@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('客户列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <label>销售员名称：</label>
+                                <input type="text" name="salepersonName"/>
+                            </li>
+                            <li>
+                                <label>客户来源;1店内订单2装修公司3设计师带单4工长带单5亲戚朋友6老客户介绍7其它：</label>
+                                <input type="text" name="customerSource"/>
+                            </li>
+                            <li>
+                                <label>客户名称：</label>
+                                <input type="text" name="customerName"/>
+                            </li>
+                            <li>
+                                <label>联系电话：</label>
+                                <input type="text" name="customerPhone"/>
+                            </li>
+                            <li>
+                                <label>客户负责人名称：</label>
+                                <input type="text" name="responsiblePerson"/>
+                            </li>
+                            <li>
+                                <label>客户负责人联系方式：</label>
+                                <input type="text" name="responsiblePhone"/>
+                            </li>
+                            <li>
+                                <label>其它联系人联系电话：</label>
+                                <input type="text" name="otherContactPhone"/>
+                            </li>
+                            <li>
+                                <label>选购品类;1木地板2墙饰壁纸壁布3脚线4实木整梯5实木包梯6钢木整梯7木地板包梯8电动楼梯9玻璃扶手11小柱扶手12护墙板13衣柜14橱柜15木门16窗套垭口17格栅18其它88整体装修：</label>
+                                <input type="text" name="buyCategories"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="order:customer:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="order:customer:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="order:customer:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="order:customer:export">
+                    <i class="fa fa-download"></i> 导出
+                </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('order:customer:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('order:customer:remove')}]];
+        var prefix = ctx + "order/customer";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "客户",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field: 'id',
+                    title: '主键id',
+                    visible: false
+                },
+                {
+                    field: 'salepersonName',
+                    title: '销售员名称'
+                },
+                {
+                    field: 'customerSource',
+                    title: '客户来源;1店内订单2装修公司3设计师带单4工长带单5亲戚朋友6老客户介绍7其它'
+                },
+                {
+                    field: 'customerName',
+                    title: '客户名称'
+                },
+                {
+                    field: 'customerPhone',
+                    title: '联系电话'
+                },
+                {
+                    field: 'responsiblePerson',
+                    title: '客户负责人名称'
+                },
+                {
+                    field: 'responsiblePhone',
+                    title: '客户负责人联系方式'
+                },
+                {
+                    field: 'community',
+                    title: '小区'
+                },
+                {
+                    field: 'address',
+                    title: '楼牌号'
+                },
+                {
+                    field: 'otherContactName',
+                    title: '其它联系人'
+                },
+                {
+                    field: 'otherContactPhone',
+                    title: '其它联系人联系电话'
+                },
+                {
+                    field: 'buyCategories',
+                    title: '选购品类;1木地板2墙饰壁纸壁布3脚线4实木整梯5实木包梯6钢木整梯7木地板包梯8电动楼梯9玻璃扶手11小柱扶手12护墙板13衣柜14橱柜15木门16窗套垭口17格栅18其它88整体装修'
+                },
+                {
+                    field: 'memo',
+                    title: '备注'
+                },
+                {
+                    field: 'amount',
+                    title: '订单金额'
+                },
+                {
+                    field: 'payStatus',
+                    title: '支付状态;100待支付110已付定金120已付中期款200支付完成'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

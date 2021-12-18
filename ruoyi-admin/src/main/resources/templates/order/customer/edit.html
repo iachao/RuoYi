@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改客户')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-customer-edit" th:object="${customerOrder}">
+            <input name="id" th:field="*{id}" type="hidden">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">销售员名称：</label>
+                <div class="col-sm-8">
+                    <input name="salepersonName" th:field="*{salepersonName}" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">客户来源;1店内订单2装修公司3设计师带单4工长带单5亲戚朋友6老客户介绍7其它：</label>
+                <div class="col-sm-8">
+                    <input name="customerSource" th:field="*{customerSource}" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">客户名称：</label>
+                <div class="col-sm-8">
+                    <input name="customerName" th:field="*{customerName}" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">联系电话：</label>
+                <div class="col-sm-8">
+                    <input name="customerPhone" th:field="*{customerPhone}" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">客户负责人名称：</label>
+                <div class="col-sm-8">
+                    <input name="responsiblePerson" th:field="*{responsiblePerson}" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">客户负责人联系方式：</label>
+                <div class="col-sm-8">
+                    <input name="responsiblePhone" th:field="*{responsiblePhone}" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">小区：</label>
+                <div class="col-sm-8">
+                    <input name="community" th:field="*{community}" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">楼牌号：</label>
+                <div class="col-sm-8">
+                    <input name="address" th:field="*{address}" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">其它联系人：</label>
+                <div class="col-sm-8">
+                    <input name="otherContactName" th:field="*{otherContactName}" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">其它联系人联系电话：</label>
+                <div class="col-sm-8">
+                    <input name="otherContactPhone" th:field="*{otherContactPhone}" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">选购品类;1木地板2墙饰壁纸壁布3脚线4实木整梯5实木包梯6钢木整梯7木地板包梯8电动楼梯9玻璃扶手11小柱扶手12护墙板13衣柜14橱柜15木门16窗套垭口17格栅18其它88整体装修：</label>
+                <div class="col-sm-8">
+                    <input name="buyCategories" th:field="*{buyCategories}" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label is-required">备注：</label>
+                <div class="col-sm-8">
+                    <textarea name="memo" class="form-control" required>[[*{memo}]]</textarea>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">订单金额：</label>
+                <div class="col-sm-8">
+                    <input name="amount" th:field="*{amount}" class="form-control" type="text" required>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var prefix = ctx + "order/customer";
+        $("#form-customer-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-customer-edit').serialize());
+            }
+        }
+    </script>
+</body>
+</html>
