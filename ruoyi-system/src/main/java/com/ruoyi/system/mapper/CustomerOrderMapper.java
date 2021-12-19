@@ -1,6 +1,8 @@
 package com.ruoyi.system.mapper;
 
 import java.util.List;
+
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ruoyi.system.domain.CustomerOrder;
 
 /**
@@ -9,53 +11,53 @@ import com.ruoyi.system.domain.CustomerOrder;
  * @author Chaos
  * @date 2021-12-18
  */
-public interface CustomerOrderMapper 
+public interface CustomerOrderMapper extends BaseMapper<CustomerOrder>
 {
     /**
      * 查询客户
-     * 
+     *
      * @param id 客户主键
      * @return 客户
      */
-    public CustomerOrder selectCustomerOrderById(Long id);
+    CustomerOrder selectCustomerOrderById(Long id);
 
     /**
      * 查询客户列表
-     * 
+     *
      * @param customerOrder 客户
      * @return 客户集合
      */
-    public List<CustomerOrder> selectCustomerOrderList(CustomerOrder customerOrder);
+    List<CustomerOrder> selectCustomerOrderList(CustomerOrder customerOrder);
 
     /**
      * 新增客户
-     * 
+     *
      * @param customerOrder 客户
      * @return 结果
      */
-    public int insertCustomerOrder(CustomerOrder customerOrder);
+    int insertCustomerOrder(CustomerOrder customerOrder);
 
     /**
      * 修改客户
-     * 
+     *
      * @param customerOrder 客户
      * @return 结果
      */
-    public int updateCustomerOrder(CustomerOrder customerOrder);
+    int updateCustomerOrder(CustomerOrder customerOrder);
 
     /**
      * 删除客户
-     * 
+     *
      * @param id 客户主键
      * @return 结果
      */
-    public int deleteCustomerOrderById(Long id);
+    int deleteCustomerOrderById(Long id);
 
     /**
      * 批量删除客户
-     * 
+     *
      * @param ids 需要删除的数据主键集合
      * @return 结果
      */
-    public int deleteCustomerOrderByIds(String[] ids);
+    int deleteCustomerOrderByIds(String[] ids);
 }

@@ -1,5 +1,6 @@
 package com.ruoyi.system.domain;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.ruoyi.common.annotation.Excel;
@@ -18,6 +19,7 @@ import java.math.BigDecimal;
 @TableName(value = "customer_name")
 public class CustomerOrder extends BaseEntity
 {
+    @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 
     /** 主键id */

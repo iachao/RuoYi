@@ -139,15 +139,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </update>
 
-    <delete id="deleteCustomerOrderById" parameterType="Long">
-        delete from customer_order where id = #{id}
-    </delete>
+    <update id="deleteCustomerOrderById" parameterType="Long">
+        update customer_order set deleted = 1 where id = #{id}
+    </update>
 
-    <delete id="deleteCustomerOrderByIds" parameterType="String">
-        delete from customer_order where id in 
+    <update id="deleteCustomerOrderByIds" parameterType="String">
+        update customer_order set deleted = 1 where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>
-    </delete>
+    </update>
 
 </mapper>

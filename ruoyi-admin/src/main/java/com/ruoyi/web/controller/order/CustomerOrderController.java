@@ -29,7 +29,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
 @RequestMapping("/order/customer")
 public class CustomerOrderController extends BaseController
 {
-    private String prefix = "order/customer";
+    private final String prefix = "order/customer";
 
     @Autowired
     private ICustomerOrderService customerOrderService;
@@ -86,6 +86,7 @@ public class CustomerOrderController extends BaseController
     @ResponseBody
     public AjaxResult addSave(CustomerOrder customerOrder)
     {
+        customerOrder.setCreateBy(getLoginName());
         return toAjax(customerOrderService.insertCustomerOrder(customerOrder));
     }
 
@@ -110,6 +111,7 @@ public class CustomerOrderController extends BaseController
     @ResponseBody
     public AjaxResult editSave(CustomerOrder customerOrder)
     {
+        customerOrder.setUpdateBy(getLoginName());
         return toAjax(customerOrderService.updateCustomerOrder(customerOrder));
     }
 

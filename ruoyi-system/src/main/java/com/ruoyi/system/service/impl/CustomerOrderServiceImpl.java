@@ -1,6 +1,8 @@
 package com.ruoyi.system.service.impl;
 
 import java.util.List;
+
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ruoyi.common.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,14 +18,14 @@ import com.ruoyi.common.core.text.Convert;
  * @date 2021-12-18
  */
 @Service
-public class CustomerOrderServiceImpl implements ICustomerOrderService 
+public class CustomerOrderServiceImpl extends ServiceImpl<CustomerOrderMapper,CustomerOrder> implements ICustomerOrderService
 {
     @Autowired
     private CustomerOrderMapper customerOrderMapper;
 
     /**
      * 查询客户
-     * 
+     *
      * @param id 客户主键
      * @return 客户
      */
@@ -35,7 +37,7 @@ public class CustomerOrderServiceImpl implements ICustomerOrderService
 
     /**
      * 查询客户列表
-     * 
+     *
      * @param customerOrder 客户
      * @return 客户
      */
@@ -47,7 +49,7 @@ public class CustomerOrderServiceImpl implements ICustomerOrderService
 
     /**
      * 新增客户
-     * 
+     *
      * @param customerOrder 客户
      * @return 结果
      */
@@ -60,7 +62,7 @@ public class CustomerOrderServiceImpl implements ICustomerOrderService
 
     /**
      * 修改客户
-     * 
+     *
      * @param customerOrder 客户
      * @return 结果
      */
@@ -73,7 +75,7 @@ public class CustomerOrderServiceImpl implements ICustomerOrderService
 
     /**
      * 批量删除客户
-     * 
+     *
      * @param ids 需要删除的客户主键
      * @return 结果
      */
@@ -85,7 +87,7 @@ public class CustomerOrderServiceImpl implements ICustomerOrderService
 
     /**
      * 删除客户信息
-     * 
+     *
      * @param id 客户主键
      * @return 结果
      */
