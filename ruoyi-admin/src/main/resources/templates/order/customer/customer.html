@@ -16,7 +16,10 @@
                             </li>
                             <li>
                                 <label>客户来源：</label>
-                                <input type="text" name="customerSource"/>
+                                <select name="customerSource" th:with="type=${@dict.getType('customer_source')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
                             </li>
                             <li>
                                 <label>客户名称：</label>
@@ -39,8 +42,11 @@
                                 <input type="text" name="otherContactPhone"/>
                             </li>
                             <li>
-                                <label>选购品类：</label>
-                                <input type="text" name="buyCategories"/>
+                                <label>支付状态：</label>
+                                <select name="payStatus" th:with="type=${@dict.getType('pay_status')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
                             </li>
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
@@ -50,7 +56,6 @@
                     </div>
                 </form>
             </div>
-
             <div class="btn-group-sm" id="toolbar" role="group">
                 <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="order:customer:add">
                     <i class="fa fa-plus"></i> 添加
@@ -74,6 +79,10 @@
     <script th:inline="javascript">
         var editFlag = [[${@permission.hasPermi('order:customer:edit')}]];
         var removeFlag = [[${@permission.hasPermi('order:customer:remove')}]];
+        var customerSourceDatas = [[${@dict.getType('customer_source')}]];
+        var payStatusDatas = [[${@dict.getType('pay_status')}]];
+        var buyCategoriesDatas = [[${@dict.getType('category')}]];
+
         var prefix = ctx + "order/customer";
 
         $(function() {
@@ -98,7 +107,10 @@
                 },
                 {
                     field: 'customerSource',
-                    title: '客户来源'
+                    title: '客户来源',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(customerSourceDatas, value);
+                    }
                 },
                 {
                     field: 'customerName',
@@ -107,6 +119,26 @@
                 {
                     field: 'customerPhone',
                     title: '联系电话'
+                },
+                {
+                    field: 'payStatus',
+                    title: '支付状态',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(payStatusDatas, value);
+                    }
+                },
+                {
+                    field: 'amount',
+                    title: '订单金额'
+                },
+                {
+                    field: 'buyCategories',
+                    title: '选购品类',
+                    formatter: function(value, row, index) {
+                        console.log(value)
+                        console.log(JSON.stringify(buyCategoriesDatas))
+                        return $.table.selectDictLabels(buyCategoriesDatas, value);
+                    }
                 },
                 {
                     field: 'responsiblePerson',
@@ -133,20 +165,8 @@
                     title: '其它联系人电话'
                 },
                 {
-                    field: 'buyCategories',
-                    title: '选购品类'
-                },
-                {
                     field: 'memo',
                     title: '备注'
-                },
-                {
-                    field: 'amount',
-                    title: '订单金额'
-                },
-                {
-                    field: 'payStatus',
-                    title: '支付状态'
                 },
                 {
                     title: '操作',
