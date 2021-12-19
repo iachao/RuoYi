@@ -29,7 +29,6 @@ import com.ruoyi.common.utils.StringUtils;
  * 
  * @author ruoyi
  */
-@Configuration
 public class MyBatisConfig
 {
     @Autowired
@@ -39,7 +38,7 @@ public class MyBatisConfig
 
     public static String setTypeAliasesPackage(String typeAliasesPackage)
     {
-        ResourcePatternResolver resolver = (ResourcePatternResolver) new PathMatchingResourcePatternResolver();
+        ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
         MetadataReaderFactory metadataReaderFactory = new CachingMetadataReaderFactory(resolver);
         List<String> allResult = new ArrayList<String>();
         try
@@ -77,7 +76,7 @@ public class MyBatisConfig
             }
             if (allResult.size() > 0)
             {
-                typeAliasesPackage = String.join(",", (String[]) allResult.toArray(new String[0]));
+                typeAliasesPackage = String.join(",", allResult.toArray(new String[0]));
             }
             else
             {
