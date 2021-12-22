@@ -10,7 +10,7 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label is-required">供应商名称：</label>
                 <div class="col-sm-8">
-                    <select name="supplyName" class="form-control m-b" th:with="type=${@dict.getType('floor_supply')}" required>
+                    <select id="supplyId" name="supplyId" class="form-control m-b" th:with="type=${@dict.getType('floor_supply')}" required>
                         <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                     </select>
                 </div>
@@ -54,6 +54,8 @@
 
         function submitHandler() {
             if ($.validate.form()) {
+                console.log($.form.selectSelects('supplyName'))
+                console.log(JSON.stringify($('#form-floor-edit').serialize()));
                 $.operate.save(prefix + "/edit", $('#form-floor-edit').serialize());
             }
         }

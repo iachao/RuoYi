@@ -12,7 +12,7 @@
                         <ul>
                             <li>
                                 <label>供应商名称：</label>
-                                <select name="supplyName" th:with="type=${@dict.getType('floor_supply')}">
+                                <select name="supplyId" th:with="type=${@dict.getType('floor_supply')}">
                                     <option value="">所有</option>
                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                                 </select>
@@ -90,7 +90,7 @@
                     visible: false
                 },
                 {
-                    field: 'supplyName',
+                    field: 'supplyId',
                     title: '供应商名称',
                     formatter: function(value, row, index) {
                        return $.table.selectDictLabel(supplyNameDatas, value);
