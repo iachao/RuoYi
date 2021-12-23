@@ -32,6 +32,7 @@ public class CustomerOrderServiceImpl extends ServiceImpl<CustomerOrderMapper,Cu
     @Override
     public CustomerOrder selectCustomerOrderById(Long id)
     {
+        CustomerOrder customerOrder = customerOrderMapper.selectById(id);
         return customerOrderMapper.selectCustomerOrderById(id);
     }
 

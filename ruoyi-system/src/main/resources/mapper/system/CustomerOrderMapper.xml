@@ -22,7 +22,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="otherContactName"    column="other_contact_name"    />
         <result property="otherContactPhone"    column="other_contact_phone"    />
         <result property="buyCategories"    column="buy_categories"    />
-        <result property="memo"    column="memo"    />
+        <result property="remark"    column="remark"    />
         <result property="createBy"    column="create_by"    />
         <result property="createTime"    column="create_time"    />
         <result property="updateBy"    column="update_by"    />
@@ -32,7 +32,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectCustomerOrderVo">
-        select id, saleperson_id, saleperson_name, customer_source, customer_name, customer_phone, responsible_person, responsible_phone, province, city, district, town, community, address, other_contact_name, other_contact_phone, buy_categories, memo, create_by, create_time, update_by, update_time, amount, pay_status from customer_order
+        select id, saleperson_id, saleperson_name, customer_source, customer_name, customer_phone, responsible_person, responsible_phone, province, city, district, town, community, address, other_contact_name, other_contact_phone, buy_categories, remark, create_by, create_time, update_by, update_time, amount, pay_status from customer_order
     </sql>
 
     <select id="selectCustomerOrderList" parameterType="CustomerOrder" resultMap="CustomerOrderResult">
@@ -74,7 +74,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="otherContactName != null and otherContactName != ''">other_contact_name,</if>
             <if test="otherContactPhone != null and otherContactPhone != ''">other_contact_phone,</if>
             <if test="buyCategories != null and buyCategories != ''">buy_categories,</if>
-            <if test="memo != null and memo != ''">memo,</if>
+            <if test="remark != null and remark != ''">remark,</if>
             <if test="createBy != null and createBy != ''">create_by,</if>
             <if test="createTime != null">create_time,</if>
             <if test="updateBy != null and updateBy != ''">update_by,</if>
@@ -99,7 +99,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="otherContactName != null and otherContactName != ''">#{otherContactName},</if>
             <if test="otherContactPhone != null and otherContactPhone != ''">#{otherContactPhone},</if>
             <if test="buyCategories != null and buyCategories != ''">#{buyCategories},</if>
-            <if test="memo != null and memo != ''">#{memo},</if>
+            <if test="remark != null and remark != ''">#{remark},</if>
             <if test="createBy != null and createBy != ''">#{createBy},</if>
             <if test="createTime != null">#{createTime},</if>
             <if test="updateBy != null and updateBy != ''">#{updateBy},</if>
@@ -128,7 +128,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="otherContactName != null and otherContactName != ''">other_contact_name = #{otherContactName},</if>
             <if test="otherContactPhone != null and otherContactPhone != ''">other_contact_phone = #{otherContactPhone},</if>
             <if test="buyCategories != null and buyCategories != ''">buy_categories = #{buyCategories},</if>
-            <if test="memo != null and memo != ''">memo = #{memo},</if>
+            <if test="remark != null and remark != ''">remark = #{remark},</if>
             <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>

@@ -16,7 +16,7 @@ import java.math.BigDecimal;
  * @date 2021-12-18
  */
 @Data
-@TableName(value = "customer_name")
+@TableName(value = "customer_order")
 public class CustomerOrder extends BaseEntity
 {
     @TableField(exist = false)
@@ -33,7 +33,7 @@ public class CustomerOrder extends BaseEntity
     private String salepersonName;
 
     /** 客户来源;1店内订单2装修公司3设计师带单4工长带单5亲戚朋友6老客户介绍7其它 */
-    @Excel(name = "客户来源;1店内订单2装修公司3设计师带单4工长带单5亲戚朋友6老客户介绍7其它")
+    @Excel(name = "客户来源",dictType = "customer_source")
     private Long customerSource;
 
     /** 客户名称 */
@@ -81,19 +81,19 @@ public class CustomerOrder extends BaseEntity
     private String otherContactPhone;
 
     /** 选购品类;1木地板2墙饰壁纸壁布3脚线4实木整梯5实木包梯6钢木整梯7木地板包梯8电动楼梯9玻璃扶手11小柱扶手12护墙板13衣柜14橱柜15木门16窗套垭口17格栅18其它88整体装修 */
-    @Excel(name = "选购品类")
+    @Excel(name = "选购品类",dictType = "buy_categories")
     private String buyCategories;
 
     /** 备注 */
     @Excel(name = "备注")
-    private String memo;
+    private String remark;
 
     /** 订单金额 */
     @Excel(name = "订单金额")
     private BigDecimal amount;
 
     /** 支付状态;100待支付110已付定金120已付中期款200支付完成 */
-    @Excel(name = "支付状态")
+    @Excel(name = "支付状态",dictType = "pay_status")
     private Long payStatus;
 
     @TableLogic
