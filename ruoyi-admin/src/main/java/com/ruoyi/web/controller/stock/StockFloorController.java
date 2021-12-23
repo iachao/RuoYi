@@ -9,6 +9,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -87,7 +88,14 @@ public class StockFloorController extends BaseController
     @ResponseBody
     public AjaxResult addSave(StockFloor stockFloor)
     {
-        return toAjax(stockFloorService.insertStockFloor(stockFloor));
+        StockFloor s = new StockFloor();
+        s.setFloorNumber(stockFloor.getFloorNumber());
+        List<StockFloor> r = stockFloorService.selectStockFloorList(s);
+        if(CollectionUtils.isEmpty(r)) {
+            return toAjax(stockFloorService.insertStockFloor(stockFloor));
+        }else{
+            return error("该地板型号已存在");
+        }
     }
 
     /**

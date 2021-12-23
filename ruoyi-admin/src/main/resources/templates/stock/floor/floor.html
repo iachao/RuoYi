@@ -90,6 +90,25 @@
                     visible: false
                 },
                 {
+                    field: 'floorNumber',
+                    title: '地板型号'
+                },
+                {
+                    field: 'stockCount',
+                    title: '库存(块)'
+                },
+                {
+                    field: 'floorArea',
+                    title: '库存面积(㎡)'
+                },
+                {
+                    field: 'floorSpec',
+                    title: '地板系列',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(floorSpecDatas, value).concat('(',value,')');
+                    }
+                },
+                {
                     field: 'supplyId',
                     title: '供应商名称',
                     formatter: function(value, row, index) {
@@ -102,21 +121,6 @@
                     formatter: function(value, row, index) {
                        return $.table.selectDictLabel(floorTypeDatas, value);
                     }
-                },
-                {
-                    field: 'floorSpec',
-                    title: '地板系列',
-                    formatter: function(value, row, index) {
-                       return $.table.selectDictLabel(floorSpecDatas, value);
-                    }
-                },
-                {
-                    field: 'floorNumber',
-                    title: '地板型号'
-                },
-                {
-                    field: 'stockCount',
-                    title: '库存'
                 },
                 {
                     title: '操作',

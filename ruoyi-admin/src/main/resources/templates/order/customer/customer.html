@@ -98,7 +98,7 @@
                 },
                 {
                     field: 'id',
-                    title: '主键id',
+                    title: '主键',
                     visible: false
                 },
                 {
@@ -135,8 +135,6 @@
                     field: 'buyCategories',
                     title: '选购品类',
                     formatter: function(value, row, index) {
-                        console.log(value)
-                        console.log(JSON.stringify(buyCategoriesDatas))
                         return $.table.selectDictLabels(buyCategoriesDatas, value);
                     }
                 },

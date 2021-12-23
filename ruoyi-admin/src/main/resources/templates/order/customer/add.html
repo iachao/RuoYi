@@ -9,7 +9,7 @@
         <div class="form-group">
             <label class="col-sm-3 control-label is-required">销售员名称：</label>
             <div class="col-sm-8">
-                <input name="salepersonName" class="form-control" type="text" required>
+                <input name="salepersonName" class="form-control" type="text" required th:value="田田">
             </div>
         </div>
         <div class="form-group">
@@ -27,23 +27,9 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-3 control-label is-required">联系电话：</label>
+            <label class="col-sm-3 control-label">联系电话：</label>
             <div class="col-sm-8">
-                <input name="customerPhone" class="form-control" type="text" required>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label is-required">订单金额：</label>
-            <div class="col-sm-8">
-                <input name="amount" class="form-control" type="text" required>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label is-required">支付状态：</label>
-            <div class="col-sm-8">
-                <select name="payStatus" class="form-control m-b" th:with="type=${@dict.getType('pay_status')}" required>
-                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                </select>
+                <input name="customerPhone" class="form-control" type="text">
             </div>
         </div>
         <div class="form-group">
@@ -58,30 +44,6 @@
                 <input name="responsiblePhone" class="form-control" type="text">
             </div>
         </div>
-<!--        <div class="form-group">-->
-<!--            <label class="col-sm-3 control-label is-required">省：</label>-->
-<!--            <div class="col-sm-8">-->
-<!--                <input name="province" class="form-control" type="text" required>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--        <div class="form-group">-->
-<!--            <label class="col-sm-3 control-label is-required">市：</label>-->
-<!--            <div class="col-sm-8">-->
-<!--                <input name="city" class="form-control" type="text" required>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--        <div class="form-group">-->
-<!--            <label class="col-sm-3 control-label is-required">县区：</label>-->
-<!--            <div class="col-sm-8">-->
-<!--                <input name="district" class="form-control" type="text" required>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--        <div class="form-group">-->
-<!--            <label class="col-sm-3 control-label is-required">镇：</label>-->
-<!--            <div class="col-sm-8">-->
-<!--                <input name="town" class="form-control" type="text" required>-->
-<!--            </div>-->
-<!--        </div>-->
         <div class="form-group">
             <label class="col-sm-3 control-label is-required">小区：</label>
             <div class="col-sm-8">
@@ -92,14 +54,6 @@
             <label class="col-sm-3 control-label is-required">楼牌号：</label>
             <div class="col-sm-8">
                 <input name="address" class="form-control" type="text" required>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label is-required">选购品类：</label>
-            <div class="col-sm-8" th:with="type=${@dict.getType('category')}">
-                <label th:each="dict : ${type}" class="check-box">
-                    <input name="buyCategories" type="checkbox" th:value="${dict.dictValue}" th:text="${dict.dictLabel}" required>
-                </label>
             </div>
         </div>
         <div class="form-group">
@@ -114,11 +68,32 @@
                 <input name="otherContactPhone" class="form-control" type="text">
             </div>
         </div>
-
+        <div class="form-group">
+            <label class="col-sm-3 control-label is-required">选购品类：</label>
+            <div class="col-sm-8" th:with="type=${@dict.getType('category')}">
+                <label th:each="dict : ${type}" class="check-box">
+                    <input name="buyCategories" type="checkbox" th:value="${dict.dictValue}" th:text="${dict.dictLabel}" required>
+                </label>
+            </div>
+        </div>
         <div class="form-group">
             <label class="col-sm-3 control-label">备注：</label>
             <div class="col-sm-8">
                 <textarea name="memo" class="form-control"></textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label is-required">订单金额：</label>
+            <div class="col-sm-8">
+                <input name="amount" class="form-control" type="text" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label is-required">支付状态：</label>
+            <div class="col-sm-8">
+                <select name="payStatus" class="form-control m-b" th:with="type=${@dict.getType('pay_status')}" required>
+                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                </select>
             </div>
         </div>
     </form>

@@ -1,13 +1,18 @@
 package com.ruoyi.system.service.impl;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
+
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.system.domain.StockFloor;
 import com.ruoyi.system.mapper.StockFloorMapper;
 import com.ruoyi.system.service.IStockFloorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.common.core.text.Convert;
+import org.springframework.util.NumberUtils;
 
 /**
  * 地板库存Service业务层处理
@@ -55,6 +60,7 @@ public class StockFloorServiceImpl implements IStockFloorService
     public int insertStockFloor(StockFloor stockFloor)
     {
         stockFloor.setCreateTime(DateUtils.getNowDate());
+        stockFloor.setFloorArea(this.getStockArea(stockFloor.getFloorSpec(),stockFloor.getStockCount()));
         return stockFloorMapper.insertStockFloor(stockFloor);
     }
 
@@ -68,6 +74,7 @@ public class StockFloorServiceImpl implements IStockFloorService
     public int updateStockFloor(StockFloor stockFloor)
     {
         stockFloor.setUpdateTime(DateUtils.getNowDate());
+        stockFloor.setFloorArea(this.getStockArea(stockFloor.getFloorSpec(),stockFloor.getStockCount()));
         return stockFloorMapper.updateStockFloor(stockFloor);
     }
 
@@ -93,5 +100,24 @@ public class StockFloorServiceImpl implements IStockFloorService
     public int deleteStockFloorById(Long id)
     {
         return stockFloorMapper.deleteStockFloorById(id);
+    }
+
+    /**
+     *
+     * @param floorSpec 地板规格例如 1221*168*12*10P
+     * @param stockCount 地板块数
+     * @return
+     */
+    private BigDecimal getStockArea(String floorSpec,Long stockCount){
+        String[] split = floorSpec.split("\\*");
+        if(StringUtils.isNotEmpty(split) && split.length == 4) {
+            BigDecimal length = new BigDecimal(split[0]);
+            BigDecimal width = new BigDecimal(split[1]);
+            length = length.divide(new BigDecimal(1000));
+            width = width.divide(new BigDecimal(1000));
+            BigDecimal stockArea = length.multiply(width).multiply(new BigDecimal(stockCount));
+            return stockArea.setScale(4, RoundingMode.HALF_UP);
+        }
+        return BigDecimal.ZERO;
     }
 }

@@ -12,6 +12,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="floorSpec"    column="floor_spec"    />
         <result property="floorNumber"    column="floor_number"    />
         <result property="stockCount"    column="stock_count"    />
+        <result property="floorArea"    column="floor_area"    />
         <result property="createBy"    column="create_by"    />
         <result property="createTime"    column="create_time"    />
         <result property="updateBy"    column="update_by"    />
@@ -19,7 +20,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectStockFloorVo">
-        select id, supply_id, supply_name, floor_type, floor_spec, floor_number, stock_count, create_by, create_time, update_by, update_time from stock_floor
+        select id, supply_id, supply_name, floor_type, floor_spec, floor_number, stock_count, floor_area, create_by, create_time, update_by, update_time from stock_floor
     </sql>
 
     <select id="selectStockFloorList" parameterType="StockFloor" resultMap="StockFloorResult">
@@ -48,6 +49,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="floorSpec != null and floorSpec != ''">floor_spec,</if>
             <if test="floorNumber != null and floorNumber != ''">floor_number,</if>
             <if test="stockCount != null">stock_count,</if>
+            <if test="floorArea != null and floorArea != ''">floor_area,</if>
             <if test="createBy != null">create_by,</if>
             <if test="createTime != null">create_time,</if>
             <if test="updateBy != null">update_by,</if>
@@ -59,7 +61,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="floorType != null">#{floorType},</if>
             <if test="floorSpec != null and floorSpec != ''">#{floorSpec},</if>
             <if test="floorNumber != null and floorNumber != ''">#{floorNumber},</if>
-            <if test="stockCount != null">#{stockCount},</if>
+            <if test="stockCount != null ">#{stockCount},</if>
+            <if test="floorArea != null and floorArea != ''">floor_area = #{floorArea},</if>
             <if test="createBy != null">#{createBy},</if>
             <if test="createTime != null">#{createTime},</if>
             <if test="updateBy != null">#{updateBy},</if>
@@ -76,6 +79,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="floorSpec != null and floorSpec != ''">floor_spec = #{floorSpec},</if>
             <if test="floorNumber != null and floorNumber != ''">floor_number = #{floorNumber},</if>
             <if test="stockCount != null">stock_count = #{stockCount},</if>
+            <if test="floorArea != null and floorArea != ''">floor_area = #{floorArea},</if>
             <if test="createBy != null">create_by = #{createBy},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="updateBy != null">update_by = #{updateBy},</if>
@@ -89,7 +93,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteStockFloorByIds" parameterType="String">
-        delete from stock_floor where id in 
+        delete from stock_floor where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>

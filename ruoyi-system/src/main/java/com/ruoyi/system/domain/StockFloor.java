@@ -6,6 +6,8 @@ import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 /**
  * 地板库存对象 stock_floor
  * 
@@ -42,8 +44,11 @@ public class StockFloor extends BaseEntity
     private String floorNumber;
 
     /** 库存 */
-    @Excel(name = "库存")
+    @Excel(name = "库存(块)")
     private Long stockCount;
+
+    @Excel(name = "库存面积")
+    private BigDecimal floorArea;
 
     @TableLogic
     private Integer deleted;
