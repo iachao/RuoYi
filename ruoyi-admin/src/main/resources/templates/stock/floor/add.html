@@ -7,7 +7,7 @@
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
         <form class="form-horizontal m" id="form-floor-add">
             <div class="form-group">
-                <label class="col-sm-3 control-label is-required">供应商名称：</label>
+                <label class="col-sm-3 control-label is-required">供应商：</label>
                 <div class="col-sm-8">
                     <select id="supplyId" name="supplyId" class="form-control m-b" th:with="type=${@dict.getType('floor_supply')}" required>
                         <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>

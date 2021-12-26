@@ -92,6 +92,7 @@ public class StockFloorController extends BaseController
         s.setFloorNumber(stockFloor.getFloorNumber());
         List<StockFloor> r = stockFloorService.selectStockFloorList(s);
         if(CollectionUtils.isEmpty(r)) {
+            stockFloor.setCreateBy(getLoginName());
             return toAjax(stockFloorService.insertStockFloor(stockFloor));
         }else{
             return error("该地板型号已存在");
@@ -119,6 +120,7 @@ public class StockFloorController extends BaseController
     @ResponseBody
     public AjaxResult editSave(StockFloor stockFloor)
     {
+        stockFloor.setUpdateBy(getLoginName());
         return toAjax(stockFloorService.updateStockFloor(stockFloor));
     }
 

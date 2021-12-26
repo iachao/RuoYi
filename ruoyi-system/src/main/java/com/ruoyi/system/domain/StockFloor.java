@@ -4,7 +4,10 @@ import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 import java.math.BigDecimal;
 
@@ -15,6 +18,9 @@ import java.math.BigDecimal;
  * @date 2021-12-18
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Accessors(chain = true)
 @TableName(value = "stock_floor")
 public class StockFloor extends BaseEntity
 {

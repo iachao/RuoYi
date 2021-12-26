@@ -11,7 +11,7 @@
                     <div class="select-list">
                         <ul>
                             <li>
-                                <label>销售员名称：</label>
+                                <label>销售员：</label>
                                 <input type="text" name="salepersonName"/>
                             </li>
                             <li>
@@ -28,18 +28,6 @@
                             <li>
                                 <label>联系电话：</label>
                                 <input type="text" name="customerPhone"/>
-                            </li>
-                            <li>
-                                <label>客户负责人名称：</label>
-                                <input type="text" name="responsiblePerson"/>
-                            </li>
-                            <li>
-                                <label>客户负责人电话：</label>
-                                <input type="text" name="responsiblePhone"/>
-                            </li>
-                            <li>
-                                <label>其它联系人电话：</label>
-                                <input type="text" name="otherContactPhone"/>
                             </li>
                             <li>
                                 <label>支付状态：</label>
@@ -121,6 +109,21 @@
                     title: '联系电话'
                 },
                 {
+                    field: 'community',
+                    title: '小区'
+                },
+                {
+                    field: 'address',
+                    title: '楼牌号'
+                },
+                {
+                    field: 'buyCategories',
+                    title: '选购品类',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabels(buyCategoriesDatas, value);
+                    }
+                },
+                {
                     field: 'payStatus',
                     title: '支付状态',
                     formatter: function(value, row, index) {
@@ -132,27 +135,12 @@
                     title: '订单金额'
                 },
                 {
-                    field: 'buyCategories',
-                    title: '选购品类',
-                    formatter: function(value, row, index) {
-                        return $.table.selectDictLabels(buyCategoriesDatas, value);
-                    }
-                },
-                {
                     field: 'responsiblePerson',
                     title: '客户负责人名称'
                 },
                 {
                     field: 'responsiblePhone',
                     title: '客户负责人电话'
-                },
-                {
-                    field: 'community',
-                    title: '小区'
-                },
-                {
-                    field: 'address',
-                    title: '楼牌号'
                 },
                 {
                     field: 'otherContactName',
@@ -179,6 +167,11 @@
             };
             $.table.init(options);
         });
+
+        /* 添加客户-选择用户-回调父页面 */
+        function getCustomerSelection() {
+            return $.table.selectCheckRows();
+        }
     </script>
 </body>
 </html>

@@ -559,6 +559,21 @@ var table = {
                 });
                 return actions.join('');
             },
+            // 获取 表格选中行
+            selectCheckRows: function() {
+                var rows = $.map($("#" + table.options.id).bootstrapTable('getSelections'), function (row) {
+                    return row;
+                });
+                if ($.common.isNotEmpty(table.options.rememberSelected) && table.options.rememberSelected) {
+                    var selectedRows = table.rememberSelecteds[table.options.id];
+                    if($.common.isNotEmpty(selectedRows)) {
+                        rows = $.map(selectedRows, function (row) {
+                            return row;
+                        });
+                    }
+                }
+                return rows;
+            },
             // 显示表格指定列
             showColumn: function(column, tableId) {
                 var currentId = $.common.isEmpty(tableId) ? table.options.id : tableId;

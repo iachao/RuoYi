@@ -126,4 +126,15 @@ public class CustomerOrderController extends BaseController
     {
         return toAjax(customerOrderService.deleteCustomerOrderByIds(ids));
     }
+
+    /**
+     * 查询客户
+     */
+    @GetMapping("/selectById/{id}")
+    @ResponseBody
+    public AjaxResult selectById(@PathVariable("id") Long id)
+    {
+        CustomerOrder customerOrder = customerOrderService.selectCustomerOrderById(id);
+        return AjaxResult.success(customerOrder);
+    }
 }

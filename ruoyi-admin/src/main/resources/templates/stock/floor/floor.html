@@ -11,7 +11,7 @@
                     <div class="select-list">
                         <ul>
                             <li>
-                                <label>供应商名称：</label>
+                                <label>供应商：</label>
                                 <select name="supplyId" th:with="type=${@dict.getType('floor_supply')}">
                                     <option value="">所有</option>
                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
