@@ -137,4 +137,19 @@ public class CustomerOrderController extends BaseController
         CustomerOrder customerOrder = customerOrderService.selectCustomerOrderById(id);
         return AjaxResult.success(customerOrder);
     }
+
+    /**
+     * 查询客户
+     */
+    @GetMapping("/selectByInfo")
+    @ResponseBody
+    public AjaxResult selectByInfo(String keyword)
+    {
+        startPage();
+        List<CustomerOrder> customerOrderList = customerOrderService.selectByInfo(keyword);
+        AjaxResult ajax = new AjaxResult();
+        ajax.put("code", 200);
+        ajax.put("value",customerOrderList);
+        return ajax;
+    }
 }

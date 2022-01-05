@@ -60,4 +60,11 @@ public interface ICustomerOrderService extends IService<CustomerOrder>
      * @return 结果
      */
     int deleteCustomerOrderById(Long id);
+
+    /**
+     * 根据 手机号、姓名、地址 获取客户信息
+     * @param keyword
+     * @return
+     */
+    List<CustomerOrder> selectByInfo(String keyword);
 }

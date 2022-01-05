@@ -1,15 +1,17 @@
 package com.ruoyi.system.service.impl;
 
-import java.util.List;
-
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.system.domain.CustomerOrder;
+import com.ruoyi.system.mapper.CustomerOrderMapper;
+import com.ruoyi.system.service.ICustomerOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.ruoyi.system.mapper.CustomerOrderMapper;
-import com.ruoyi.system.domain.CustomerOrder;
-import com.ruoyi.system.service.ICustomerOrderService;
-import com.ruoyi.common.core.text.Convert;
+
+import java.util.List;
 
 /**
  * 客户Service业务层处理
@@ -32,7 +34,6 @@ public class CustomerOrderServiceImpl extends ServiceImpl<CustomerOrderMapper,Cu
     @Override
     public CustomerOrder selectCustomerOrderById(Long id)
     {
-        CustomerOrder customerOrder = customerOrderMapper.selectById(id);
         return customerOrderMapper.selectCustomerOrderById(id);
     }
 
@@ -96,5 +97,12 @@ public class CustomerOrderServiceImpl extends ServiceImpl<CustomerOrderMapper,Cu
     public int deleteCustomerOrderById(Long id)
     {
         return customerOrderMapper.deleteCustomerOrderById(id);
+    }
+
+    @Override
+    public List<CustomerOrder> selectByInfo(String keyword) {
+        QueryWrapper queryWrapper = Wrappers.query();
+        List list = customerOrderMapper.selectList(queryWrapper);
+        return list;
     }
 }
