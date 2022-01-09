@@ -54,7 +54,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectCustomerOrderVo"/>
         where id = #{id}
     </select>
-        
+    <select id="selectByInfo" resultType="com.ruoyi.system.domain.CustomerOrder">
+        <include refid="selectCustomerOrderVo"/>
+        <if test="customerName != null  and customerName != ''">
+            where customer_name like concat('%', #{keyword}, '%') or customer_phone like concat('%', #{keyword}, '%')
+        </if>
+        limit 0,10
+    </select>
+
     <insert id="insertCustomerOrder" parameterType="CustomerOrder" useGeneratedKeys="true" keyProperty="id">
         insert into customer_order
         <trim prefix="(" suffix=")" suffixOverrides=",">

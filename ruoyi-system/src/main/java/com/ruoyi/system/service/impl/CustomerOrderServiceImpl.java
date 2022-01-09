@@ -101,8 +101,7 @@ public class CustomerOrderServiceImpl extends ServiceImpl<CustomerOrderMapper,Cu
 
     @Override
     public List<CustomerOrder> selectByInfo(String keyword) {
-        QueryWrapper queryWrapper = Wrappers.query();
-        List list = customerOrderMapper.selectList(queryWrapper);
+        List<CustomerOrder> list = customerOrderMapper.selectByInfo(keyword);
         return list;
     }
 }

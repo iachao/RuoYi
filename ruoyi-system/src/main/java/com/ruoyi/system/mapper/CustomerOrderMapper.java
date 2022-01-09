@@ -60,4 +60,6 @@ public interface CustomerOrderMapper extends BaseMapper<CustomerOrder>
      * @return 结果
      */
     int deleteCustomerOrderByIds(String[] ids);
+
+    List<CustomerOrder> selectByInfo(String keyword);
 }

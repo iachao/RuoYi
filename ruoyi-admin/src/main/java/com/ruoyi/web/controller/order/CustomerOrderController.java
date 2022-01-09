@@ -1,10 +1,19 @@
 package com.ruoyi.web.controller.order;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import com.ruoyi.system.resp.CustomerOrderResp;
+import ma.glasnost.orika.MapperFactory;
+import ma.glasnost.orika.impl.DefaultMapperFactory;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -147,9 +156,14 @@ public class CustomerOrderController extends BaseController
     {
         startPage();
         List<CustomerOrder> customerOrderList = customerOrderService.selectByInfo(keyword);
+        List<CustomerOrderResp> customerOrderRespList = new ArrayList<>();
+        if(!CollectionUtils.isEmpty(customerOrderList)){
+            MapperFactory mapperFactory = new DefaultMapperFactory.Builder().build();
+            customerOrderRespList = mapperFactory.getMapperFacade().mapAsList(customerOrderList, CustomerOrderResp.class);
+        }
         AjaxResult ajax = new AjaxResult();
         ajax.put("code", 200);
-        ajax.put("value",customerOrderList);
+        ajax.put("value",customerOrderRespList);
         return ajax;
     }
 }

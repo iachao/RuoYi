@@ -19,9 +19,10 @@
                             </li>
                             <li>
                                 <label>客户名称：</label>
+                                <input type="hidden" name="customerId" id="customerId">
                                 <div class="input-group">
-                                    <input type="text" name="customerId" class="form-control" id="customerId">
-                                        <div class="input-group-btn">
+                                    <input type="text" name="customerInfo" class="form-control" id="customerInfo">
+                                        <div class="input-group-btn" style="width: 10%;">
                                             <button type="button" class="btn btn-white dropdown-toggle" style="height: 31px" data-toggle="dropdown">
                                                 <span class="caret"></span>
                                             </button>
@@ -265,16 +266,19 @@
             $.modal.open('安装地板', prefix + "/install/"+id);
         }
         // 根据手机号、姓名、地址 获取 客户
-        var customerSuggest = $("#customerId").bsSuggest({
-            url: ctx + "order/customer/selectByInfo",
+        var customerSuggest = $("#customerInfo").bsSuggest({
+            url: ctx + "order/customer/selectByInfo?keyword=",
             idField: "id",
-            keyField: "customerName",
+            keyField: "customerInfo",
             effectiveFields: ["customerName","customerPhone","community","address","remark"],
             effectiveFieldsAlias: {"customerName":"客户名","customerPhone":"电话","community":"小区","address":"地址","remark":"备注"},
+            getDataMethod: 'url',
+            clearable: true
         }).on('onDataRequestSuccess', function (e, result) {
             console.log('onDataRequestSuccess: ', result);
         }).on('onSetSelectValue', function (e, keyword) {
             console.log('onSetSelectValue: ', keyword);
+            $('#customerId').attr('value',keyword.id);
         }).on('onUnsetSelectValue', function (e) {
             console.log("onUnsetSelectValue");
         });
