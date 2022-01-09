@@ -8,6 +8,8 @@ import com.ruoyi.common.core.domain.BaseEntity;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 客户对象 customer_order
@@ -25,6 +27,17 @@ public class CustomerOrder extends BaseEntity
     /** 主键id */
     private Long id;
 
+    @TableField(exist = false)
+    private String customerInfo;
+
+    public String getCustomerInfo() {
+        List<String> info = new ArrayList<>();
+        info.add(this.getCustomerName());
+        info.add(this.getCustomerPhone());
+        info.add(this.getCommunity());
+        info.add(this.getAddress());
+        return String.join(",",info);
+    }
     /** 销售员id */
     private Long salepersonId;
 

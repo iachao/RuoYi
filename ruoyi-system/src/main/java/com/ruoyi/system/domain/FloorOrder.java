@@ -40,6 +40,13 @@ public class FloorOrder extends BaseEntity
     /** 客户ID */
     @Excel(name = "客户ID")
     private Long customerId;
+
+    /**
+     * 客户信息
+     */
+    @TableField(exist = false)
+    private String customerInfo;
+
     /** 供应商ID */
     @Excel(name = "供应商",dictType = "floor_supply")
     private Long supplyId;

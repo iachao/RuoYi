@@ -1,6 +1,9 @@
 package com.ruoyi.web.controller.order;
 
 import java.util.List;
+
+import com.ruoyi.system.domain.CustomerOrder;
+import com.ruoyi.system.service.ICustomerOrderService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,6 +36,8 @@ public class FloorOrderController extends BaseController
 
     @Autowired
     private IFloorOrderService floorOrderService;
+    @Autowired
+    private ICustomerOrderService customerOrderService;
 
     @RequiresPermissions("order:floor:view")
     @GetMapping()
@@ -97,6 +102,8 @@ public class FloorOrderController extends BaseController
     public String edit(@PathVariable("id") Long id, ModelMap mmap)
     {
         FloorOrder floorOrder = floorOrderService.selectFloorOrderById(id);
+        CustomerOrder customerOrder = customerOrderService.selectCustomerOrderById(floorOrder.getCustomerId());
+        floorOrder.setCustomerInfo(customerOrder.getCustomerInfo());
         mmap.put("floorOrder", floorOrder);
         return prefix + "/edit";
     }
