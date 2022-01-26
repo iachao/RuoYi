@@ -154,7 +154,6 @@ public class CustomerOrderController extends BaseController
     @ResponseBody
     public AjaxResult selectByInfo(String keyword)
     {
-        startPage();
         List<CustomerOrder> customerOrderList = customerOrderService.selectByInfo(keyword);
         List<CustomerOrderResp> customerOrderRespList = new ArrayList<>();
         if(!CollectionUtils.isEmpty(customerOrderList)){

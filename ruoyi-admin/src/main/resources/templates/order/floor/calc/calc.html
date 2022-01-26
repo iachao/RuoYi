@@ -4,36 +4,100 @@
     <th:block th:include="include :: header('地板计算')" />
 </head>
 <body class="gray-bg">
-<div class="container-div">
-    <div class="row">
-        <div class="col-sm-12 search-collapse">
-            <form id="formId">
-                <div class="select-list">
-                    <ul>
-                        <li>
-                            <label>地板系列：</label>
-                            <select name="floorSpec" class="form-control m-b" th:with="type=${@dict.getType('floor_spec')}" required>
-                                <option th:each="dict : ${type}" th:text="${dict.dictLabel+'【'+dict.dictValue+'】'}" th:value="${dict.dictValue}"></option>
-                            </select>
-                        </li>
-                    </ul>
+    <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <label>地板系列：</label>
+                                <select name="floorSpec" th:with="type=${@dict.getType('floor_spec')}" required>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel+'【'+dict.dictValue+'】'}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <div class="bootstrap-table bootstrap3">
+                    <div class="fixed-table-toolbar">
+                        <div class="bs-bars pull-left">
+                            <div class="btn-group-sm" id="toolbar" role="group">
+                                <a class="btn btn-success" onclick="addTR()">
+                                    <i class="fa fa-plus"></i> 添加行
+                                </a>
+                                <a class="btn btn-success" onclick="calcFloor()">
+                                    <i class="fa fa-calculator"></i> 计算
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 select-table table-striped">
+                        <table id="bootstrap-table">
+                            <thead>
+                            <tr>
+                                <th>长(mm)</th>
+                                <th>宽(mm)</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody id="bootstrap-table-tbody">
+                            <tr>
+                                <td><input name="areaWidth" class="form-control" type="number"></td>
+                                <td><input name="areaLength" class="form-control" type="number"></td>
+                                <td>
+                                    <a class="btn btn-primary btn-xs" onclick="removeTR()">
+                                        <i class="fa fa-remove"></i> 删除行
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><input name="areaWidth" class="form-control" type="number"></td>
+                                <td><input name="areaLength" class="form-control" type="number"></td>
+                                <td>
+                                    <a class="btn btn-primary btn-xs" onclick="removeTR()">
+                                        <i class="fa fa-remove"></i> 删除行
+                                    </a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-            </form>
-        </div>
+            </div>
 
-        <div class="col-sm-12 select-table table-striped">
-            <table id="bootstrap-table"></table>
         </div>
     </div>
-</div>
-<th:block th:include="include :: footer" />
-<script th:inline="javascript">
-    var floorSpecDatas = [[${@dict.getType('floor_spec')}]];
-    var prefix = ctx + "order/floor/calc";
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var floorSpecDatas = [[${@dict.getType('floor_spec')}]];
+        var prefix = ctx + "order/floor/calc";
 
-    $(function() {
+        function addTR(){
 
-    })
-</script>
+        }
+        function removeTR(){
+
+        }
+
+        function calcFloor(){
+            var floorData = [];
+            let rows = $('#bootstrap-table-tbody').children('tr');
+            for(var i=0;i<rows.length;i++){
+                var data = {};
+                var tdArr = rows.eq(i).find('td');
+                var td1 = tdArr.eq(0).find('input').val();
+                var td2 = tdArr.eq(1).find('input').val();
+                data.areaWidth = td1;
+                data.areaLength = td2;
+                floorData.push(data);
+            }
+            $.post(ctx + 'order/floor/calc/calcFloor', JSON.stringify(floorData), function (result) {
+                console.log(result)
+            });
+        }
+    </script>
 </body>
 </html>
