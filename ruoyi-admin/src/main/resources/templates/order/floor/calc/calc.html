@@ -6,14 +6,20 @@
 <body class="gray-bg">
     <div class="container-div">
         <div class="row">
-            <div class="col-sm-12 search-collapse">
+            <div id="search-collapse" class="col-sm-12 search-collapse">
                 <form id="formId">
                     <div class="select-list">
                         <ul>
                             <li>
                                 <label>地板系列：</label>
-                                <select name="floorSpec" th:with="type=${@dict.getType('floor_spec')}" required>
+                                <select name="floorSpec" id="floorSpec" th:with="type=${@dict.getType('floor_spec')}" required>
                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel+'【'+dict.dictValue+'】'}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <label>起头方式：</label>
+                                <select name="floorStartWay" id="floorStartWay" th:with="type=${@dict.getType('floor_start_way')}" required>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                                 </select>
                             </li>
                         </ul>
@@ -33,69 +39,175 @@
                                 </a>
                             </div>
                         </div>
+                        <div class="columns columns-right btn-group pull-right">
+                            <button class="btn btn-default btn-outline" type="button" id="search" name="search" aria-label="隐藏/显示搜索" title="隐藏/显示搜索">
+                                <i class="glyphicon glyphicon-search"></i>
+                            </button>
+                            <button class="btn btn-default btn-outline" type="button" name="refresh" aria-label="刷新" title="刷新">
+                                <i class="glyphicon glyphicon-refresh icon-refresh"></i>
+                            </button>
+                        </div>
                     </div>
-                    <div class="col-sm-12 select-table table-striped">
-                        <table id="bootstrap-table">
-                            <thead>
-                            <tr>
-                                <th>长(mm)</th>
-                                <th>宽(mm)</th>
-                                <th>操作</th>
-                            </tr>
-                            </thead>
-                            <tbody id="bootstrap-table-tbody">
-                            <tr>
-                                <td><input name="areaWidth" class="form-control" type="number"></td>
-                                <td><input name="areaLength" class="form-control" type="number"></td>
-                                <td>
-                                    <a class="btn btn-primary btn-xs" onclick="removeTR()">
-                                        <i class="fa fa-remove"></i> 删除行
-                                    </a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><input name="areaWidth" class="form-control" type="number"></td>
-                                <td><input name="areaLength" class="form-control" type="number"></td>
-                                <td>
-                                    <a class="btn btn-primary btn-xs" onclick="removeTR()">
-                                        <i class="fa fa-remove"></i> 删除行
-                                    </a>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
+                    <div class="fixed-table-container">
+                        <div class="fixed-table-body">
+                            <ul>
+                                <li>
+                                    <label>测量面积：<span id="measureFloorArea"></span>㎡</label>
+                                </li>
+                                <li>
+                                    <label>预计安装面积：<span id="installFloorArea"></span>㎡</label>
+                                    <label>预计安装块数：<span id="installFloorBlock"></span>块</label>
+                                </li>
+                                <li>
+                                    <label style="color: red">发货面积：<span id="sendFloorArea"></span>㎡</label>
+                                    <label>发货件数：<span id="sendFloorBox"></span>件</label>
+                                    <label>发货块数：<span id="sendFloorBlock"></span>块</label>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="fixed-table-body">
+                            <table id="bootstrap-table">
+                                <thead>
+                                <tr>
+                                    <th style="text-align: center">序号</th>
+                                    <th style="text-align: center">长(mm)</th>
+                                    <th style="text-align: center">宽(mm)</th>
+                                    <th style="text-align: center">操作</th>
+                                </tr>
+                                </thead>
+                                <tbody id="floorTbody">
+                                <tr id="floorTr">
+                                    <td class="floorTd">1</td>
+                                    <td><input name="areaWidth" class="form-control" type="number"></td>
+                                    <td><input name="areaLength" class="form-control" type="number"></td>
+                                    <td>
+                                        <a class="btn btn-primary btn-xs" onclick="removeTR(this)">
+                                            <i class="fa fa-remove"></i> 删除行
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="floorTd">2</td>
+                                    <td><input name="areaWidth" class="form-control" type="number"></td>
+                                    <td><input name="areaLength" class="form-control" type="number"></td>
+                                    <td>
+                                        <a class="btn btn-primary btn-xs" onclick="removeTR(this)">
+                                            <i class="fa fa-remove"></i> 删除行
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="floorTd">3</td>
+                                    <td><input name="areaWidth" class="form-control" type="number"></td>
+                                    <td><input name="areaLength" class="form-control" type="number"></td>
+                                    <td>
+                                        <a class="btn btn-primary btn-xs" onclick="removeTR(this)">
+                                            <i class="fa fa-remove"></i> 删除行
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="floorTd">4</td>
+                                    <td><input name="areaWidth" class="form-control" type="number"></td>
+                                    <td><input name="areaLength" class="form-control" type="number"></td>
+                                    <td>
+                                        <a class="btn btn-primary btn-xs" onclick="removeTR(this)">
+                                            <i class="fa fa-remove"></i> 删除行
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="floorTd">5</td>
+                                    <td><input name="areaWidth" class="form-control" type="number"></td>
+                                    <td><input name="areaLength" class="form-control" type="number"></td>
+                                    <td>
+                                        <a class="btn btn-primary btn-xs" onclick="removeTR(this)">
+                                            <i class="fa fa-remove"></i> 删除行
+                                        </a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="fixed-table-footer"></div>
                     </div>
                 </div>
+                <div class="clearfix"></div>
             </div>
-
         </div>
     </div>
     <th:block th:include="include :: footer" />
     <script th:inline="javascript">
         var floorSpecDatas = [[${@dict.getType('floor_spec')}]];
         var prefix = ctx + "order/floor/calc";
-
+        $(function (){
+            renderSN();
+        })
+        $("#search").click(function (){
+            $('#search-collapse').toggle();
+        });
         function addTR(){
-
+            let $td = $('#floorTr').clone();
+            $('#bootstrap-table').append($td);
+            $('#bootstrap-table tr:last').find(':input').val('');
+            renderSN();
         }
-        function removeTR(){
-
+        function removeTR(curTr){
+            let $td = $('#floorTr').clone();
+            if($td.length == 0){
+                $('#bootstrap-table tr:last').attr('id','floorTr');
+            }
+            let rows = $('#floorTbody').children('tr');
+            if(rows.length == 1){
+                $.modal.msgWarning('至少保留一行');
+                return;
+            }
+            $(curTr).parent().parent().remove();
+            renderSN();
         }
-
+        // 重新渲染序号列
+        function renderSN(){
+            var i = 1;
+            $('.floorTd').each(function (){
+                $(this).html(i++);
+            });
+        }
+        // 计算地板
         function calcFloor(){
-            var floorData = [];
-            let rows = $('#bootstrap-table-tbody').children('tr');
+            var floorCalcReq = {};
+            var calcParams = [];
+            let rows = $('#floorTbody').children('tr');
             for(var i=0;i<rows.length;i++){
                 var data = {};
                 var tdArr = rows.eq(i).find('td');
-                var td1 = tdArr.eq(0).find('input').val();
-                var td2 = tdArr.eq(1).find('input').val();
-                data.areaWidth = td1;
-                data.areaLength = td2;
-                floorData.push(data);
+                data.measureLength = tdArr.eq(1).find('input').val();
+                data.measureWidth = tdArr.eq(2).find('input').val();
+                calcParams.push(data);
             }
-            $.post(ctx + 'order/floor/calc/calcFloor', JSON.stringify(floorData), function (result) {
-                console.log(result)
+            floorCalcReq.calcParams = calcParams;
+            floorCalcReq.floorSpec = $('#floorSpec').find('option:selected').val();
+            floorCalcReq.floorStartWay  = $('#floorStartWay').find('option:selected').val();
+            $.ajax({
+                type: 'POST',
+                url: ctx + 'order/floor/calc/calcFloor',
+                data: JSON.stringify(floorCalcReq),
+                contentType: "application/json",
+                dataType: "json",
+                success: function(result){
+                    console.log(result);
+                    if(result.code == 0){
+                        var lengthAsLengthResult = result.data.lengthAsLengthResult;
+                        $('#measureFloorArea').html(lengthAsLengthResult.measureFloorArea / 1000000);
+                        $('#installFloorArea').html(lengthAsLengthResult.installFloorArea / 1000000);
+                        $('#installFloorBlock').html(lengthAsLengthResult.installFloorBlock);
+                        $('#sendFloorArea').html(lengthAsLengthResult.sendFloorArea / 1000000);
+                        $('#sendFloorBlock').html(lengthAsLengthResult.sendFloorBlock);
+                        $('#sendFloorBox').html(lengthAsLengthResult.sendFloorBox);
+
+                    }else{
+                        $.modal.msg(data.msg);
+                    }
+                }
             });
         }
     </script>
