@@ -1,6 +1,7 @@
 package com.ruoyi.system.model;
 
 import lombok.Data;
+import lombok.ToString;
 
 import java.math.BigDecimal;
 
@@ -11,12 +12,13 @@ public class FloorCalcParam {
     private BigDecimal measureLength = BigDecimal.ZERO;
     // 宽 mm
     private BigDecimal measureWidth = BigDecimal.ZERO;
-    // 是否减去该面积
-    private boolean ifSubtract = false;
 
-    public boolean isIfSubtract() {
+    public boolean isSubtractArea() {
         return this.measureLength.compareTo(BigDecimal.ZERO) != 1 || this.measureWidth.compareTo(BigDecimal.ZERO) != 1;
     }
+
+    // 是否减去该面积
+    private boolean subtractArea = false;
 
     // 优化后 长mm
     private BigDecimal optimizeLength;

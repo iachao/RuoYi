@@ -9,11 +9,9 @@ import com.ruoyi.system.model.FloorCalcResult;
 import com.ruoyi.system.model.FloorParam;
 import com.ruoyi.system.req.FloorCalcReq;
 import com.ruoyi.system.resp.FloorCalcResp;
-import nonapi.io.github.classgraph.json.JSONUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-import springfox.documentation.spring.web.json.Json;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -60,10 +58,8 @@ public class FloorCalcController extends BaseController {
         ){
             return AjaxResult.error("地板规格参数错误,必须包含 长*宽*厚度*片数 !");
         }
-
         FloorCalcResp floorCalcResp = new FloorCalcResp();
 
-        FloorCalcResult floorCalcResult = new FloorCalcResult();
         BigDecimal totalFloorBlocks = BigDecimal.ZERO;
         BigDecimal totalMeasureAreas = BigDecimal.ZERO;
         List<FloorParam> remainderFloorTotal = new ArrayList<>();
@@ -132,6 +128,7 @@ public class FloorCalcController extends BaseController {
                 remainderFloorTotal.add(remainderFloor);
             }
         }
+        FloorCalcResult floorCalcResult = new FloorCalcResult();
         // 测量总面积
         floorCalcResult.setMeasureFloorArea(totalMeasureAreas);
         // 安装总面积 和 块数
