@@ -148,7 +148,7 @@ public class FloorCalcController extends BaseController {
     @Log(title = "计算地板", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
-    public AjaxResult addSave(FloorCalcReq req)
+    public AjaxResult addSave(@RequestBody FloorCalcReq req)
     {
         return toAjax(true);
     }

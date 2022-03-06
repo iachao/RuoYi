@@ -9,6 +9,9 @@ import java.util.List;
 @Data
 public class FloorCalcReq {
 
+    private Integer customerId;
+    private String customerInfo;
+
     // 地板规格
     private String floorSpec;
 
