@@ -5,6 +5,9 @@ import lombok.ToString;
 
 import java.math.BigDecimal;
 
+/**
+ * 用户输入的房租面积计算参数
+ */
 @Data
 public class FloorCalcParam {
 
@@ -13,15 +16,10 @@ public class FloorCalcParam {
     // 宽 mm
     private BigDecimal measureWidth = BigDecimal.ZERO;
 
-    public boolean isSubtractArea() {
-        return this.measureLength.compareTo(BigDecimal.ZERO) != 1 || this.measureWidth.compareTo(BigDecimal.ZERO) != 1;
-    }
-
-    // 是否减去该面积
-    private boolean subtractArea = false;
-
     // 优化后 长mm
     private BigDecimal optimizeLength;
     // 优化后 宽mm
     private BigDecimal optimizeWidth;
+
+    private FloorCalcResult floorCalcResult;
 }

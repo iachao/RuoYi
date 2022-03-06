@@ -4,6 +4,9 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 
+/**
+ * 地板规格参数
+ */
 @Data
 public class FloorParam {
 

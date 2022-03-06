@@ -1,15 +1,19 @@
 package com.ruoyi.system.resp;
 
+import com.ruoyi.system.model.FloorCalcParam;
 import com.ruoyi.system.model.FloorCalcResult;
 import lombok.Data;
 
+import java.util.List;
+
+/**
+ * 地板计算后返回结果
+ */
 @Data
 public class FloorCalcResp {
 
-    // 横向铺结果 长作长铺地板
-    private FloorCalcResult lengthAsLengthResult;
+    private List<FloorCalcParam> floorCalcParam;
 
-    // 众向铺结果 长作宽铺地板
-    private FloorCalcResult lengthAsWidthResult;
+    private FloorCalcResult floorCalcResult;
 
 }

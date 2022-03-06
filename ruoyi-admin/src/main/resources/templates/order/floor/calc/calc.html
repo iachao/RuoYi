@@ -31,11 +31,14 @@
                     <div class="fixed-table-toolbar">
                         <div class="bs-bars pull-left">
                             <div class="btn-group-sm" id="toolbar" role="group">
-                                <a class="btn btn-success" onclick="addTR()">
+                                <a class="btn btn-default" onclick="addTR()">
                                     <i class="fa fa-plus"></i> 添加行
                                 </a>
-                                <a class="btn btn-success" onclick="calcFloor()">
+                                <a class="btn btn-info" onclick="calcFloor()">
                                     <i class="fa fa-calculator"></i> 计算
+                                </a>
+                                <a class="btn btn-success" onclick="save()" shiro:hasPermission="floor:calc:add">
+                                    <i class="fa fa-floppy-o"></i> 保存
                                 </a>
                             </div>
                         </div>
@@ -140,6 +143,9 @@
     <script th:inline="javascript">
         var floorSpecDatas = [[${@dict.getType('floor_spec')}]];
         var prefix = ctx + "order/floor/calc";
+        function save(){
+            $.operate.save(prefix + "/add", $('#form-floor-edit').serialize());
+        }
         $(function (){
             renderSN();
         })
@@ -172,9 +178,7 @@
                 $(this).html(i++);
             });
         }
-        // 计算地板
-        function calcFloor(){
-            var floorCalcReq = {};
+        function buildUpParam(){
             var calcParams = [];
             let rows = $('#floorTbody').children('tr');
             for(var i=0;i<rows.length;i++){
@@ -182,7 +186,20 @@
                 var tdArr = rows.eq(i).find('td');
                 data.measureLength = tdArr.eq(1).find('input').val();
                 data.measureWidth = tdArr.eq(2).find('input').val();
+                if(data.measureLength.trim().length == 0 || data.measureWidth.trim().length == 0){
+                    continue;
+                }
                 calcParams.push(data);
+            }
+            return calcParams;
+        }
+        // 计算地板
+        function calcFloor(){
+            var floorCalcReq = {};
+            var calcParams = buildUpParam();
+            if(calcParams.length == 0){
+                $.modal.msg('无需计算');
+                return;
             }
             floorCalcReq.calcParams = calcParams;
             floorCalcReq.floorSpec = $('#floorSpec').find('option:selected').val();
@@ -196,13 +213,13 @@
                 success: function(result){
                     console.log(result);
                     if(result.code == 0){
-                        var lengthAsLengthResult = result.data.lengthAsLengthResult;
-                        $('#measureFloorArea').html(lengthAsLengthResult.measureFloorArea / 1000000);
-                        $('#installFloorArea').html(lengthAsLengthResult.installFloorArea / 1000000);
-                        $('#installFloorBlock').html(lengthAsLengthResult.installFloorBlock);
-                        $('#sendFloorArea').html(lengthAsLengthResult.sendFloorArea / 1000000);
-                        $('#sendFloorBlock').html(lengthAsLengthResult.sendFloorBlock);
-                        $('#sendFloorBox').html(lengthAsLengthResult.sendFloorBox);
+                        var floorCalcResult = result.data.floorCalcResult;
+                        $('#measureFloorArea').html((floorCalcResult.measureFloorArea / 1000000).toFixed(4));
+                        $('#installFloorArea').html((floorCalcResult.installFloorArea / 1000000).toFixed(4));
+                        $('#installFloorBlock').html(floorCalcResult.installFloorBlock);
+                        $('#sendFloorArea').html((floorCalcResult.sendFloorArea / 1000000).toFixed(4));
+                        $('#sendFloorBlock').html(floorCalcResult.sendFloorBlock);
+                        $('#sendFloorBox').html(floorCalcResult.sendFloorBox);
 
                     }else{
                         $.modal.msg(data.msg);

@@ -1,19 +1,26 @@
 package com.ruoyi.web.controller.order;
 
 import com.alibaba.fastjson.JSON;
+import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.text.Convert;
+import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.system.domain.CustomerOrder;
 import com.ruoyi.system.model.FloorCalcParam;
 import com.ruoyi.system.model.FloorCalcResult;
 import com.ruoyi.system.model.FloorParam;
 import com.ruoyi.system.req.FloorCalcReq;
 import com.ruoyi.system.resp.FloorCalcResp;
+import ma.glasnost.orika.MapperFactory;
+import ma.glasnost.orika.impl.DefaultMapperFactory;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +51,7 @@ public class FloorCalcController extends BaseController {
         if (split.length != 4) {
             return AjaxResult.error("地板规格参数错误,必须包含 长*宽*厚度*片数 !");
         }
-        // 地板参数
+        // 地板规格参数
         FloorParam floorParam = new FloorParam();
         floorParam.setFloorLength(Convert.toBigDecimal(split[0]));
         floorParam.setFloorWidth(Convert.toBigDecimal(split[1]));
@@ -58,94 +65,94 @@ public class FloorCalcController extends BaseController {
         ){
             return AjaxResult.error("地板规格参数错误,必须包含 长*宽*厚度*片数 !");
         }
-        FloorCalcResp floorCalcResp = new FloorCalcResp();
+        MapperFactory mapperFactory = new DefaultMapperFactory.Builder().build();
 
         BigDecimal totalFloorBlocks = BigDecimal.ZERO;
         BigDecimal totalMeasureAreas = BigDecimal.ZERO;
-        List<FloorParam> remainderFloorTotal = new ArrayList<>();
+
         List<FloorCalcParam> calcParams = req.getCalcParams();
         for (int i = 0; i < calcParams.size(); i++) {
-            FloorCalcParam floorCalcParam = calcParams.get(i);
-            if(null == floorCalcParam.getMeasureLength() || null == floorCalcParam.getMeasureWidth()
-                    || floorCalcParam.getMeasureLength().compareTo(BigDecimal.ZERO) == 0
-                    || floorCalcParam.getMeasureWidth().compareTo(BigDecimal.ZERO) == 0){
+            FloorCalcParam floorCalcParam1 = calcParams.get(i);
+            FloorCalcParam floorCalcParam2 = mapperFactory.getMapperFacade().map(floorCalcParam1,FloorCalcParam.class);
+
+            if(null == floorCalcParam1.getMeasureLength() || null == floorCalcParam1.getMeasureWidth()
+                    || floorCalcParam1.getMeasureLength().compareTo(BigDecimal.ZERO) == 0
+                    || floorCalcParam1.getMeasureWidth().compareTo(BigDecimal.ZERO) == 0){
                 continue;
             }
-            // 优化实际计算木地板块数 长和宽参数
-            optimizeFloorCalcParam(floorCalcParam,floorParam);
             // 总测量面积
-            totalMeasureAreas = totalMeasureAreas.add(floorCalcParam.getMeasureLength().multiply(floorCalcParam.getMeasureWidth()));
-            // 半块板 长度
-            BigDecimal halfFloorLength = floorParam.getFloorLength().divide(new BigDecimal(2));
-            // 半块板 数量 和 余数
-            BigDecimal[] divideAndRemainder = floorCalcParam.getOptimizeLength().divideAndRemainder(halfFloorLength);
-            BigDecimal halfLengthCount = divideAndRemainder[0];
-            // 余数
-            BigDecimal halfStartLastFloor = divideAndRemainder[1];
-            // 整块板 余数
-            BigDecimal wholeStartLastFloor = floorCalcParam.getOptimizeLength().remainder(floorParam.getFloorLength());
+            totalMeasureAreas = totalMeasureAreas.add(floorCalcParam1.getMeasureLength().multiply(floorCalcParam1.getMeasureWidth()));
 
-            // ====关键属性: 行数 (即一个面积内地板铺多少行)
-            BigDecimal rows = floorCalcParam.getOptimizeWidth().divide(floorParam.getFloorWidth(), RoundingMode.UP);
-            // ====关键属性: 每行剩余板长 = (木地板长度/2) - (房间长 % (木地板长度/2) )
-            BigDecimal remainderPerRow = BigDecimal.ZERO;
-            // 如果余数是0,则每行剩余为 0
-            if(halfStartLastFloor.compareTo(BigDecimal.ZERO) != 0){
-                remainderPerRow = halfFloorLength.subtract(halfStartLastFloor);
+            // 优化实际计算木地板块数 长和宽参数
+            optimizeFloorCalcParam(floorCalcParam1,floorParam);
+
+            BigDecimal floorBlocks1 = calcFloorBlocks(floorCalcParam1,floorParam);
+            swapFloorCalcParam(floorCalcParam2);
+            optimizeFloorCalcParam(floorCalcParam2,floorParam);
+            BigDecimal floorBlocks2 = calcFloorBlocks(floorCalcParam2,floorParam);
+            BigDecimal realUseFloorBlock = floorBlocks1.compareTo(floorBlocks2) == 1 ? floorBlocks2 : floorBlocks1;
+            // 该测量面积剩余地板
+            if(realUseFloorBlock.compareTo(floorBlocks1) == 0){
+
             }
-            // ====该面积内 总块数
-            BigDecimal totalBlocks = ((floorCalcParam.getOptimizeLength().add(remainderPerRow)).multiply(rows)).divide(floorParam.getFloorLength(),0,RoundingMode.UP);
-            totalFloorBlocks = totalFloorBlocks.add(totalBlocks);
-            // 奇数行 计算剩余 板
-            if(rows.remainder(new BigDecimal(2)).compareTo(BigDecimal.ZERO) == 1){
-                // 剩余木地板数据
-                FloorParam remainderFloor = new FloorParam();
-                // 半块板 整除
-                if(halfLengthCount.compareTo(BigDecimal.ZERO) == 0){
-                    remainderFloor.setFloorWidth(floorParam.getFloorWidth());
-                    remainderFloor.setFloorLength(halfFloorLength);
-                    // 地板起头方式:整块
-                    if(req.getFloorStartWay().equals(1)){
-                        remainderFloor.setLeftFloorCut(true);
-                    }else{
-                        remainderFloor.setRightFloorCut(true);
-                    }
-                }else {
-                    if(wholeStartLastFloor.compareTo(halfFloorLength) == -1){
-                        remainderFloor.setFloorWidth(floorParam.getFloorWidth());
-                        if(req.getFloorStartWay().equals(1)){
-                            remainderFloor.setFloorLength(floorParam.getFloorLength().subtract(wholeStartLastFloor));
-                            remainderFloor.setLeftFloorCut(true);
-                        }else{
-                            remainderFloor.setFloorLength(halfFloorLength);
-                            remainderFloor.setRightFloorCut(true);
-                        }
-                    }else{
-                        remainderFloor.setFloorLength(BigDecimal.ZERO);
-                        remainderFloor.setFloorWidth(BigDecimal.ZERO);
-                    }
-                }
-                remainderFloorTotal.add(remainderFloor);
-            }
+            totalFloorBlocks = totalFloorBlocks.add(realUseFloorBlock);
+
+            FloorCalcResult tmp = new FloorCalcResult();
+            tmp.setInstallFloorBlock(realUseFloorBlock);
+            // 测量面积
+            tmp.setMeasureFloorArea(floorCalcParam1.getMeasureLength().multiply(floorCalcParam1.getMeasureWidth()).setScale(4,RoundingMode.HALF_UP));
+            // 安装面积和块数
+            tmp.setInstallFloorBlock(realUseFloorBlock);
+            tmp.setInstallFloorArea(realUseFloorBlock.multiply(floorParam.getFloorLength().multiply(floorParam.getFloorWidth())).setScale(4,RoundingMode.HALF_UP));
+            // 发货地板
+            BigDecimal sendFloorBox = realUseFloorBlock.divide(floorParam.getFloorBlockPerBox(), 0, RoundingMode.UP);
+            tmp.setSendFloorBox(sendFloorBox);
+            tmp.setSendFloorBlock(sendFloorBox.multiply(floorParam.getFloorBlockPerBox()));
+            // 发货地板面积
+            tmp.setSendFloorArea(tmp.getSendFloorBlock().multiply(floorParam.getFloorLength().multiply(floorParam.getFloorWidth())));
+            floorCalcParam1.setFloorCalcResult(tmp);
         }
+
         FloorCalcResult floorCalcResult = new FloorCalcResult();
-        // 测量总面积
-        floorCalcResult.setMeasureFloorArea(totalMeasureAreas);
-        // 安装总面积 和 块数
-        floorCalcResult.setInstallFloorArea(totalFloorBlocks.multiply(floorParam.getFloorLength().multiply(floorParam.getFloorWidth())));
-        floorCalcResult.setInstallFloorBlock(totalFloorBlocks);
+        for (int i = 0; i < calcParams.size(); i++) {
+            FloorCalcParam calcParam = calcParams.get(i);
+            if(null == calcParam.getMeasureLength() || null == calcParam.getMeasureWidth()
+                    || calcParam.getMeasureLength().compareTo(BigDecimal.ZERO) == 0
+                    || calcParam.getMeasureWidth().compareTo(BigDecimal.ZERO) == 0){
+                continue;
+            }
+            FloorCalcResult calcResult = calcParam.getFloorCalcResult();
+            floorCalcResult.setMeasureFloorArea(floorCalcResult.getMeasureFloorArea().add(calcResult.getMeasureFloorArea()));
+            floorCalcResult.setInstallFloorBlock(floorCalcResult.getInstallFloorBlock().add(calcResult.getInstallFloorBlock()));
+        }
+
+        FloorCalcResp floorCalcResp = new FloorCalcResp();
+        floorCalcResult.setInstallFloorArea(floorCalcResult.getInstallFloorBlock().multiply(floorParam.getFloorLength().multiply(floorParam.getFloorWidth())));
         // 发货地板箱数
-        BigDecimal sendFloorBox = totalFloorBlocks.divide(floorParam.getFloorBlockPerBox(), 0, RoundingMode.UP);
+        BigDecimal sendFloorBox = floorCalcResult.getInstallFloorBlock().divide(floorParam.getFloorBlockPerBox(), 0, RoundingMode.UP);
         floorCalcResult.setSendFloorBox(sendFloorBox);
         // 发货地板块数
         floorCalcResult.setSendFloorBlock(sendFloorBox.multiply(floorParam.getFloorBlockPerBox()));
         // 发货地板面积
         floorCalcResult.setSendFloorArea(floorCalcResult.getSendFloorBlock().multiply(floorParam.getFloorLength().multiply(floorParam.getFloorWidth())));
         logger.info("结果: " + JSON.toJSONString(floorCalcResult));
-        logger.info("剩余可用板长度: " + JSON.toJSONString(remainderFloorTotal));
-        floorCalcResp.setLengthAsLengthResult(floorCalcResult);
+        floorCalcResp.setFloorCalcResult(floorCalcResult);
+        floorCalcResp.setFloorCalcParam(calcParams);
         return AjaxResult.success(floorCalcResp);
     }
+
+    /**
+     * 保存计算地板数据
+     */
+    @RequiresPermissions("floor:calc:add")
+    @Log(title = "计算地板", businessType = BusinessType.INSERT)
+    @PostMapping("/add")
+    @ResponseBody
+    public AjaxResult addSave(FloorCalcReq req)
+    {
+        return toAjax(true);
+    }
+
 
     /**
      * 优化测量参数
@@ -169,5 +176,111 @@ public class FloorCalcController extends BaseController {
         }else{
             floorCalcParam.setOptimizeWidth(floorCalcParam.getMeasureWidth().abs());
         }
+    }
+
+    /**
+     * 计算铺地板行数
+     * @param calcValue
+     * @param floorWidth
+     * @return
+     */
+    private BigDecimal calcFloorRows(BigDecimal calcValue,BigDecimal floorWidth){
+        return calcValue.divide(floorWidth,0,RoundingMode.UP);
+    }
+
+    /**
+     * 计算某测量面积所需地板块数
+     * @param floorCalcParam
+     * @param floorParam
+     * @return
+     */
+    private BigDecimal calcFloorBlocks(FloorCalcParam floorCalcParam,FloorParam floorParam){
+        // 半块板 长度
+        BigDecimal halfFloorLength = floorParam.getFloorLength().divide(new BigDecimal(2));
+        // 半块板 数量 和 余数
+        BigDecimal[] divideAndRemainder = floorCalcParam.getOptimizeLength().divideAndRemainder(halfFloorLength);
+        BigDecimal halfLengthCount = divideAndRemainder[0];
+        // 余数
+        BigDecimal halfStartLastFloor = divideAndRemainder[1];
+
+        // ====关键属性: 每行剩余板长 = (木地板长度/2) - (房间长 % (木地板长度/2) )
+        BigDecimal remainderPerRow = BigDecimal.ZERO;
+        // 如果余数是0,则每行剩余为 0
+        if(halfStartLastFloor.compareTo(BigDecimal.ZERO) != 0){
+            remainderPerRow = halfFloorLength.subtract(halfStartLastFloor);
+        }
+        // ====关键属性: 行数 (即一个面积内地板铺多少行)
+        BigDecimal rows = calcFloorRows(floorCalcParam.getOptimizeWidth(),floorParam.getFloorWidth());
+        BigDecimal floorBlocks = ((floorCalcParam.getOptimizeLength().add(remainderPerRow)).multiply(rows)).divide(floorParam.getFloorLength(),0,RoundingMode.UP);
+
+        return floorBlocks;
+    }
+
+    /**
+     * 交换测量面积长和宽参数
+     * @param floorCalcParam
+     */
+    private void swapFloorCalcParam(FloorCalcParam floorCalcParam){
+        long a = floorCalcParam.getMeasureLength().longValue();
+        long b = floorCalcParam.getMeasureWidth().longValue();
+        if(a == b){
+            return;
+        }
+        a = a ^ b;
+        b = a ^ b;
+        a = a ^ b;
+        floorCalcParam.setMeasureLength(new BigDecimal(a));
+        floorCalcParam.setMeasureWidth(new BigDecimal(b));
+    }
+
+    /**
+     * 计算某测量面积内剩余地板
+     * @param floorCalcParam
+     * @param floorParam
+     * @param floorStartWay
+     * @return
+     */
+    private List<FloorParam> calcRemainFloor(FloorCalcParam floorCalcParam,FloorParam floorParam,Integer floorStartWay){
+        List<FloorParam> remainderFloorTotal = new ArrayList<>();
+        BigDecimal rows = calcFloorRows(floorCalcParam.getOptimizeWidth(),floorParam.getFloorWidth());
+        // 整块板 余数
+        BigDecimal wholeStartLastFloor = floorCalcParam.getOptimizeLength().remainder(floorParam.getFloorLength());
+        // 奇数行 计算剩余 板
+        if(rows.remainder(new BigDecimal(2)).compareTo(BigDecimal.ZERO) == 1){
+            // 半块板 长度
+            BigDecimal halfFloorLength = floorParam.getFloorLength().divide(new BigDecimal(2),1,RoundingMode.HALF_UP);
+            // 半块板 数量 和 余数
+            BigDecimal[] divideAndRemainder = floorCalcParam.getOptimizeLength().divideAndRemainder(halfFloorLength);
+            BigDecimal halfLengthCount = divideAndRemainder[0];
+            // 剩余木地板数据
+            FloorParam remainderFloor = new FloorParam();
+            // 半块板 整除
+            if(halfLengthCount.compareTo(BigDecimal.ZERO) == 0){
+                remainderFloor.setFloorWidth(floorParam.getFloorWidth());
+                remainderFloor.setFloorLength(halfFloorLength);
+                // 地板起头方式:整块
+                if(floorStartWay.equals(1)){
+                    remainderFloor.setLeftFloorCut(true);
+                }else{
+                    remainderFloor.setRightFloorCut(true);
+                }
+            }else {
+                if(wholeStartLastFloor.compareTo(halfFloorLength) == -1){
+                    remainderFloor.setFloorWidth(floorParam.getFloorWidth());
+                    if(floorStartWay.equals(1)){
+                        remainderFloor.setFloorLength(floorParam.getFloorLength().subtract(wholeStartLastFloor));
+                        remainderFloor.setLeftFloorCut(true);
+                    }else{
+                        remainderFloor.setFloorLength(halfFloorLength);
+                        remainderFloor.setRightFloorCut(true);
+                    }
+                }else{
+                    remainderFloor.setFloorLength(BigDecimal.ZERO);
+                    remainderFloor.setFloorWidth(BigDecimal.ZERO);
+                }
+            }
+            remainderFloorTotal.add(remainderFloor);
+        }
+        return remainderFloorTotal;
     }
 }
