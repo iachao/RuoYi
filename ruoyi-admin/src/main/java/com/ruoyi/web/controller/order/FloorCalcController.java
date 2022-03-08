@@ -6,21 +6,23 @@ import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.enums.BusinessType;
-import com.ruoyi.system.domain.CustomerOrder;
+import com.ruoyi.system.domain.CustomerFloorData;
 import com.ruoyi.system.model.FloorCalcParam;
 import com.ruoyi.system.model.FloorCalcResult;
 import com.ruoyi.system.model.FloorParam;
 import com.ruoyi.system.req.FloorCalcReq;
 import com.ruoyi.system.resp.FloorCalcResp;
+import com.ruoyi.system.service.ICustomerFloorDataService;
 import ma.glasnost.orika.MapperFactory;
 import ma.glasnost.orika.impl.DefaultMapperFactory;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +38,8 @@ import java.util.List;
 public class FloorCalcController extends BaseController {
     private final String prefix = "order/floor/calc";
 
+    @Autowired
+    private ICustomerFloorDataService customerFloorDataService;
 
     @GetMapping()
     public String calc() {
@@ -150,6 +154,29 @@ public class FloorCalcController extends BaseController {
     @ResponseBody
     public AjaxResult addSave(@RequestBody FloorCalcReq req)
     {
+        CustomerFloorData cusReq = new CustomerFloorData();
+        cusReq.setCustomerId(req.getCustomerId());
+        List<CustomerFloorData> result = customerFloorDataService.selectCustomerFloorDataList(cusReq);
+        if(!CollectionUtils.isEmpty(result)){
+            customerFloorDataService.deleteByCustomerId(req.getCustomerId());
+        }
+        
+        List<CustomerFloorData> list =new ArrayList<>();
+        if(!CollectionUtils.isEmpty(req.getCalcParams())){
+            for (int i = 0; i < req.getCalcParams().size(); i++) {
+                FloorCalcParam floorCalcParam = req.getCalcParams().get(i);
+                CustomerFloorData customerFloorData = new CustomerFloorData();
+                customerFloorData.setCustomerId(req.getCustomerId());
+                customerFloorData.setCustomerInfo(req.getCustomerInfo());
+                customerFloorData.setMeasureLength(floorCalcParam.getMeasureLength());
+                customerFloorData.setMeasureWidth(floorCalcParam.getMeasureWidth());
+                customerFloorData.setCreateBy(getLoginName());
+
+                list.add(customerFloorData);
+            }
+            return toAjax(customerFloorDataService.saveBatch(list));
+        }
+
         return toAjax(true);
     }
 

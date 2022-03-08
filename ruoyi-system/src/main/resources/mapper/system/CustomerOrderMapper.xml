@@ -58,6 +58,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectCustomerOrderVo"/>
         <if test="customerName != null  and customerName != ''">
             where customer_name like concat('%', #{keyword}, '%') or customer_phone like concat('%', #{keyword}, '%')
+            or community like concat('%', #{keyword}, '%')
         </if>
         order by id desc
         limit 0,10

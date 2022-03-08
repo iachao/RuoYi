@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 public class FloorCalcReq {
 
-    private Integer customerId;
+    private Long customerId;
     private String customerInfo;
 
     // 地板规格
