@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.customer.mapper.CustomerAfterSaleMapper">
+    
+    <resultMap type="CustomerAfterSale" id="CustomerAfterSaleResult">
+        <result property="id"    column="id"    />
+        <result property="customerId"    column="customer_id"    />
+        <result property="customerName"    column="customer_name"    />
+        <result property="customerPhone"    column="customer_phone"    />
+        <result property="community"    column="community"    />
+        <result property="address"    column="address"    />
+        <result property="buyTime"    column="buy_time"    />
+        <result property="issueCategories"    column="issue_categories"    />
+        <result property="issueDesc"    column="issue_desc"    />
+        <result property="remark"    column="remark"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="dealBy"    column="deal_by"    />
+        <result property="dealTime"    column="deal_time"    />
+        <result property="dealResult"    column="deal_result"    />
+        <result property="dealStatus"    column="deal_status"    />
+        <result property="deleted"    column="deleted"    />
+    </resultMap>
+
+    <sql id="selectCustomerAfterSaleVo">
+        select id, customer_id, customer_name, customer_phone, community, address, buy_time, issue_categories, issue_desc, remark, create_by, create_time, update_by, update_time, deal_by, deal_time, deal_result, deal_status, deleted from customer_after_sale
+    </sql>
+
+    <select id="selectCustomerAfterSaleList" parameterType="CustomerAfterSale" resultMap="CustomerAfterSaleResult">
+        <include refid="selectCustomerAfterSaleVo"/>
+        <where>  
+            <if test="customerName != null  and customerName != ''"> and customer_name like concat('%', #{customerName}, '%')</if>
+            <if test="customerPhone != null  and customerPhone != ''"> and customer_phone = #{customerPhone}</if>
+            <if test="community != null  and community != ''"> and community like concat('%', #{community}, '%')</if>
+            <if test="address != null  and address != ''"> and address like concat('%', #{address}, '%')</if>
+            <if test="dealBy != null  and dealBy != ''"> and deal_by = #{dealBy}</if>
+            <if test="dealStatus != null "> and deal_status = #{dealStatus}</if>
+        </where>
+    </select>
+    
+    <select id="selectCustomerAfterSaleById" parameterType="Long" resultMap="CustomerAfterSaleResult">
+        <include refid="selectCustomerAfterSaleVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertCustomerAfterSale" parameterType="CustomerAfterSale" useGeneratedKeys="true" keyProperty="id">
+        insert into customer_after_sale
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="customerId != null">customer_id,</if>
+            <if test="customerName != null and customerName != ''">customer_name,</if>
+            <if test="customerPhone != null and customerPhone != ''">customer_phone,</if>
+            <if test="community != null and community != ''">community,</if>
+            <if test="address != null and address != ''">address,</if>
+            <if test="buyTime != null">buy_time,</if>
+            <if test="issueCategories != null">issue_categories,</if>
+            <if test="issueDesc != null">issue_desc,</if>
+            <if test="remark != null">remark,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="dealBy != null">deal_by,</if>
+            <if test="dealTime != null">deal_time,</if>
+            <if test="dealResult != null">deal_result,</if>
+            <if test="dealStatus != null">deal_status,</if>
+            <if test="deleted != null">deleted,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="customerId != null">#{customerId},</if>
+            <if test="customerName != null and customerName != ''">#{customerName},</if>
+            <if test="customerPhone != null and customerPhone != ''">#{customerPhone},</if>
+            <if test="community != null and community != ''">#{community},</if>
+            <if test="address != null and address != ''">#{address},</if>
+            <if test="buyTime != null">#{buyTime},</if>
+            <if test="issueCategories != null">#{issueCategories},</if>
+            <if test="issueDesc != null">#{issueDesc},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="dealBy != null">#{dealBy},</if>
+            <if test="dealTime != null">#{dealTime},</if>
+            <if test="dealResult != null">#{dealResult},</if>
+            <if test="dealStatus != null">#{dealStatus},</if>
+            <if test="deleted != null">#{deleted},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCustomerAfterSale" parameterType="CustomerAfterSale">
+        update customer_after_sale
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="customerId != null">customer_id = #{customerId},</if>
+            <if test="customerName != null and customerName != ''">customer_name = #{customerName},</if>
+            <if test="customerPhone != null and customerPhone != ''">customer_phone = #{customerPhone},</if>
+            <if test="community != null and community != ''">community = #{community},</if>
+            <if test="address != null and address != ''">address = #{address},</if>
+            <if test="buyTime != null">buy_time = #{buyTime},</if>
+            <if test="issueCategories != null">issue_categories = #{issueCategories},</if>
+            <if test="issueDesc != null">issue_desc = #{issueDesc},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="dealBy != null">deal_by = #{dealBy},</if>
+            <if test="dealTime != null">deal_time = #{dealTime},</if>
+            <if test="dealResult != null">deal_result = #{dealResult},</if>
+            <if test="dealStatus != null">deal_status = #{dealStatus},</if>
+            <if test="deleted != null">deleted = #{deleted},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCustomerAfterSaleById" parameterType="Long">
+        delete from customer_after_sale where id = #{id}
+    </delete>
+
+    <delete id="deleteCustomerAfterSaleByIds" parameterType="String">
+        delete from customer_after_sale where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>
