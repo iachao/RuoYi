@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.order.mapper.CustomerFloorDataMapper">
+
+    <resultMap type="CustomerFloorData" id="CustomerFloorDataResult">
+        <result property="id"    column="id"    />
+        <result property="customerId"    column="customer_id"    />
+        <result property="customerInfo"    column="customer_info"    />
+        <result property="measureLength"    column="measure_length"    />
+        <result property="measureWidth"    column="measure_width"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectCustomerFloorDataVo">
+        select id, customer_id, customer_info, measure_length, measure_width, create_by, create_time, update_by, update_time, remark from customer_floor_data
+    </sql>
+
+    <select id="selectCustomerFloorDataList" parameterType="CustomerFloorData" resultMap="CustomerFloorDataResult">
+        <include refid="selectCustomerFloorDataVo"/>
+        <where>
+            <if test="customerId != null "> and customer_id = #{customerId}</if>
+            <if test="customerInfo != null  and customerInfo != ''"> and customer_info = #{customerInfo}</if>
+            <if test="measureLength != null "> and measure_length = #{measureLength}</if>
+            <if test="measureWidth != null "> and measure_width = #{measureWidth}</if>
+        </where>
+    </select>
+
+    <select id="selectCustomerFloorDataById" parameterType="Long" resultMap="CustomerFloorDataResult">
+        <include refid="selectCustomerFloorDataVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertCustomerFloorData" parameterType="CustomerFloorData" useGeneratedKeys="true" keyProperty="id">
+        insert into customer_floor_data
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="customerId != null">customer_id,</if>
+            <if test="customerInfo != null and customerInfo != ''">customer_info,</if>
+            <if test="measureLength != null">measure_length,</if>
+            <if test="measureWidth != null">measure_width,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null and updateBy != ''">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null and remark != ''">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="customerId != null">#{customerId},</if>
+            <if test="customerInfo != null and customerInfo != ''">#{customerInfo},</if>
+            <if test="measureLength != null">#{measureLength},</if>
+            <if test="measureWidth != null">#{measureWidth},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null and remark != ''">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updateCustomerFloorData" parameterType="CustomerFloorData">
+        update customer_floor_data
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="customerId != null">customer_id = #{customerId},</if>
+            <if test="customerInfo != null and customerInfo != ''">customer_info = #{customerInfo},</if>
+            <if test="measureLength != null">measure_length = #{measureLength},</if>
+            <if test="measureWidth != null">measure_width = #{measureWidth},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null and remark != ''">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCustomerFloorDataById" parameterType="Long">
+        delete from customer_floor_data where id = #{id}
+    </delete>
+
+    <delete id="deleteCustomerFloorDataByIds" parameterType="String">
+        delete from customer_floor_data where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <delete id="deleteByCustomerId">
+        delete from customer_floor_data where customer_id = #{customerId}
+    </delete>
+
+</mapper>

@@ -3,8 +3,8 @@ package com.ruoyi.web.controller.stock;
 import java.util.List;
 
 import com.ruoyi.common.utils.poi.ExcelUtil;
-import com.ruoyi.system.domain.StockFloor;
-import com.ruoyi.system.service.IStockFloorService;
+import com.ruoyi.stock.domain.StockFloor;
+import com.ruoyi.stock.service.IStockFloorService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

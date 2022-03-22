@@ -2,8 +2,10 @@ package com.ruoyi.web.controller.order;
 
 import java.util.List;
 
-import com.ruoyi.system.domain.CustomerOrder;
-import com.ruoyi.system.service.ICustomerOrderService;
+import com.ruoyi.order.domain.CustomerOrder;
+import com.ruoyi.order.domain.FloorOrder;
+import com.ruoyi.order.service.ICustomerOrderService;
+import com.ruoyi.order.service.IFloorOrderService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,8 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.enums.BusinessType;
-import com.ruoyi.system.domain.FloorOrder;
-import com.ruoyi.system.service.IFloorOrderService;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.utils.poi.ExcelUtil;
