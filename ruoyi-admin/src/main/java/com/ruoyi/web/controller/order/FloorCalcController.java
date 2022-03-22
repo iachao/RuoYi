@@ -238,8 +238,14 @@ public class FloorCalcController extends BaseController {
         }
         // ====关键属性: 行数 (即一个面积内地板铺多少行)
         BigDecimal rows = calcFloorRows(floorCalcParam.getOptimizeWidth(),floorParam.getFloorWidth());
-        BigDecimal floorBlocks = ((floorCalcParam.getOptimizeLength().add(remainderPerRow)).multiply(rows)).divide(floorParam.getFloorLength(),0,RoundingMode.UP);
 
+        BigDecimal floorBlocks = BigDecimal.ZERO;
+
+        if(floorCalcParam.getMeasureLength().compareTo(BigDecimal.ZERO) == -1 || floorCalcParam.getMeasureWidth().compareTo(BigDecimal.ZERO) == -1){
+            floorBlocks = BigDecimal.ZERO.subtract(((floorCalcParam.getOptimizeLength().add(remainderPerRow)).multiply(rows)).divide(floorParam.getFloorLength(),0,RoundingMode.UP));
+        }else{
+            floorBlocks = ((floorCalcParam.getOptimizeLength().add(remainderPerRow)).multiply(rows)).divide(floorParam.getFloorLength(),0,RoundingMode.UP);
+        }
         return floorBlocks;
     }
 
