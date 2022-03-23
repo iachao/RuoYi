@@ -31,6 +31,13 @@
                                 <input type="text" name="dealBy"/>
                             </li>
                             <li>
+                                <label>售后状态：</label>
+                                <select name="dealStatus" th:with="type=${@dict.getType('deal_status')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
                                 <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
                             </li>
@@ -63,6 +70,7 @@
         var editFlag = [[${@permission.hasPermi('customer:afterSale:edit')}]];
         var removeFlag = [[${@permission.hasPermi('customer:afterSale:remove')}]];
         var issueCategoriesDatas = [[${@dict.getType('category')}]];
+        var dealStatusDatas = [[${@dict.getType('deal_status')}]];
         var prefix = ctx + "customer/afterSale";
 
         $(function() {
@@ -72,7 +80,7 @@
                 updateUrl: prefix + "/edit/{id}",
                 removeUrl: prefix + "/remove",
                 exportUrl: prefix + "/export",
-                modalName: "客户售后服务",
+                modalName: "售后服务",
                 columns: [{
                     checkbox: true
                 },
@@ -103,7 +111,7 @@
                 },
                 {
                     field: 'issueCategories',
-                    title: '同购买品类',
+                    title: '售后品类',
                     formatter: function(value, row, index) {
                        return $.table.selectDictLabels(issueCategoriesDatas, value);
                     }
@@ -130,11 +138,10 @@
                 },
                 {
                     field: 'dealStatus',
-                    title: '服务状态;100待处理120服务中150部分处理200已处理500已取消'
-                },
-                {
-                    field: 'deleted',
-                    title: '是否删除'
+                    title: '售后状态',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(dealStatusDatas, value);
+                    }
                 },
                 {
                     title: '操作',
