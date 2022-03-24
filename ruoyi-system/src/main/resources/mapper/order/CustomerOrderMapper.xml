@@ -42,6 +42,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="customerSource != null "> and customer_source = #{customerSource}</if>
             <if test="customerName != null  and customerName != ''"> and customer_name like concat('%', #{customerName}, '%')</if>
             <if test="customerPhone != null  and customerPhone != ''"> and customer_phone = #{customerPhone}</if>
+            <if test="community != null  and community != ''"> and community like concat('%', #{community}, '%')</if>
             <if test="responsiblePerson != null  and responsiblePerson != ''"> and responsible_person = #{responsiblePerson}</if>
             <if test="responsiblePhone != null  and responsiblePhone != ''"> and responsible_phone = #{responsiblePhone}</if>
             <if test="otherContactPhone != null  and otherContactPhone != ''"> and other_contact_phone = #{otherContactPhone}</if>

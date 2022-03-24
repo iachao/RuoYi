@@ -1748,6 +1748,24 @@ var table = {
                 var patten = new RegExp(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[~!@#\$%\^&\*\(\)\-=_\+])[A-Za-z\d~!@#\$%\^&\*\(\)\-=_\+]{6,}$/);
                 return patten.test(text);
             },
+            // 四舍五入保留两位小数，不足补0
+            keepTwoDecimalFull : function (num){
+                var result = parseFloat(num);
+                if (isNaN(result)) {
+                    return 0;
+                }
+                result = Math.round(num * 100) / 100;
+                var s_x = result.toString();
+                var pos_decimal = s_x.indexOf('.');
+                if (pos_decimal < 0) {
+                    pos_decimal = s_x.length;
+                    s_x += '.';
+                }
+                while (s_x.length <= pos_decimal + 2) {
+                    s_x += '0';
+                }
+                return s_x;
+            }
         }
     });
 })(jQuery);

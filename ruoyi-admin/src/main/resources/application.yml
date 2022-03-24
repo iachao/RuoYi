@@ -90,7 +90,7 @@ mybatis-plus:
 pagehelper: 
   helperDialect: mysql
   supportMethodsArguments: true
-  params: count=countSql 
+  params: count=countSql
 
 # Shiro
 shiro:

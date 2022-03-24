@@ -18,20 +18,6 @@
                                 </select>
                             </li>
                             <li>
-                                <label>客户名称：</label>
-                                <input type="hidden" name="customerId" id="customerId">
-                                <div class="input-group">
-                                    <input type="text" name="customerInfo" class="form-control" id="customerInfo">
-                                        <div class="input-group-btn" style="width: 10%;">
-                                            <button type="button" class="btn btn-white dropdown-toggle" style="height: 31px" data-toggle="dropdown">
-                                                <span class="caret"></span>
-                                            </button>
-                                            <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                                            </ul>
-                                        </div>
-                                </div>
-                            </li>
-                            <li>
                                 <label>客户电话：</label>
                                 <input type="text" name="customerPhone"/>
                             </li>
@@ -59,6 +45,20 @@
                             <li>
                                 <label>地板型号：</label>
                                 <input type="text" name="floorNumber"/>
+                            </li>
+                            <li>
+                                <label>客户名称：</label>
+                                <input type="hidden" name="customerId" id="customerId">
+                                <div class="input-group">
+                                    <input type="text" name="customerInfo" class="form-control" id="customerInfo">
+                                    <div class="input-group-btn" style="width: 10%;">
+                                        <button type="button" class="btn btn-white dropdown-toggle" style="height: 31px" data-toggle="dropdown">
+                                            <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                                        </ul>
+                                    </div>
+                                </div>
                             </li>
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="searchList()"><i class="fa fa-search"></i>&nbsp;搜索</a>
@@ -113,6 +113,8 @@
                 removeUrl: prefix + "/remove",
                 exportUrl: prefix + "/export",
                 modalName: "地板订单",
+                sortName: "createTime",
+                sortOrder: "desc",
                 columns: [{
                     checkbox: true
                 },
@@ -174,10 +176,6 @@
                     title: '测量时间'
                 },
                 {
-                    field: 'surveyImg',
-                    title: '现场图片'
-                },
-                {
                     field: 'sendBlock',
                     title: '发货块数'
                 },
@@ -187,11 +185,11 @@
                 },
                 {
                     field: 'actualUseBlock',
-                    title: '实际使用块数'
+                    title: '实际块数'
                 },
                 {
                     field: 'installName',
-                    title: '安装工人'
+                    title: '安装工'
                 },
                 {
                     field: 'installTime',
@@ -202,12 +200,11 @@
                     title: '安装面积'
                 },
                 {
-                    field: 'installImg',
-                    title: '安装图片'
-                },
-                {
                     field: 'installAmount',
-                    title: '安装费用'
+                    title: '安装费',
+                    formatter: function (value, row, index){
+                        return $.common.keepTwoDecimalFull(value)
+                    }
                 },
                 {
                     field: 'createBy',
@@ -284,11 +281,8 @@
             getDataMethod: 'url',
             clearable: true
         }).on('onDataRequestSuccess', function (e, result) {
-            console.log('onDataRequestSuccess: ', result);
         }).on('onSetSelectValue', function (e, keyword) {
-            console.log('onSetSelectValue: ', keyword);
         }).on('onUnsetSelectValue', function (e) {
-            console.log("onUnsetSelectValue");
         });
     </script>
 </body>

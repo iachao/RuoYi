@@ -36,7 +36,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="customerName != null  and customerName != ''"> and customer_name like concat('%', #{customerName}, '%')</if>
             <if test="customerPhone != null  and customerPhone != ''"> and customer_phone = #{customerPhone}</if>
             <if test="community != null  and community != ''"> and community like concat('%', #{community}, '%')</if>
-            <if test="address != null  and address != ''"> and address like concat('%', #{address}, '%')</if>
             <if test="dealBy != null  and dealBy != ''"> and deal_by = #{dealBy}</if>
             <if test="dealStatus != null "> and deal_status = #{dealStatus}</if>
         </where>
