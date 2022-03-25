@@ -17,7 +17,7 @@
         <div class="form-group">
             <label class="col-sm-3 control-label is-required">地板系列：</label>
             <div class="col-sm-8">
-                <select name="floorSpec" class="form-control m-b" th:with="type=${@dict.getType('floor_spec')}" required>
+                <select id="floorSpec" name="floorSpec" class="form-control m-b" th:with="type=${@dict.getType('floor_spec')}" required>
                     <option th:each="dict : ${type}" th:text="${dict.dictLabel+'【'+dict.dictValue+'】'}" th:value="${dict.dictValue}" th:field="*{floorSpec}"></option>
                 </select>
             </div>
@@ -25,13 +25,13 @@
         <div class="form-group">
             <label class="col-sm-3 control-label is-required">发货块数：</label>
             <div class="col-sm-8">
-                <input name="sendBlock" th:field="*{sendBlock}" class="form-control" type="number" required>
+                <input id="sendBlock" name="sendBlock" th:field="*{sendBlock}" class="form-control" type="number" required>
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label is-required">发货面积：</label>
             <div class="col-sm-8">
-                <input name="sendArea" th:field="*{sendArea}" class="form-control" type="text" required>
+                <input id="sendArea" name="sendArea" th:field="*{sendArea}" class="form-control" type="text" required>
             </div>
         </div>
         <div class="form-group">
@@ -65,7 +65,12 @@
         }
     }
 
-    $("input[name='sendBlock']").blur(function (){
+    $("input[name='sendBlock']").mouseup(function (){
+        var selFloorSpec = $("select#floorSpec").find('option:selected').val();
+        console.log(selFloorSpec)
+        var floorSpecArr = selFloorSpec.split('*');
+        var sendBlock = $('#sendBlock').val();
+        var sendArea = $('#sendArea').attr('value',(sendBlock*floorSpecArr[0]*floorSpecArr[1]/1000000));
     })
 
     $("input[name='sendTime']").datetimepicker({
