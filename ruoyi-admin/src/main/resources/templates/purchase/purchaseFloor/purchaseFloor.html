@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('地板库存列表')" />
+    <th:block th:include="include :: header('采购木地板列表')" />
 </head>
 <body class="gray-bg">
      <div class="container-div">
@@ -11,6 +11,10 @@
                     <div class="select-list">
                         <ul>
                             <li>
+                                <label>客户ID：</label>
+                                <input type="text" name="customerId"/>
+                            </li>
+                            <li>
                                 <label>供应商：</label>
                                 <select name="supplyId" th:with="type=${@dict.getType('floor_supply')}">
                                     <option value="">所有</option>
@@ -18,22 +22,23 @@
                                 </select>
                             </li>
                             <li>
-                                <label>地板类型：</label>
+                                <label>类型：</label>
                                 <select name="floorType" th:with="type=${@dict.getType('floor_type')}">
                                     <option value="">所有</option>
                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                                 </select>
                             </li>
                             <li>
-                                <label>地板系列：</label>
-                                <select name="floorSpec" th:with="type=${@dict.getType('floor_spec')}">
-                                    <option value="">所有</option>
-                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                                </select>
+                                <label>型号：</label>
+                                <input type="text" name="floorNumber"/>
                             </li>
                             <li>
-                                <label>地板型号：</label>
-                                <input type="text" name="floorNumber"/>
+                                <label>创建人：</label>
+                                <input type="text" name="createBy"/>
+                            </li>
+                            <li>
+                                <label>创建时间：</label>
+                                <input type="text" class="time-input" placeholder="请选择创建时间" name="createTime"/>
                             </li>
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
@@ -45,16 +50,16 @@
             </div>
 
             <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="stock:floor:add">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="purchase:purchaseFloor:add">
                     <i class="fa fa-plus"></i> 添加
                 </a>
-                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="stock:floor:edit">
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="purchase:purchaseFloor:edit">
                     <i class="fa fa-edit"></i> 修改
                 </a>
-                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="stock:floor:remove">
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="purchase:purchaseFloor:remove">
                     <i class="fa fa-remove"></i> 删除
                 </a>
-                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="stock:floor:export">
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="purchase:purchaseFloor:export">
                     <i class="fa fa-download"></i> 导出
                 </a>
             </div>
@@ -65,13 +70,12 @@
     </div>
     <th:block th:include="include :: footer" />
     <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('stock:floor:edit')}]];
-        var removeFlag = [[${@permission.hasPermi('stock:floor:remove')}]];
+        var editFlag = [[${@permission.hasPermi('purchase:purchaseFloor:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('purchase:purchaseFloor:remove')}]];
         var supplyIdDatas = [[${@dict.getType('floor_supply')}]];
-        var supplyNameDatas = [[${@dict.getType('floor_supply')}]];
         var floorTypeDatas = [[${@dict.getType('floor_type')}]];
         var floorSpecDatas = [[${@dict.getType('floor_spec')}]];
-        var prefix = ctx + "stock/floor";
+        var prefix = ctx + "purchase/purchaseFloor";
 
         $(function() {
             var options = {
@@ -80,9 +84,7 @@
                 updateUrl: prefix + "/edit/{id}",
                 removeUrl: prefix + "/remove",
                 exportUrl: prefix + "/export",
-                modalName: "地板库存",
-                sortName: "createTime",
-                sortOrder: "desc",
+                modalName: "采购木地板",
                 columns: [{
                     checkbox: true
                 },
@@ -92,37 +94,62 @@
                     visible: false
                 },
                 {
-                    field: 'floorNumber',
-                    title: '地板型号'
+                    field: 'customerId',
+                    title: '客户ID',
+                    visible: false
                 },
                 {
-                    field: 'stockCount',
-                    title: '库存(块)'
+                    field: 'customerInfo',
+                    title: '客户信息'
                 },
                 {
-                    field: 'floorArea',
-                    title: '库存面积(㎡)'
+                    field: 'supplyId',
+                    title: '供应商',
+                    formatter: function(value, row, index) {
+                       return $.table.selectDictLabel(supplyIdDatas, value);
+                    }
+                },
+                {
+                    field: 'floorType',
+                    title: '类型',
+                    formatter: function(value, row, index) {
+                       return $.table.selectDictLabel(floorTypeDatas, value);
+                    }
                 },
                 {
                     field: 'floorSpec',
                     title: '系列规格',
                     formatter: function(value, row, index) {
-                        return $.table.selectDictLabel(floorSpecDatas, value).concat('(',value,')');
+                       return $.table.selectDictLabel(floorSpecDatas, value).concat('(',value,')');
                     }
                 },
                 {
-                    field: 'supplyId',
-                    title: '供应商名称',
-                    formatter: function(value, row, index) {
-                       return $.table.selectDictLabel(supplyNameDatas, value);
-                    }
+                    field: 'floorNumber',
+                    title: '型号'
                 },
                 {
-                    field: 'floorType',
-                    title: '地板类型',
-                    formatter: function(value, row, index) {
-                       return $.table.selectDictLabel(floorTypeDatas, value);
-                    }
+                    field: 'purchaseBlock',
+                    title: '采购块数'
+                },
+                {
+                    field: 'purchaseArea',
+                    title: '采购面积'
+                },
+                {
+                    field: 'singPrice',
+                    title: '单价/㎡'
+                },
+                {
+                    field: 'status',
+                    title: '采购状态'
+                },
+                {
+                    field: 'purchaseAmount',
+                    title: '采购金额',
+                },
+                {
+                    field: 'remark',
+                    title: '备注'
                 },
                 {
                     title: '操作',

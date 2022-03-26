@@ -15,13 +15,21 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-3 control-label is-required">实际使用块数：</label>
+            <label class="col-sm-3 control-label is-required">系列规格：</label>
             <div class="col-sm-8">
-                <input name="actualUseBlock" th:field="*{actualUseBlock}" onmouseout="actualUseBlockMouseOut()" class="form-control" type="text" required>
+                <select id="floorSpec" name="floorSpec" class="form-control m-b" th:with="type=${@dict.getType('floor_spec')}" required readonly="readonly">
+                    <option th:each="dict : ${type}" th:text="${dict.dictLabel+'【'+dict.dictValue+'】'}" th:value="${dict.dictValue}" th:field="*{floorSpec}"></option>
+                </select>
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-3 control-label is-required">安装工人：</label>
+            <label class="col-sm-3 control-label is-required">实际块数：</label>
+            <div class="col-sm-8">
+                <input id="actualUseBlock" name="actualUseBlock" th:field="*{actualUseBlock}" class="form-control" type="text" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label is-required">安装工：</label>
             <div class="col-sm-8">
                 <input name="installName" th:field="*{installName}" class="form-control" type="text" required>
             </div>
@@ -36,9 +44,9 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-3 control-label is-required">安装面积：</label>
+            <label class="col-sm-3 control-label is-required">安装面积(㎡)：</label>
             <div class="col-sm-8">
-                <input name="installArea" th:field="*{installArea}" class="form-control" type="number" required>
+                <input id="installArea" name="installArea" th:field="*{installArea}" class="form-control" type="number" required>
             </div>
         </div>
         <div class="form-group">
@@ -48,7 +56,7 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-3 control-label">安装费用：</label>
+            <label class="col-sm-3 control-label">安装费：</label>
             <div class="col-sm-8">
                 <input name="installAmount" th:field="*{installAmount}" class="form-control" type="number">
             </div>
@@ -71,13 +79,16 @@
 
     function submitHandler() {
         if ($.validate.form()) {
-            $.operate.save(prefix + "/edit", $('#form-floor-edit').serialize());
+            $.operate.save(prefix + "/installFloorSave", $('#form-floor-edit').serialize());
         }
     }
 
-    function actualUseBlockMouseOut(){
-        console.log('sdsd')
-    }
+    $('#actualUseBlock').blur(function (){
+        var selFloorSpec = $("select#floorSpec").find('option:selected').val();
+        var floorSpecArr = selFloorSpec.split('*');
+        var actualUseBlock = $('#actualUseBlock').val();
+        $('#installArea').attr('value',(actualUseBlock*floorSpecArr[0]*floorSpecArr[1]/1000000));
+    })
 
     $("input[name='installTime']").datetimepicker({
         format: "yyyy-mm-dd",

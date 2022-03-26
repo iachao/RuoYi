@@ -2,6 +2,7 @@ package com.ruoyi.web.controller.order;
 
 import java.util.List;
 
+import com.ruoyi.common.enums.business.FloorOrderStatusEnum;
 import com.ruoyi.order.domain.CustomerOrder;
 import com.ruoyi.order.domain.FloorOrder;
 import com.ruoyi.order.service.ICustomerOrderService;
@@ -108,6 +109,7 @@ public class FloorOrderController extends BaseController
         return prefix + "/edit";
     }
 
+
     /**
      * 修改保存地板订单
      */
@@ -157,5 +159,44 @@ public class FloorOrderController extends BaseController
         FloorOrder floorOrder = floorOrderService.selectFloorOrderById(id);
         mmap.put("floorOrder", floorOrder);
         return prefix + "/installFloor";
+    }
+
+    /**
+     * 地板测量
+     */
+    @RequiresPermissions("order:floor:survey")
+    @Log(title = "地板测量", businessType = BusinessType.UPDATE)
+    @PostMapping("/surveyFloorSave")
+    @ResponseBody
+    public AjaxResult surveyFloorSave(FloorOrder floorOrder)
+    {
+        floorOrder.setStatus(FloorOrderStatusEnum.WAIT_SEND.getKey());
+        return toAjax(floorOrderService.surveyFloorSave(floorOrder));
+    }
+
+    /**
+     * 地板发货
+     */
+    @RequiresPermissions("order:floor:send")
+    @Log(title = "地板发货", businessType = BusinessType.UPDATE)
+    @PostMapping("/sendFloorSave")
+    @ResponseBody
+    public AjaxResult sendFloorSave(FloorOrder floorOrder)
+    {
+        floorOrder.setStatus(FloorOrderStatusEnum.WAIT_RECEIVED.getKey());
+        return toAjax(floorOrderService.sendFloorSave(floorOrder));
+    }
+
+    /**
+     * 地板安装
+     */
+    @RequiresPermissions("order:floor:install")
+    @Log(title = "地板安装", businessType = BusinessType.UPDATE)
+    @PostMapping("/installFloorSave")
+    @ResponseBody
+    public AjaxResult installFloorSave(FloorOrder floorOrder)
+    {
+        floorOrder.setStatus(FloorOrderStatusEnum.COMPLETED.getKey());
+        return toAjax(floorOrderService.installFloorSave(floorOrder));
     }
 }

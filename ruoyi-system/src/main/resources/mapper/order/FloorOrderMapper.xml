@@ -20,6 +20,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="surveyImg"    column="survey_img"    />
         <result property="sendBlock"    column="send_block"    />
         <result property="sendArea"    column="send_area"    />
+        <result property="sendTime"    column="send_time"    />
         <result property="actualUseBlock"    column="actual_use_block"    />
         <result property="installNameId"    column="install_name_id"    />
         <result property="installName"    column="install_name"    />
@@ -37,7 +38,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectFloorOrderVo">
-        select id, status, customer_id, supply_id, supply_name, floor_type, floor_spec, floor_number, survey_name_id, survey_name, survey_area, survey_time, survey_img, send_block, send_area, actual_use_block, install_name_id, install_name, install_time, install_area, install_img, install_amount, create_by, create_time, update_by, update_time, price, amount, remark from floor_order
+        select id, status, customer_id, supply_id, supply_name, floor_type, floor_spec, floor_number, survey_name_id, survey_name, survey_area, survey_time, survey_img, send_block, send_area,send_time, actual_use_block, install_name_id, install_name, install_time, install_area, install_img, install_amount, create_by, create_time, update_by, update_time, price, amount, remark from floor_order
     </sql>
 
     <select id="selectFloorOrderList" parameterType="FloorOrder" resultMap="FloorOrderResult">
@@ -138,6 +139,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="surveyImg != null and surveyImg != ''">survey_img = #{surveyImg},</if>
             <if test="sendBlock != null">send_block = #{sendBlock},</if>
             <if test="sendArea != null">send_area = #{sendArea},</if>
+            <if test="sendTime != null">send_time = #{sendTime},</if>
             <if test="actualUseBlock != null">actual_use_block = #{actualUseBlock},</if>
             <if test="installNameId != null">install_name_id = #{installNameId},</if>
             <if test="installName != null and installName != ''">install_name = #{installName},</if>

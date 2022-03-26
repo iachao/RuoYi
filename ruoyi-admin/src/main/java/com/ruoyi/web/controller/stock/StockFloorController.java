@@ -1,6 +1,7 @@
 package com.ruoyi.web.controller.stock;
 
 import java.util.List;
+import java.util.Locale;
 
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.stock.domain.StockFloor;
@@ -88,6 +89,7 @@ public class StockFloorController extends BaseController
     @ResponseBody
     public AjaxResult addSave(StockFloor stockFloor)
     {
+        stockFloor.setFloorNumber(stockFloor.getFloorNumber().toUpperCase(Locale.ROOT));
         StockFloor s = new StockFloor();
         s.setFloorNumber(stockFloor.getFloorNumber());
         List<StockFloor> r = stockFloorService.selectStockFloorList(s);
@@ -120,6 +122,7 @@ public class StockFloorController extends BaseController
     @ResponseBody
     public AjaxResult editSave(StockFloor stockFloor)
     {
+        stockFloor.setFloorNumber(stockFloor.getFloorNumber().toUpperCase(Locale.ROOT));
         stockFloor.setUpdateBy(getLoginName());
         return toAjax(stockFloorService.updateStockFloor(stockFloor));
     }

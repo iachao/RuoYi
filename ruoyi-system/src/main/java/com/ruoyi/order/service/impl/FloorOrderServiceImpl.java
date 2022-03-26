@@ -7,6 +7,8 @@ import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.order.domain.FloorOrder;
 import com.ruoyi.order.mapper.FloorOrderMapper;
 import com.ruoyi.order.service.IFloorOrderService;
+import com.ruoyi.purchase.domain.PurchaseFloorOrder;
+import com.ruoyi.purchase.mapper.PurchaseFloorOrderMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.common.core.text.Convert;
@@ -95,5 +97,21 @@ public class FloorOrderServiceImpl extends ServiceImpl<FloorOrderMapper, FloorOr
     public int deleteFloorOrderById(Long id)
     {
         return floorOrderMapper.deleteFloorOrderById(id);
+    }
+
+    @Override
+    public int sendFloorSave(FloorOrder floorOrder) {
+        int result = floorOrderMapper.updateFloorOrder(floorOrder);
+        return result;
+    }
+
+    @Override
+    public int surveyFloorSave(FloorOrder floorOrder) {
+        return floorOrderMapper.updateFloorOrder(floorOrder);
+    }
+
+    @Override
+    public int installFloorSave(FloorOrder floorOrder) {
+        return floorOrderMapper.updateFloorOrder(floorOrder);
     }
 }

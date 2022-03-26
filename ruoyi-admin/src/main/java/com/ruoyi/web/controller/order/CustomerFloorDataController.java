@@ -121,4 +121,16 @@ public class CustomerFloorDataController extends BaseController
     {
         return toAjax(customerFloorDataService.deleteCustomerFloorDataByIds(ids));
     }
+
+    /**
+     * 查询客户地板测量数据列表
+     */
+    @RequiresPermissions("customer:floorData:list")
+    @PostMapping("/listById")
+    @ResponseBody
+    public List<CustomerFloorData> listById(@RequestBody CustomerFloorData customerFloorData)
+    {
+        List<CustomerFloorData> list = customerFloorDataService.selectCustomerFloorDataList(customerFloorData);
+        return list;
+    }
 }

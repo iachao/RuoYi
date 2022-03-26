@@ -24,7 +24,7 @@
                 </div>
             </div>
             <div class="form-group">    
-                <label class="col-sm-3 control-label is-required">地板系列：</label>
+                <label class="col-sm-3 control-label is-required">系列规格：</label>
                 <div class="col-sm-8">
                     <select name="floorSpec" class="form-control m-b" th:with="type=${@dict.getType('floor_spec')}" required>
                         <option th:each="dict : ${type}" th:text="${dict.dictLabel+'【'+dict.dictValue+'】'}" th:value="${dict.dictValue}" th:field="*{floorSpec}"></option>

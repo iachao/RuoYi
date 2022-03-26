@@ -11,7 +11,7 @@
                     <div class="select-list">
                         <ul>
                             <li>
-                                <label>地板系列：</label>
+                                <label>系列规格：</label>
                                 <select name="floorSpec" id="floorSpec" th:with="type=${@dict.getType('floor_spec')}" required>
                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel+'【'+dict.dictValue+'】'}" th:value="${dict.dictValue}"></option>
                                 </select>
@@ -274,8 +274,21 @@
             clearable: true
         }).on('onDataRequestSuccess', function (e, result) {
             console.log('onDataRequestSuccess: ', result);
-        }).on('onSetSelectValue', function (e, keyword) {
-            console.log('onSetSelectValue: ', keyword);
+        }).on('onSetSelectValue', function (e, v) {
+            console.log('onSetSelectValue: ', v);
+            console.log(v.id);
+            var req = {};
+            req.customerId = v.id;
+            $.ajax({
+                type: 'POST',
+                url: ctx + 'order/customer/floorData/listById',
+                data: JSON.stringify(req),
+                contentType: "application/json",
+                dataType: "json",
+                success: function(result){
+                    console.log(result)
+                }
+            });
         }).on('onUnsetSelectValue', function (e) {
             console.log("onUnsetSelectValue");
         });

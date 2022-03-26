@@ -59,4 +59,25 @@ public interface IFloorOrderService extends IService<FloorOrder>
      * @return 结果
      */
     int deleteFloorOrderById(Long id);
+
+    /**
+     * 地板发货
+     * @param floorOrder
+     * @return
+     */
+    int sendFloorSave(FloorOrder floorOrder);
+
+    /**
+     * 地板测量
+     * @param floorOrder
+     * @return
+     */
+    int surveyFloorSave(FloorOrder floorOrder);
+
+    /**
+     * 地板安装
+     * @param floorOrder
+     * @return
+     */
+    int installFloorSave(FloorOrder floorOrder);
 }

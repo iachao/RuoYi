@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增采购木地板')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-purchaseFloor-add">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">客户名称：</label>
+                <input type="hidden" name="customerId" id="customerId" class="form-control">
+                <div class="col-sm-8">
+                <div class="input-group">
+                    <input type="text" name="customerInfo" class="form-control" id="customerInfo">
+                    <div class="input-group-btn">
+                        <button type="button" class="btn btn-white dropdown-toggle" style="height: 31px" data-toggle="dropdown">
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                        </ul>
+                    </div>
+                </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <input id="supplyName" name="supplyName" class="form-control" type="hidden">
+                <label class="col-sm-3 control-label is-required">供应商：</label>
+                <div class="col-sm-8">
+                    <select id="supplyId" name="supplyId" class="form-control m-b" th:with="type=${@dict.getType('floor_supply')}" required>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">类型：</label>
+                <div class="col-sm-8">
+                    <select name="floorType" class="form-control m-b" th:with="type=${@dict.getType('floor_type')}" required>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">规格：</label>
+                <div class="col-sm-8">
+                    <select id="floorSpec" name="floorSpec" class="form-control m-b" th:with="type=${@dict.getType('floor_spec')}" required>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel+'【'+dict.dictValue+'】'}" th:value="${dict.dictValue}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">型号：</label>
+                <div class="col-sm-8">
+                    <input name="floorNumber" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">采购块数：</label>
+                <div class="col-sm-8">
+                    <input id="purchaseBlock" name="purchaseBlock" class="form-control" type="number" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">采购面积：</label>
+                <div class="col-sm-8">
+                    <input id="purchaseArea" name="purchaseArea" class="form-control" type="number" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">单价/㎡：</label>
+                <div class="col-sm-8">
+                    <input id="singPrice" name="singPrice" class="form-control" type="number" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">采购金额：</label>
+                <div class="col-sm-8">
+                    <input id="purchaseAmount" name="purchaseAmount" class="form-control" type="number" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">备注：</label>
+                <div class="col-sm-8">
+                    <input name="remark" class="form-control" type="text">
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: bootstrap-suggest-js" />
+    <script th:inline="javascript">
+        var prefix = ctx + "purchase/purchaseFloor"
+        $("#form-purchaseFloor-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/add", $('#form-purchaseFloor-add').serialize());
+            }
+        }
+        $('#purchaseBlock').blur(function (){
+            var selFloorSpec = $("select#floorSpec").find('option:selected').val();
+            var floorSpecArr = selFloorSpec.split('*');
+            var purchaseBlock = $('#purchaseBlock').val();
+            $('#purchaseArea').attr('value',(purchaseBlock*floorSpecArr[0]*floorSpecArr[1]/1000000));
+        })
+        $('#singPrice').blur(function (){
+            $('#purchaseAmount').attr('value',$.common.keepTwoDecimalFull($(this).val()*$('#purchaseArea').val()));
+        });
+        $('#supplyId').change(function (){
+            $('#supplyName').attr('value',$(this).find('option:selected').text());
+        })
+        // 根据手机号、姓名、地址 获取 客户
+        var customerSuggest = $("#customerInfo").bsSuggest({
+            url: ctx + "order/customer/selectByInfo?keyword=",
+            idField: "id",
+            keyField: "customerInfo",
+            effectiveFields: ["customerName","customerPhone","community","address","remark"],
+            effectiveFieldsAlias: {"customerName":"客户名","customerPhone":"电话","community":"小区","address":"地址","remark":"备注"},
+            getDataMethod: 'url',
+            clearable: true
+        }).on('onDataRequestSuccess', function (e, result) {
+        }).on('onSetSelectValue', function (e, v) {
+            $('#customerId').attr('value',v.id);
+        }).on('onUnsetSelectValue', function (e) {
+        });
+    </script>
+</body>
+</html>

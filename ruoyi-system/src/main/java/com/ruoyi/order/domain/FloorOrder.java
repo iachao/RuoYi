@@ -36,7 +36,7 @@ public class FloorOrder extends BaseEntity
     private Long id;
     /** 订单状态;100待测量105待发货110待收货115待送货120待安装200已完成 */
     @Excel(name = "订单状态",dictType = "order_status")
-    private Long status;
+    private Integer status;
     /** 客户ID */
     @Excel(name = "客户ID")
     private Long customerId;
