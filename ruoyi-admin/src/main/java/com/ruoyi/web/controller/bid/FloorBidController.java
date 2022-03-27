@@ -1,5 +1,8 @@
 package com.ruoyi.web.controller.bid;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.List;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,6 +90,7 @@ public class FloorBidController extends BaseController
     public AjaxResult addSave(FloorBid floorBid)
     {
         floorBid.setCreateBy(getLoginName());
+        floorBid.setPrice3(floorBid.getPrice().multiply(new BigDecimal(3.5).setScale(0, RoundingMode.UP)));
         return toAjax(floorBidService.insertFloorBid(floorBid));
     }
 
@@ -112,6 +116,7 @@ public class FloorBidController extends BaseController
     public AjaxResult editSave(FloorBid floorBid)
     {
         floorBid.setUpdateBy(getLoginName());
+        floorBid.setPrice3(floorBid.getPrice().multiply(new BigDecimal(3.5).setScale(0, RoundingMode.UP)));
         return toAjax(floorBidService.updateFloorBid(floorBid));
     }
 
