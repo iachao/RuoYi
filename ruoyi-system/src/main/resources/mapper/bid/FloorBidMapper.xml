@@ -34,7 +34,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="floorType != null "> and floor_type = #{floorType}</if>
             <if test="woodType != null  and woodType != ''"> and wood_type = #{woodType}</if>
             <if test="floorNumber != null  and floorNumber != ''"> and floor_number = #{floorNumber}</if>
-            <if test="floorSpec != null  and floorSpec != ''"> and floor_spec = #{floorSpec}</if>
+            <if test="floorSpec != null  and floorSpec != ''"> and floor_spec like concat('%', #{floorSpec}, '%')</if>
             <if test="floorRank != null  and floorRank != ''"> and floor_rank = #{floorRank}</if>
             <if test="price3 != null "> and price3 = #{price3}</if>
             <if test="technology != null  and technology != ''"> and technology = #{technology}</if>

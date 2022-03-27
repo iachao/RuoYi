@@ -34,7 +34,7 @@
                 <label class="col-sm-3 control-label is-required">规格：</label>
                 <div class="col-sm-8">
                     <select id="floorSpec" name="floorSpec" class="form-control m-b" th:with="type=${@dict.getType('floor_spec')}" required>
-                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{floorSpec}"></option>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel+'【'+dict.dictValue+'】'}" th:value="${dict.dictLabel}" th:field="*{floorSpec}"></option>
                     </select>
                 </div>
             </div>

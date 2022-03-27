@@ -25,23 +25,16 @@
                                 </select>
                             </li>
                             <li>
-                                <label>型号/编号/系列：</label>
-                                <input type="text" name="floorNumber"/>
+                                <label>型号：</label>
+                                <input type="text" name="floorNumber" placeholder="请输入型号/编号/系列"/>
                             </li>
                             <li>
                                 <label>地板规格：</label>
-                                <select name="floorSpec" th:with="type=${@dict.getType('floor_spec')}">
-                                    <option value="">所有</option>
-                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                                </select>
+                                <input type="text" name="floorSpec" placeholder="例如：1221*168*12*10P"/>
                             </li>
                             <li>
                                 <label>等级：</label>
                                 <input type="text" name="floorRank"/>
-                            </li>
-                            <li>
-                                <label>价格：</label>
-                                <input type="text" name="price3"/>
                             </li>
                             <li>
                                 <label>工艺：</label>
@@ -117,7 +110,7 @@
                 },
                 {
                     field: 'floorType',
-                    title: '地板类型;1强化地板2实木地板3三层实木地板4多层实木地板5新三层地板6SPC地板',
+                    title: '地板类型',
                     formatter: function(value, row, index) {
                        return $.table.selectDictLabel(floorTypeDatas, value);
                     }
@@ -132,10 +125,7 @@
                 },
                 {
                     field: 'floorSpec',
-                    title: '地板规格;1220*168*12*10P',
-                    formatter: function(value, row, index) {
-                       return $.table.selectDictLabel(floorSpecDatas, value);
-                    }
+                    title: '规格'
                 },
                 {
                     field: 'floorRank',
@@ -155,7 +145,7 @@
                 },
                 {
                     field: 'buckleType',
-                    title: '扣型;1锁扣2平扣',
+                    title: '扣型',
                     formatter: function(value, row, index) {
                        return $.table.selectDictLabel(buckleTypeDatas, value);
                     }

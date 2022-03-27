@@ -545,6 +545,24 @@ var table = {
                 }
                 return actions.join('');
             },
+            // 回显数据字典值
+            selectDictValue: function(datas, value) {
+                if ($.common.isEmpty(datas) || $.common.isEmpty(value)) {
+                    return '';
+                }
+                var actions = [];
+                $.each(datas, function(index, dict) {
+                    if (dict.dictLabel == ('' + value)) {
+                        var listClass = $.common.equals("default", dict.listClass) || $.common.isEmpty(dict.listClass) ? "" : "badge badge-" + dict.listClass;
+                        actions.push($.common.sprintf("<span class='%s'>%s</span>", listClass, dict.dictValue));
+                        return false;
+                    }
+                });
+                if (actions.length === 0) {
+                    actions.push($.common.sprintf("<span>%s</span>", value))
+                }
+                return actions.join('');
+            },
             // 回显数据字典（字符串数组）
             selectDictLabels: function(datas, value, separator) {
                 if ($.common.isEmpty(datas) || $.common.isEmpty(value)) {

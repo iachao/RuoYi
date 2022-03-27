@@ -86,6 +86,7 @@ public class FloorBidController extends BaseController
     @ResponseBody
     public AjaxResult addSave(FloorBid floorBid)
     {
+        floorBid.setCreateBy(getLoginName());
         return toAjax(floorBidService.insertFloorBid(floorBid));
     }
 
@@ -110,6 +111,7 @@ public class FloorBidController extends BaseController
     @ResponseBody
     public AjaxResult editSave(FloorBid floorBid)
     {
+        floorBid.setUpdateBy(getLoginName());
         return toAjax(floorBidService.updateFloorBid(floorBid));
     }
 

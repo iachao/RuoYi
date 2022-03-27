@@ -157,6 +157,7 @@ public class FloorCalcController extends BaseController {
         CustomerFloorData cusReq = new CustomerFloorData();
         cusReq.setCustomerId(req.getCustomerId());
         List<CustomerFloorData> result = customerFloorDataService.selectCustomerFloorDataList(cusReq);
+        // 先删除该客户 原有 数据 再保存
         if(!CollectionUtils.isEmpty(result)){
             customerFloorDataService.deleteByCustomerId(req.getCustomerId());
         }

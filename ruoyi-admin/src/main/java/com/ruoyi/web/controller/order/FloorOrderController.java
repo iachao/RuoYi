@@ -92,6 +92,7 @@ public class FloorOrderController extends BaseController
     @ResponseBody
     public AjaxResult addSave(FloorOrder floorOrder)
     {
+        floorOrder.setCreateBy(getLoginName());
         return toAjax(floorOrderService.insertFloorOrder(floorOrder));
     }
 
@@ -119,6 +120,7 @@ public class FloorOrderController extends BaseController
     @ResponseBody
     public AjaxResult editSave(FloorOrder floorOrder)
     {
+        floorOrder.setUpdateBy(getLoginName());
         return toAjax(floorOrderService.updateFloorOrder(floorOrder));
     }
 
@@ -170,6 +172,7 @@ public class FloorOrderController extends BaseController
     @ResponseBody
     public AjaxResult surveyFloorSave(FloorOrder floorOrder)
     {
+        floorOrder.setUpdateBy(getLoginName());
         floorOrder.setStatus(FloorOrderStatusEnum.WAIT_SEND.getKey());
         return toAjax(floorOrderService.surveyFloorSave(floorOrder));
     }
@@ -183,6 +186,7 @@ public class FloorOrderController extends BaseController
     @ResponseBody
     public AjaxResult sendFloorSave(FloorOrder floorOrder)
     {
+        floorOrder.setUpdateBy(getLoginName());
         floorOrder.setStatus(FloorOrderStatusEnum.WAIT_RECEIVED.getKey());
         return toAjax(floorOrderService.sendFloorSave(floorOrder));
     }
@@ -196,6 +200,7 @@ public class FloorOrderController extends BaseController
     @ResponseBody
     public AjaxResult installFloorSave(FloorOrder floorOrder)
     {
+        floorOrder.setUpdateBy(getLoginName());
         floorOrder.setStatus(FloorOrderStatusEnum.COMPLETED.getKey());
         return toAjax(floorOrderService.installFloorSave(floorOrder));
     }

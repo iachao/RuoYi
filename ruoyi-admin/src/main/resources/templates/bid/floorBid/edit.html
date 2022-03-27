@@ -32,39 +32,37 @@
             <div class="form-group">    
                 <label class="col-sm-3 control-label is-required">地板规格：</label>
                 <div class="col-sm-8">
-                    <select name="floorSpec" class="form-control m-b" th:with="type=${@dict.getType('floor_spec')}" required>
-                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{floorSpec}"></option>
-                    </select>
+                    <input name="floorSpec" th:field="*{floorSpec}" class="form-control" type="text" required placeholder="例如：1221*168*12*10P">
                 </div>
             </div>
             <div class="form-group">    
-                <label class="col-sm-3 control-label is-required">等级：</label>
+                <label class="col-sm-3 control-label">等级：</label>
                 <div class="col-sm-8">
-                    <input name="floorRank" th:field="*{floorRank}" class="form-control" type="text" required>
+                    <input name="floorRank" th:field="*{floorRank}" class="form-control" type="text">
                 </div>
             </div>
             <div class="form-group">    
-                <label class="col-sm-3 control-label is-required">价格：</label>
+                <label class="col-sm-3 control-label">价格：</label>
                 <div class="col-sm-8">
-                    <input name="price" th:field="*{price}" class="form-control" type="text" required>
+                    <input name="price" th:field="*{price}" class="form-control" type="text">
                 </div>
             </div>
             <div class="form-group">    
-                <label class="col-sm-3 control-label is-required">价格：</label>
+                <label class="col-sm-3 control-label">价格3：</label>
                 <div class="col-sm-8">
-                    <input name="price3" th:field="*{price3}" class="form-control" type="text" required>
+                    <input name="price3" th:field="*{price3}" class="form-control" type="text">
                 </div>
             </div>
             <div class="form-group">    
-                <label class="col-sm-3 control-label is-required">工艺：</label>
+                <label class="col-sm-3 control-label">工艺：</label>
                 <div class="col-sm-8">
-                    <input name="technology" th:field="*{technology}" class="form-control" type="text" required>
+                    <input name="technology" th:field="*{technology}" class="form-control" type="text">
                 </div>
             </div>
             <div class="form-group">    
-                <label class="col-sm-3 control-label is-required">扣型：</label>
+                <label class="col-sm-3 control-label">扣型：</label>
                 <div class="col-sm-8">
-                    <select name="buckleType" class="form-control m-b" th:with="type=${@dict.getType('floor_buckle_type')}" required>
+                    <select name="buckleType" class="form-control m-b" th:with="type=${@dict.getType('floor_buckle_type')}">
                         <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{buckleType}"></option>
                     </select>
                 </div>

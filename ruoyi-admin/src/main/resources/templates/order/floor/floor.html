@@ -154,9 +154,9 @@
                 },
                 {
                     field: 'floorSpec',
-                    title: '地板规格',
+                    title: '规格系列',
                     formatter: function(value, row, index) {
-                       return $.table.selectDictLabel(floorSpecDatas, value).concat('【').concat(value).concat('】');
+                       return $.table.selectDictValue(floorSpecDatas, value).concat('【').concat(value).concat('】');
                     }
                 },
                 {

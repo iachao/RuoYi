@@ -86,6 +86,7 @@ public class CustomerAfterSaleController extends BaseController
     @ResponseBody
     public AjaxResult addSave(CustomerAfterSale customerAfterSale)
     {
+        customerAfterSale.setCreateBy(getLoginName());
         return toAjax(customerAfterSaleService.insertCustomerAfterSale(customerAfterSale));
     }
 
@@ -110,6 +111,7 @@ public class CustomerAfterSaleController extends BaseController
     @ResponseBody
     public AjaxResult editSave(CustomerAfterSale customerAfterSale)
     {
+        customerAfterSale.setUpdateBy(getLoginName());
         return toAjax(customerAfterSaleService.updateCustomerAfterSale(customerAfterSale));
     }
 

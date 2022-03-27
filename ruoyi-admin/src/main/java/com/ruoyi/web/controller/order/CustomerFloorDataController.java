@@ -83,6 +83,7 @@ public class CustomerFloorDataController extends BaseController
     @ResponseBody
     public AjaxResult addSave(CustomerFloorData customerFloorData)
     {
+        customerFloorData.setCreateBy(getLoginName());
         return toAjax(customerFloorDataService.insertCustomerFloorData(customerFloorData));
     }
 
@@ -107,6 +108,7 @@ public class CustomerFloorDataController extends BaseController
     @ResponseBody
     public AjaxResult editSave(CustomerFloorData customerFloorData)
     {
+        customerFloorData.setUpdateBy(getLoginName());
         return toAjax(customerFloorDataService.updateCustomerFloorData(customerFloorData));
     }
 

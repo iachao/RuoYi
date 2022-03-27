@@ -86,6 +86,7 @@ public class PurchaseFloorOrderController extends BaseController
     @ResponseBody
     public AjaxResult addSave(PurchaseFloorOrder purchaseFloorOrder)
     {
+        purchaseFloorOrder.setCreateBy(getLoginName());
         return toAjax(purchaseFloorOrderService.insertPurchaseFloorOrder(purchaseFloorOrder));
     }
 
@@ -110,6 +111,7 @@ public class PurchaseFloorOrderController extends BaseController
     @ResponseBody
     public AjaxResult editSave(PurchaseFloorOrder purchaseFloorOrder)
     {
+        purchaseFloorOrder.setUpdateBy(getLoginName());
         return toAjax(purchaseFloorOrderService.updatePurchaseFloorOrder(purchaseFloorOrder));
     }
 
