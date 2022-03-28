@@ -90,7 +90,8 @@ public class FloorBidController extends BaseController
     public AjaxResult addSave(FloorBid floorBid)
     {
         floorBid.setCreateBy(getLoginName());
-        floorBid.setPrice3(floorBid.getPrice().multiply(new BigDecimal(3.5).setScale(0, RoundingMode.UP)));
+        floorBid.setMarketPrice(floorBid.getPrice().multiply(new BigDecimal(3.5).setScale(0, RoundingMode.UP)));
+        floorBid.setVisiblePrice(floorBid.getPrice().multiply(new BigDecimal(1.2).setScale(0, RoundingMode.UP)));
         return toAjax(floorBidService.insertFloorBid(floorBid));
     }
 
@@ -116,7 +117,8 @@ public class FloorBidController extends BaseController
     public AjaxResult editSave(FloorBid floorBid)
     {
         floorBid.setUpdateBy(getLoginName());
-        floorBid.setPrice3(floorBid.getPrice().multiply(new BigDecimal(3.5).setScale(0, RoundingMode.UP)));
+        floorBid.setMarketPrice(floorBid.getPrice().multiply(new BigDecimal(3.5).setScale(0, RoundingMode.UP)));
+        floorBid.setVisiblePrice(floorBid.getPrice().multiply(new BigDecimal(1.2).setScale(0, RoundingMode.UP)));
         return toAjax(floorBidService.updateFloorBid(floorBid));
     }
 

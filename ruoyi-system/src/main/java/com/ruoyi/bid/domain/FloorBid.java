@@ -49,9 +49,21 @@ public class FloorBid extends BaseEntity
     /** 价格 */
     @Excel(name = "价格")
     private BigDecimal price;
-    /** 价格 */
-    @Excel(name = "价格")
-    private BigDecimal price3;
+    /** 采购价 */
+    @Excel(name = "采购价")
+    private BigDecimal visiblePrice;
+    /** 市场价 */
+    @Excel(name = "市场价")
+    private BigDecimal marketPrice;
+    /** 建议成交价 */
+    @Excel(name = "建议成交价")
+    private BigDecimal tradePrice;
+    /** 直供价(分销商) */
+    @Excel(name = "直供价(分销商)")
+    private BigDecimal directPrice;
+    /** 合作价 */
+    @Excel(name = "合作价")
+    private BigDecimal cooperatePrice;
     /** 工艺 */
     @Excel(name = "工艺")
     private String technology;

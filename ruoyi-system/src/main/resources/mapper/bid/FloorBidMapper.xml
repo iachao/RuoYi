@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.bid.mapper.FloorBidMapper">
-    
+
     <resultMap type="FloorBid" id="FloorBidResult">
         <result property="id"    column="id"    />
         <result property="supplyId"    column="supply_id"    />
@@ -13,7 +13,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="floorSpec"    column="floor_spec"    />
         <result property="floorRank"    column="floor_rank"    />
         <result property="price"    column="price"    />
-        <result property="price3"    column="price3"    />
+        <result property="visiblePrice"    column="visible_price"    />
+        <result property="marketPrice"    column="market_price"    />
+        <result property="tradePrice"    column="trade_price"    />
+        <result property="directPrice"    column="direct_price"    />
+        <result property="cooperatePrice"    column="cooperate_price"    />
         <result property="technology"    column="technology"    />
         <result property="buckleType"    column="buckle_type"    />
         <result property="createBy"    column="create_by"    />
@@ -24,29 +28,34 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectFloorBidVo">
-        select id, supply_id, floor_type, wood_type, floor_number, floor_spec, floor_rank, price, price3, technology, buckle_type, create_by, create_time, update_by, update_time, remark from floor_bid
+        select id, supply_id, floor_type, wood_type, floor_number, floor_spec, floor_rank, price, visible_price, market_price, trade_price, direct_price, cooperate_price, technology, buckle_type, create_by, create_time, update_by, update_time, remark from floor_bid
     </sql>
 
     <select id="selectFloorBidList" parameterType="FloorBid" resultMap="FloorBidResult">
         <include refid="selectFloorBidVo"/>
-        <where>  
+        <where>
             <if test="supplyId != null "> and supply_id = #{supplyId}</if>
             <if test="floorType != null "> and floor_type = #{floorType}</if>
             <if test="woodType != null  and woodType != ''"> and wood_type = #{woodType}</if>
-            <if test="floorNumber != null  and floorNumber != ''"> and floor_number like concat('%', #{floorNumber}, '%')</if>
-            <if test="floorSpec != null  and floorSpec != ''"> and floor_spec like concat('%', #{floorSpec}, '%')</if>
-            <if test="floorRank != null  and floorRank != ''"> and floor_rank like concat('%', #{floorRank}, '%')</if>
-            <if test="price3 != null "> and price3 = #{price3}</if>
+            <if test="floorNumber != null  and floorNumber != ''"> and floor_number = #{floorNumber}</if>
+            <if test="floorSpec != null  and floorSpec != ''"> and floor_spec = #{floorSpec}</if>
+            <if test="floorRank != null  and floorRank != ''"> and floor_rank = #{floorRank}</if>
+            <if test="price != null "> and price = #{price}</if>
+            <if test="visiblePrice != null "> and visible_price = #{visiblePrice}</if>
+            <if test="marketPrice != null "> and market_price = #{marketPrice}</if>
+            <if test="tradePrice != null "> and trade_price = #{tradePrice}</if>
+            <if test="directPrice != null "> and direct_price = #{directPrice}</if>
+            <if test="cooperatePrice != null "> and cooperate_price = #{cooperatePrice}</if>
             <if test="technology != null  and technology != ''"> and technology = #{technology}</if>
             <if test="buckleType != null "> and buckle_type = #{buckleType}</if>
         </where>
     </select>
-    
+
     <select id="selectFloorBidById" parameterType="Long" resultMap="FloorBidResult">
         <include refid="selectFloorBidVo"/>
         where id = #{id}
     </select>
-        
+
     <insert id="insertFloorBid" parameterType="FloorBid" useGeneratedKeys="true" keyProperty="id">
         insert into floor_bid
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -57,15 +66,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="floorSpec != null and floorSpec != ''">floor_spec,</if>
             <if test="floorRank != null and floorRank != ''">floor_rank,</if>
             <if test="price != null">price,</if>
-            <if test="price3 != null">price3,</if>
+            <if test="visiblePrice != null">visible_price,</if>
+            <if test="marketPrice != null">market_price,</if>
+            <if test="tradePrice != null">trade_price,</if>
+            <if test="directPrice != null">direct_price,</if>
+            <if test="cooperatePrice != null">cooperate_price,</if>
             <if test="technology != null and technology != ''">technology,</if>
             <if test="buckleType != null">buckle_type,</if>
-            <if test="createBy != null">create_by,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
             <if test="createTime != null">create_time,</if>
-            <if test="updateBy != null">update_by,</if>
+            <if test="updateBy != null and updateBy != ''">update_by,</if>
             <if test="updateTime != null">update_time,</if>
-            <if test="remark != null">remark,</if>
-         </trim>
+            <if test="remark != null and remark != ''">remark,</if>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="supplyId != null">#{supplyId},</if>
             <if test="floorType != null">#{floorType},</if>
@@ -74,15 +87,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="floorSpec != null and floorSpec != ''">#{floorSpec},</if>
             <if test="floorRank != null and floorRank != ''">#{floorRank},</if>
             <if test="price != null">#{price},</if>
-            <if test="price3 != null">#{price3},</if>
+            <if test="visiblePrice != null">#{visiblePrice},</if>
+            <if test="marketPrice != null">#{marketPrice},</if>
+            <if test="tradePrice != null">#{tradePrice},</if>
+            <if test="directPrice != null">#{directPrice},</if>
+            <if test="cooperatePrice != null">#{cooperatePrice},</if>
             <if test="technology != null and technology != ''">#{technology},</if>
             <if test="buckleType != null">#{buckleType},</if>
-            <if test="createBy != null">#{createBy},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
             <if test="createTime != null">#{createTime},</if>
-            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateBy != null and updateBy != ''">#{updateBy},</if>
             <if test="updateTime != null">#{updateTime},</if>
-            <if test="remark != null">#{remark},</if>
-         </trim>
+            <if test="remark != null and remark != ''">#{remark},</if>
+        </trim>
     </insert>
 
     <update id="updateFloorBid" parameterType="FloorBid">
@@ -95,14 +112,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="floorSpec != null and floorSpec != ''">floor_spec = #{floorSpec},</if>
             <if test="floorRank != null and floorRank != ''">floor_rank = #{floorRank},</if>
             <if test="price != null">price = #{price},</if>
-            <if test="price3 != null">price3 = #{price3},</if>
+            <if test="visiblePrice != null">visible_price = #{visiblePrice},</if>
+            <if test="marketPrice != null">market_price = #{marketPrice},</if>
+            <if test="tradePrice != null">trade_price = #{tradePrice},</if>
+            <if test="directPrice != null">direct_price = #{directPrice},</if>
+            <if test="cooperatePrice != null">cooperate_price = #{cooperatePrice},</if>
             <if test="technology != null and technology != ''">technology = #{technology},</if>
             <if test="buckleType != null">buckle_type = #{buckleType},</if>
-            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
-            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
-            <if test="remark != null">remark = #{remark},</if>
+            <if test="remark != null and remark != ''">remark = #{remark},</if>
         </trim>
         where id = #{id}
     </update>
@@ -112,7 +133,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteFloorBidByIds" parameterType="String">
-        delete from floor_bid where id in 
+        delete from floor_bid where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>
