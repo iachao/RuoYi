@@ -59,4 +59,6 @@ public interface FloorBidMapper extends BaseMapper<FloorBid>
      * @return 结果
      */
     int deleteFloorBidByIds(String[] ids);
+
+    List<FloorBid> selectStaffFloorBidList(FloorBid floorBid);
 }

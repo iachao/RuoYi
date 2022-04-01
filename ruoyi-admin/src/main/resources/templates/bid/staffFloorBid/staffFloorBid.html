@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('店内地板报价列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <label>品牌：</label>
+                                <select name="supplyId" th:with="type=${@dict.getType('floor_supply')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <label>地板类型：</label>
+                                <select name="floorType" th:with="type=${@dict.getType('floor_type')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <label>型号：</label>
+                                <input type="text" name="floorNumber" placeholder="请输入型号/编号/系列"/>
+                            </li>
+                            <li>
+                                <label>地板规格：</label>
+                                <input type="text" name="floorSpec" placeholder="例如：1221*168*12*10P"/>
+                            </li>
+                            <li>
+                                <label>等级：</label>
+                                <input type="text" name="floorRank"/>
+                            </li>
+                            <li>
+                                <label>工艺：</label>
+                                <input type="text" name="technology"/>
+                            </li>
+                            <li>
+                                <label>扣型：</label>
+                                <select name="buckleType" th:with="type=${@dict.getType('floor_buckle_type')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var supplyIdDatas = [[${@dict.getType('floor_supply')}]];
+        var floorTypeDatas = [[${@dict.getType('floor_type')}]];
+        var floorSpecDatas = [[${@dict.getType('floor_spec')}]];
+        var buckleTypeDatas = [[${@dict.getType('floor_buckle_type')}]];
+        var prefix = ctx + "bid/staffFloorBid";
+
+        $(function() {
+            var options = {
+                url: prefix + "/staffFloorBidList",
+                modalName: "店内地板报价",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field: 'id',
+                    title: '主键',
+                    visible: false
+                },
+                {
+                    field: 'supplyId',
+                    title: '品牌',
+                    formatter: function(value, row, index) {
+                       return $.table.selectDictLabel(supplyIdDatas, value);
+                    }
+                },
+                {
+                    field: 'floorType',
+                    title: '地板类型',
+                    formatter: function(value, row, index) {
+                       return $.table.selectDictLabel(floorTypeDatas, value);
+                    }
+                },
+                {
+                    field: 'woodType',
+                    title: '木种'
+                },
+                {
+                    field: 'floorNumber',
+                    title: '型号/编号/系列'
+                },
+                {
+                    field: 'floorSpec',
+                    title: '规格'
+                },
+                {
+                    field: 'floorRank',
+                    title: '等级',
+                    visible: false
+                },
+                {
+                    field: 'marketPrice',
+                    title: '市场价'
+                },
+                {
+                    field: 'tradePrice',
+                    title: '建议成交价'
+                },
+                {
+                    field: 'technology',
+                    title: '工艺'
+                },
+                {
+                    field: 'buckleType',
+                    title: '扣型',
+                    formatter: function(value, row, index) {
+                       return $.table.selectDictLabel(buckleTypeDatas, value);
+                    }
+                },
+                {
+                    field: 'remark',
+                    title: '备注'
+                }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

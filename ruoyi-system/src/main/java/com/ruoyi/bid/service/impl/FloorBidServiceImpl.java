@@ -95,4 +95,9 @@ public class FloorBidServiceImpl extends ServiceImpl<FloorBidMapper,FloorBid> im
     {
         return floorBidMapper.deleteFloorBidById(id);
     }
+
+    @Override
+    public List<FloorBid> selectStaffFloorBidList(FloorBid floorBid) {
+        return floorBidMapper.selectStaffFloorBidList(floorBid);
+    }
 }

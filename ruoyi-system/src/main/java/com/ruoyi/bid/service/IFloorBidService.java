@@ -59,4 +59,11 @@ public interface IFloorBidService extends IService<FloorBid>
      * @return 结果
      */
     int deleteFloorBidById(Long id);
+
+    /**
+     * 店内员工地板报价列表
+     * @param floorBid
+     * @return
+     */
+    List<FloorBid> selectStaffFloorBidList(FloorBid floorBid);
 }
