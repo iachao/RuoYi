@@ -3,6 +3,7 @@ package com.ruoyi.order.service;
 import java.util.List;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ruoyi.order.domain.FloorOrder;
+import com.ruoyi.order.resp.FloorOrderResp;
 
 /**
  * 地板订单Service接口
@@ -80,4 +81,6 @@ public interface IFloorOrderService extends IService<FloorOrder>
      * @return
      */
     int installFloorSave(FloorOrder floorOrder);
+
+    List<FloorOrderResp> selectFloorOrderRespList(FloorOrder floorOrder);
 }

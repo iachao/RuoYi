@@ -5,6 +5,7 @@ import java.util.List;
 import com.ruoyi.common.enums.business.FloorOrderStatusEnum;
 import com.ruoyi.order.domain.CustomerOrder;
 import com.ruoyi.order.domain.FloorOrder;
+import com.ruoyi.order.resp.FloorOrderResp;
 import com.ruoyi.order.service.ICustomerOrderService;
 import com.ruoyi.order.service.IFloorOrderService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -56,7 +57,7 @@ public class FloorOrderController extends BaseController
     public TableDataInfo list(FloorOrder floorOrder)
     {
         startPage();
-        List<FloorOrder> list = floorOrderService.selectFloorOrderList(floorOrder);
+        List<FloorOrderResp> list = floorOrderService.selectFloorOrderRespList(floorOrder);
         return getDataTable(list);
     }
 

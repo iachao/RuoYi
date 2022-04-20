@@ -57,7 +57,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectFloorOrderVo"/>
         where id = #{id}
     </select>
-        
+    <select id="selectFloorOrderRespList" resultType="com.ruoyi.order.resp.FloorOrderResp">
+        select a.*,b.customer_name,b.customer_phone,b.community,b.address,b.customer_source
+        from floor_order a join customer_order b on a.customer_id = b.id
+        <where>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="customerId != null "> and customer_id = #{customerId}</if>
+            <if test="supplyId != null "> and supply_id = #{supplyId}</if>
+            <if test="floorType != null "> and floor_type = #{floorType}</if>
+            <if test="floorSpec != null  and floorSpec != ''"> and floor_spec = #{floorSpec}</if>
+            <if test="floorNumber != null  and floorNumber != ''"> and floor_number = #{floorNumber}</if>
+        </where>
+    </select>
+
     <insert id="insertFloorOrder" parameterType="FloorOrder" useGeneratedKeys="true" keyProperty="id">
         insert into floor_order
         <trim prefix="(" suffix=")" suffixOverrides=",">

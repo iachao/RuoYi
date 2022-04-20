@@ -3,6 +3,7 @@ package com.ruoyi.order.mapper;
 import java.util.List;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ruoyi.order.domain.FloorOrder;
+import com.ruoyi.order.resp.FloorOrderResp;
 
 /**
  * 地板订单Mapper接口
@@ -59,4 +60,6 @@ public interface FloorOrderMapper extends BaseMapper<FloorOrder>
      * @return 结果
      */
     int deleteFloorOrderByIds(String[] ids);
+
+    List<FloorOrderResp> selectFloorOrderRespList(FloorOrder floorOrder);
 }

@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.order.domain.FloorOrder;
 import com.ruoyi.order.mapper.FloorOrderMapper;
+import com.ruoyi.order.resp.FloorOrderResp;
 import com.ruoyi.order.service.IFloorOrderService;
 import com.ruoyi.purchase.domain.PurchaseFloorOrder;
 import com.ruoyi.purchase.mapper.PurchaseFloorOrderMapper;
@@ -113,5 +114,10 @@ public class FloorOrderServiceImpl extends ServiceImpl<FloorOrderMapper, FloorOr
     @Override
     public int installFloorSave(FloorOrder floorOrder) {
         return floorOrderMapper.updateFloorOrder(floorOrder);
+    }
+
+    @Override
+    public List<FloorOrderResp> selectFloorOrderRespList(FloorOrder floorOrder) {
+        return floorOrderMapper.selectFloorOrderRespList(floorOrder);
     }
 }

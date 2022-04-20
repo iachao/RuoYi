@@ -165,4 +165,14 @@ public class CustomerOrderController extends BaseController
         ajax.put("value",customerOrderRespList);
         return ajax;
     }
+
+    /**
+     * 查看详细
+     */
+    @GetMapping("/detail/{id}")
+    public String detail(@PathVariable("id") Long id, ModelMap mmap)
+    {
+        mmap.put("cus", customerOrderService.selectCustomerOrderById(id));
+        return prefix + "/detail";
+    }
 }
