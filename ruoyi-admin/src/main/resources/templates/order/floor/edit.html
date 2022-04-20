@@ -27,7 +27,7 @@
                 <label class="col-sm-3 control-label is-required">供应商：</label>
                 <div class="col-sm-8">
                     <select name="supplyId" class="form-control m-b" th:with="type=${@dict.getType('floor_supply')}" required>
-                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{floorSupply}"></option>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{supplyId}"></option>
                     </select>
                 </div>
             </div>
