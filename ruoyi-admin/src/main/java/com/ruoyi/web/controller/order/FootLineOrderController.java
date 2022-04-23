@@ -91,6 +91,7 @@ public class FootLineOrderController extends BaseController
     @ResponseBody
     public AjaxResult addSave(FootLineOrder footLineOrder)
     {
+        footLineOrder.setCreateBy(getLoginName());
         return toAjax(footLineOrderService.insertFootLineOrder(footLineOrder));
     }
 
@@ -117,6 +118,7 @@ public class FootLineOrderController extends BaseController
     @ResponseBody
     public AjaxResult editSave(FootLineOrder footLineOrder)
     {
+        footLineOrder.setUpdateBy(getLoginName());
         return toAjax(footLineOrderService.updateFootLineOrder(footLineOrder));
     }
 
