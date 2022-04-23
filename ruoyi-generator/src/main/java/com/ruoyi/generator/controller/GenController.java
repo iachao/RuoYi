@@ -46,7 +46,7 @@ import com.ruoyi.generator.service.IGenTableService;
 @RequestMapping("/tool/gen")
 public class GenController extends BaseController
 {
-    private String prefix = "tool/gen";
+    private final String prefix = "tool/gen";
 
     @Autowired
     private IGenTableService genTableService;
@@ -247,7 +247,7 @@ public class GenController extends BaseController
     public void download(HttpServletResponse response, @PathVariable("tableName") String tableName) throws IOException
     {
         byte[] data = genTableService.downloadCode(tableName);
-        genCode(response, data);
+        genCode(response, data, tableName);
     }
 
     /**
@@ -297,6 +297,18 @@ public class GenController extends BaseController
     {
         response.reset();
         response.setHeader("Content-Disposition", "attachment; filename=\"ruoyi.zip\"");
+        response.addHeader("Content-Length", "" + data.length);
+        response.setContentType("application/octet-stream; charset=UTF-8");
+        IOUtils.write(data, response.getOutputStream());
+    }
+
+    /**
+     * 生成zip文件，文件名称 表名
+     */
+    private void genCode(HttpServletResponse response, byte[] data,String tableName) throws IOException
+    {
+        response.reset();
+        response.setHeader("Content-Disposition", "attachment; filename="+tableName+".zip");
         response.addHeader("Content-Length", "" + data.length);
         response.setContentType("application/octet-stream; charset=UTF-8");
         IOUtils.write(data, response.getOutputStream());
