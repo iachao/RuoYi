@@ -1,13 +1,17 @@
 package com.ruoyi.order.model;
 
-import lombok.Data;
+import lombok.*;
 
 import java.math.BigDecimal;
 
 /**
  * 地板规格参数
  */
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class FloorParam {
 
     // 地板长度

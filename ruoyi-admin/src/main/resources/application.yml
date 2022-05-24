@@ -63,7 +63,9 @@ mybatis-plus:
     db-config:
       id-type: auto
       logic-delete-field: deleted
-
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+      select-strategy: not_empty
 # PageHelper分页插件
 pagehelper: 
   helperDialect: mysql

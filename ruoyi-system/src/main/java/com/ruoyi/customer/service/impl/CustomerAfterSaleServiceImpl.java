@@ -1,14 +1,16 @@
 package com.ruoyi.customer.service.impl;
 
-import java.util.List;
-import com.ruoyi.common.utils.DateUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import com.ruoyi.customer.mapper.CustomerAfterSaleMapper;
-import com.ruoyi.customer.domain.CustomerAfterSale;
-import com.ruoyi.customer.service.ICustomerAfterSaleService;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ruoyi.common.core.text.Convert;
+import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.customer.domain.CustomerAfterSale;
+import com.ruoyi.customer.mapper.CustomerAfterSaleMapper;
+import com.ruoyi.customer.service.ICustomerAfterSaleService;
+import org.springframework.stereotype.Service;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * 客户售后服务Service业务层处理
@@ -19,9 +21,6 @@ import com.ruoyi.common.core.text.Convert;
 @Service
 public class CustomerAfterSaleServiceImpl extends ServiceImpl<CustomerAfterSaleMapper,CustomerAfterSale> implements ICustomerAfterSaleService
 {
-    @Autowired
-    private CustomerAfterSaleMapper customerAfterSaleMapper;
-
     /**
      * 查询客户售后服务
      * 
@@ -31,7 +30,7 @@ public class CustomerAfterSaleServiceImpl extends ServiceImpl<CustomerAfterSaleM
     @Override
     public CustomerAfterSale selectCustomerAfterSaleById(Long id)
     {
-        return customerAfterSaleMapper.selectCustomerAfterSaleById(id);
+        return baseMapper.selectById(id);
     }
 
     /**
@@ -43,7 +42,10 @@ public class CustomerAfterSaleServiceImpl extends ServiceImpl<CustomerAfterSaleM
     @Override
     public List<CustomerAfterSale> selectCustomerAfterSaleList(CustomerAfterSale customerAfterSale)
     {
-        return customerAfterSaleMapper.selectCustomerAfterSaleList(customerAfterSale);
+        QueryWrapper<CustomerAfterSale> queryWrapper = new QueryWrapper<>();
+        queryWrapper.orderByDesc("id");
+        queryWrapper.setEntity(customerAfterSale);
+        return baseMapper.selectList(queryWrapper);
     }
 
     /**
@@ -56,7 +58,7 @@ public class CustomerAfterSaleServiceImpl extends ServiceImpl<CustomerAfterSaleM
     public int insertCustomerAfterSale(CustomerAfterSale customerAfterSale)
     {
         customerAfterSale.setCreateTime(DateUtils.getNowDate());
-        return customerAfterSaleMapper.insertCustomerAfterSale(customerAfterSale);
+        return baseMapper.insert(customerAfterSale);
     }
 
     /**
@@ -69,7 +71,7 @@ public class CustomerAfterSaleServiceImpl extends ServiceImpl<CustomerAfterSaleM
     public int updateCustomerAfterSale(CustomerAfterSale customerAfterSale)
     {
         customerAfterSale.setUpdateTime(DateUtils.getNowDate());
-        return customerAfterSaleMapper.updateCustomerAfterSale(customerAfterSale);
+        return baseMapper.updateById(customerAfterSale);
     }
 
     /**
@@ -81,7 +83,7 @@ public class CustomerAfterSaleServiceImpl extends ServiceImpl<CustomerAfterSaleM
     @Override
     public int deleteCustomerAfterSaleByIds(String ids)
     {
-        return customerAfterSaleMapper.deleteCustomerAfterSaleByIds(Convert.toStrArray(ids));
+        return baseMapper.deleteBatchIds(Arrays.asList(Convert.toIntArray(ids)));
     }
 
     /**
@@ -93,6 +95,6 @@ public class CustomerAfterSaleServiceImpl extends ServiceImpl<CustomerAfterSaleM
     @Override
     public int deleteCustomerAfterSaleById(Long id)
     {
-        return customerAfterSaleMapper.deleteCustomerAfterSaleById(id);
+        return baseMapper.deleteById(id);
     }
 }

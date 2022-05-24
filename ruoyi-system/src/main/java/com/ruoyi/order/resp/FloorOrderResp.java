@@ -1,8 +1,12 @@
 package com.ruoyi.order.resp;
 
 import com.ruoyi.order.domain.FloorOrder;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 public class FloorOrderResp extends FloorOrder {
 

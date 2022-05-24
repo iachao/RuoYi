@@ -1,15 +1,17 @@
 package com.ruoyi.order.service.impl;
 
-import java.util.List;
-import com.ruoyi.common.utils.DateUtils;
-import com.ruoyi.order.resp.FootLineOrderResp;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import com.ruoyi.order.mapper.FootLineOrderMapper;
-import com.ruoyi.order.domain.FootLineOrder;
-import com.ruoyi.order.service.IFootLineOrderService;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ruoyi.common.core.text.Convert;
+import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.order.domain.FootLineOrder;
+import com.ruoyi.order.mapper.FootLineOrderMapper;
+import com.ruoyi.order.resp.FootLineOrderResp;
+import com.ruoyi.order.service.IFootLineOrderService;
+import org.springframework.stereotype.Service;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * 踢脚线订单Service业务层处理
@@ -20,8 +22,6 @@ import com.ruoyi.common.core.text.Convert;
 @Service
 public class FootLineOrderServiceImpl extends ServiceImpl<FootLineOrderMapper,FootLineOrder> implements IFootLineOrderService
 {
-    @Autowired
-    private FootLineOrderMapper footLineOrderMapper;
 
     /**
      * 查询踢脚线订单
@@ -32,7 +32,7 @@ public class FootLineOrderServiceImpl extends ServiceImpl<FootLineOrderMapper,Fo
     @Override
     public FootLineOrder selectFootLineOrderById(Long id)
     {
-        return footLineOrderMapper.selectFootLineOrderById(id);
+        return baseMapper.selectById(id);
     }
 
     /**
@@ -44,7 +44,10 @@ public class FootLineOrderServiceImpl extends ServiceImpl<FootLineOrderMapper,Fo
     @Override
     public List<FootLineOrder> selectFootLineOrderList(FootLineOrder footLineOrder)
     {
-        return footLineOrderMapper.selectFootLineOrderList(footLineOrder);
+        QueryWrapper<FootLineOrder> queryWrapper = new QueryWrapper<>();
+        queryWrapper.orderByDesc("id");
+        queryWrapper.setEntity(footLineOrder);
+        return baseMapper.selectList(queryWrapper);
     }
 
     /**
@@ -57,7 +60,7 @@ public class FootLineOrderServiceImpl extends ServiceImpl<FootLineOrderMapper,Fo
     public int insertFootLineOrder(FootLineOrder footLineOrder)
     {
         footLineOrder.setCreateTime(DateUtils.getNowDate());
-        return footLineOrderMapper.insertFootLineOrder(footLineOrder);
+        return baseMapper.insert(footLineOrder);
     }
 
     /**
@@ -70,7 +73,7 @@ public class FootLineOrderServiceImpl extends ServiceImpl<FootLineOrderMapper,Fo
     public int updateFootLineOrder(FootLineOrder footLineOrder)
     {
         footLineOrder.setUpdateTime(DateUtils.getNowDate());
-        return footLineOrderMapper.updateFootLineOrder(footLineOrder);
+        return baseMapper.updateById(footLineOrder);
     }
 
     /**
@@ -82,7 +85,7 @@ public class FootLineOrderServiceImpl extends ServiceImpl<FootLineOrderMapper,Fo
     @Override
     public int deleteFootLineOrderByIds(String ids)
     {
-        return footLineOrderMapper.deleteFootLineOrderByIds(Convert.toStrArray(ids));
+        return baseMapper.deleteBatchIds(Arrays.asList(Convert.toIntArray(ids)));
     }
 
     /**
@@ -94,11 +97,11 @@ public class FootLineOrderServiceImpl extends ServiceImpl<FootLineOrderMapper,Fo
     @Override
     public int deleteFootLineOrderById(Long id)
     {
-        return footLineOrderMapper.deleteFootLineOrderById(id);
+        return baseMapper.deleteById(id);
     }
 
     @Override
     public List<FootLineOrderResp> selectFootLineOrderRespList(FootLineOrder footLineOrder) {
-        return footLineOrderMapper.selectFootLineOrderRespList(footLineOrder);
+        return baseMapper.selectFootLineOrderRespList(footLineOrder);
     }
 }

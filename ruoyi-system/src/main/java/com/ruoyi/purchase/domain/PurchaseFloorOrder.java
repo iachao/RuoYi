@@ -1,16 +1,10 @@
 package com.ruoyi.purchase.domain;
 
-import java.math.BigDecimal;
-import com.baomidou.mybatisplus.annotation.TableId;
-import lombok.Data;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.experimental.Accessors;
 import com.ruoyi.common.core.domain.BaseEntity;
+import lombok.*;
+
+import java.math.BigDecimal;
 
 /**
  * 采购木地板对象 purchase_floor_order
@@ -18,10 +12,11 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * @author Chaos
  * @date 2022-03-26
  */
-@Data
-@NoArgsConstructor
 @AllArgsConstructor
-@Accessors(chain = true)
+@NoArgsConstructor
+@Builder
+@Data
+@EqualsAndHashCode(callSuper = false)
 public class PurchaseFloorOrder extends BaseEntity
 {
     private static final long serialVersionUID = 1L;

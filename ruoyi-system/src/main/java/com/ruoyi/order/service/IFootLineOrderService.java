@@ -1,9 +1,10 @@
 package com.ruoyi.order.service;
 
-import java.util.List;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ruoyi.order.domain.FootLineOrder;
 import com.ruoyi.order.resp.FootLineOrderResp;
+
+import java.util.List;
 
 /**
  * 踢脚线订单Service接口
@@ -15,7 +16,7 @@ public interface IFootLineOrderService extends IService<FootLineOrder>
 {
     /**
      * 查询踢脚线订单
-     * 
+     *
      * @param id 踢脚线订单主键
      * @return 踢脚线订单
      */
@@ -23,7 +24,7 @@ public interface IFootLineOrderService extends IService<FootLineOrder>
 
     /**
      * 查询踢脚线订单列表
-     * 
+     *
      * @param footLineOrder 踢脚线订单
      * @return 踢脚线订单集合
      */
@@ -31,7 +32,7 @@ public interface IFootLineOrderService extends IService<FootLineOrder>
 
     /**
      * 新增踢脚线订单
-     * 
+     *
      * @param footLineOrder 踢脚线订单
      * @return 结果
      */
@@ -39,7 +40,7 @@ public interface IFootLineOrderService extends IService<FootLineOrder>
 
     /**
      * 修改踢脚线订单
-     * 
+     *
      * @param footLineOrder 踢脚线订单
      * @return 结果
      */
@@ -47,7 +48,7 @@ public interface IFootLineOrderService extends IService<FootLineOrder>
 
     /**
      * 批量删除踢脚线订单
-     * 
+     *
      * @param ids 需要删除的踢脚线订单主键集合
      * @return 结果
      */
@@ -55,7 +56,7 @@ public interface IFootLineOrderService extends IService<FootLineOrder>
 
     /**
      * 删除踢脚线订单信息
-     * 
+     *
      * @param id 踢脚线订单主键
      * @return 结果
      */

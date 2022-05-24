@@ -1,19 +1,20 @@
 package com.ruoyi.framework.shiro.web.filter.online;
 
-import java.io.IOException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import org.apache.shiro.session.Session;
-import org.apache.shiro.subject.Subject;
-import org.apache.shiro.web.filter.AccessControlFilter;
-import org.apache.shiro.web.util.WebUtils;
-import org.springframework.beans.factory.annotation.Value;
 import com.ruoyi.common.constant.ShiroConstants;
 import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.enums.OnlineStatus;
 import com.ruoyi.common.utils.ShiroUtils;
 import com.ruoyi.framework.shiro.session.OnlineSession;
 import com.ruoyi.framework.shiro.session.OnlineSessionDAO;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
+import org.apache.shiro.web.filter.AccessControlFilter;
+import org.apache.shiro.web.util.WebUtils;
+import org.springframework.beans.factory.annotation.Value;
+
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import java.io.IOException;
 
 /**
  * 自定义访问控制
@@ -62,10 +63,7 @@ public class OnlineSessionFilter extends AccessControlFilter
                 }
             }
 
-            if (onlineSession.getStatus() == OnlineStatus.off_line)
-            {
-                return false;
-            }
+            return onlineSession.getStatus() != OnlineStatus.off_line;
         }
         return true;
     }

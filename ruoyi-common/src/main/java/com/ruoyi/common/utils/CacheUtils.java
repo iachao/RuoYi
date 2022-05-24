@@ -1,13 +1,14 @@
 package com.ruoyi.common.utils;
 
-import java.util.Iterator;
-import java.util.Set;
+import com.ruoyi.common.utils.spring.SpringUtils;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheManager;
 import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.ruoyi.common.utils.spring.SpringUtils;
+
+import java.util.Iterator;
+import java.util.Set;
 
 /**
  * Cache工具类
@@ -16,9 +17,9 @@ import com.ruoyi.common.utils.spring.SpringUtils;
  */
 public class CacheUtils
 {
-    private static Logger logger = LoggerFactory.getLogger(CacheUtils.class);
+    private static final Logger logger = LoggerFactory.getLogger(CacheUtils.class);
 
-    private static CacheManager cacheManager = SpringUtils.getBean(CacheManager.class);
+    private static final CacheManager cacheManager = SpringUtils.getBean(CacheManager.class);
 
     private static final String SYS_CACHE = "sys-cache";
 

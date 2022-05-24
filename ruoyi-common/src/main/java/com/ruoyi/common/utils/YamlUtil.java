@@ -1,14 +1,14 @@
 package com.ruoyi.common.utils;
 
+import org.yaml.snakeyaml.DumperOptions;
+import org.yaml.snakeyaml.Yaml;
+
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import org.yaml.snakeyaml.DumperOptions;
-import org.yaml.snakeyaml.Yaml;
-import com.ruoyi.common.utils.StringUtils;
 
 /**
  * 配置处理工具类
@@ -46,7 +46,7 @@ public class YamlUtil
                 {
                     int index = input.indexOf(".");
                     String left = input.substring(0, index);
-                    String right = input.substring(index + 1, input.length());
+                    String right = input.substring(index + 1);
                     return getProperty((Map<?, ?>) map.get(left), right);
                 }
                 else if (map.containsKey(input))
@@ -74,7 +74,7 @@ public class YamlUtil
                 {
                     int index = input.indexOf(".");
                     String left = input.substring(0, index);
-                    String right = input.substring(index + 1, input.length());
+                    String right = input.substring(index + 1);
                     setProperty((Map<?, ?>) map.get(left), right, value);
                 }
                 else

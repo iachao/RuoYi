@@ -1,6 +1,7 @@
 package com.ruoyi.stock.service;
 
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.ruoyi.stock.domain.StockFloor;
 
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
  * @author Chaos
  * @date 2021-12-18
  */
-public interface IStockFloorService 
+public interface IStockFloorService extends IService<StockFloor>
 {
     /**
      * 查询地板库存

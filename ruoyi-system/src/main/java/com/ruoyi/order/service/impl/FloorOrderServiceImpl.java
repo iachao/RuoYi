@@ -1,18 +1,17 @@
 package com.ruoyi.order.service.impl;
 
-import java.util.List;
-
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.order.domain.FloorOrder;
 import com.ruoyi.order.mapper.FloorOrderMapper;
 import com.ruoyi.order.resp.FloorOrderResp;
 import com.ruoyi.order.service.IFloorOrderService;
-import com.ruoyi.purchase.domain.PurchaseFloorOrder;
-import com.ruoyi.purchase.mapper.PurchaseFloorOrderMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.ruoyi.common.core.text.Convert;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * 地板订单Service业务层处理
@@ -23,8 +22,6 @@ import com.ruoyi.common.core.text.Convert;
 @Service
 public class FloorOrderServiceImpl extends ServiceImpl<FloorOrderMapper, FloorOrder> implements IFloorOrderService
 {
-    @Autowired
-    private FloorOrderMapper floorOrderMapper;
 
     /**
      * 查询地板订单
@@ -35,7 +32,7 @@ public class FloorOrderServiceImpl extends ServiceImpl<FloorOrderMapper, FloorOr
     @Override
     public FloorOrder selectFloorOrderById(Long id)
     {
-        return floorOrderMapper.selectFloorOrderById(id);
+        return baseMapper.selectById(id);
     }
 
     /**
@@ -47,7 +44,10 @@ public class FloorOrderServiceImpl extends ServiceImpl<FloorOrderMapper, FloorOr
     @Override
     public List<FloorOrder> selectFloorOrderList(FloorOrder floorOrder)
     {
-        return floorOrderMapper.selectFloorOrderList(floorOrder);
+        QueryWrapper<FloorOrder> queryWrapper = new QueryWrapper<>();
+        queryWrapper.orderByDesc("id");
+        queryWrapper.setEntity(floorOrder);
+        return baseMapper.selectList(queryWrapper);
     }
 
     /**
@@ -60,7 +60,7 @@ public class FloorOrderServiceImpl extends ServiceImpl<FloorOrderMapper, FloorOr
     public int insertFloorOrder(FloorOrder floorOrder)
     {
         floorOrder.setCreateTime(DateUtils.getNowDate());
-        return floorOrderMapper.insertFloorOrder(floorOrder);
+        return baseMapper.insert(floorOrder);
     }
 
     /**
@@ -73,7 +73,7 @@ public class FloorOrderServiceImpl extends ServiceImpl<FloorOrderMapper, FloorOr
     public int updateFloorOrder(FloorOrder floorOrder)
     {
         floorOrder.setUpdateTime(DateUtils.getNowDate());
-        return floorOrderMapper.updateFloorOrder(floorOrder);
+        return baseMapper.updateById(floorOrder);
     }
 
     /**
@@ -85,7 +85,7 @@ public class FloorOrderServiceImpl extends ServiceImpl<FloorOrderMapper, FloorOr
     @Override
     public int deleteFloorOrderByIds(String ids)
     {
-        return floorOrderMapper.deleteFloorOrderByIds(Convert.toStrArray(ids));
+        return baseMapper.deleteBatchIds(Arrays.asList(Convert.toIntArray(ids)));
     }
 
     /**
@@ -97,27 +97,27 @@ public class FloorOrderServiceImpl extends ServiceImpl<FloorOrderMapper, FloorOr
     @Override
     public int deleteFloorOrderById(Long id)
     {
-        return floorOrderMapper.deleteFloorOrderById(id);
+        return baseMapper.deleteById(id);
     }
 
     @Override
     public int sendFloorSave(FloorOrder floorOrder) {
-        int result = floorOrderMapper.updateFloorOrder(floorOrder);
+        int result = baseMapper.updateById(floorOrder);
         return result;
     }
 
     @Override
     public int surveyFloorSave(FloorOrder floorOrder) {
-        return floorOrderMapper.updateFloorOrder(floorOrder);
+        return baseMapper.updateById(floorOrder);
     }
 
     @Override
     public int installFloorSave(FloorOrder floorOrder) {
-        return floorOrderMapper.updateFloorOrder(floorOrder);
+        return baseMapper.updateById(floorOrder);
     }
 
     @Override
     public List<FloorOrderResp> selectFloorOrderRespList(FloorOrder floorOrder) {
-        return floorOrderMapper.selectFloorOrderRespList(floorOrder);
+        return baseMapper.selectFloorOrderRespList(floorOrder);
     }
 }

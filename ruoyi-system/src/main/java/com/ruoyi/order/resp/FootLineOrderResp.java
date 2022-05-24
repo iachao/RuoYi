@@ -1,9 +1,12 @@
 package com.ruoyi.order.resp;
 
-import com.ruoyi.order.domain.FloorOrder;
 import com.ruoyi.order.domain.FootLineOrder;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 public class FootLineOrderResp extends FootLineOrder {
 

@@ -1,13 +1,17 @@
 package com.ruoyi.order.model;
 
-import lombok.Data;
+import lombok.*;
 
 import java.math.BigDecimal;
 
 /**
  * 某面积计算地板结果
  */
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class FloorCalcResult {
 
     // 测量面积

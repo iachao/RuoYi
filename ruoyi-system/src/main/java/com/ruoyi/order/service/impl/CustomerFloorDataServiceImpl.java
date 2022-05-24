@@ -1,14 +1,15 @@
 package com.ruoyi.order.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.order.domain.CustomerFloorData;
 import com.ruoyi.order.mapper.CustomerFloorDataMapper;
 import com.ruoyi.order.service.ICustomerFloorDataService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -20,8 +21,6 @@ import java.util.List;
 @Service
 public class CustomerFloorDataServiceImpl extends ServiceImpl<CustomerFloorDataMapper, CustomerFloorData> implements ICustomerFloorDataService
 {
-    @Autowired
-    private CustomerFloorDataMapper customerFloorDataMapper;
 
     /**
      * 查询客户地板测量数据
@@ -32,7 +31,7 @@ public class CustomerFloorDataServiceImpl extends ServiceImpl<CustomerFloorDataM
     @Override
     public CustomerFloorData selectCustomerFloorDataById(Long id)
     {
-        return customerFloorDataMapper.selectCustomerFloorDataById(id);
+        return baseMapper.selectById(id);
     }
 
     /**
@@ -44,7 +43,10 @@ public class CustomerFloorDataServiceImpl extends ServiceImpl<CustomerFloorDataM
     @Override
     public List<CustomerFloorData> selectCustomerFloorDataList(CustomerFloorData customerFloorData)
     {
-        return customerFloorDataMapper.selectCustomerFloorDataList(customerFloorData);
+        QueryWrapper<CustomerFloorData> queryWrapper = new QueryWrapper<>();
+        queryWrapper.orderByDesc("id");
+        queryWrapper.setEntity(customerFloorData);
+        return baseMapper.selectList(queryWrapper);
     }
 
     /**
@@ -57,7 +59,7 @@ public class CustomerFloorDataServiceImpl extends ServiceImpl<CustomerFloorDataM
     public int insertCustomerFloorData(CustomerFloorData customerFloorData)
     {
         customerFloorData.setCreateTime(DateUtils.getNowDate());
-        return customerFloorDataMapper.insertCustomerFloorData(customerFloorData);
+        return baseMapper.insert(customerFloorData);
     }
 
     /**
@@ -70,7 +72,7 @@ public class CustomerFloorDataServiceImpl extends ServiceImpl<CustomerFloorDataM
     public int updateCustomerFloorData(CustomerFloorData customerFloorData)
     {
         customerFloorData.setUpdateTime(DateUtils.getNowDate());
-        return customerFloorDataMapper.updateCustomerFloorData(customerFloorData);
+        return baseMapper.updateById(customerFloorData);
     }
 
     /**
@@ -82,7 +84,7 @@ public class CustomerFloorDataServiceImpl extends ServiceImpl<CustomerFloorDataM
     @Override
     public int deleteCustomerFloorDataByIds(String ids)
     {
-        return customerFloorDataMapper.deleteCustomerFloorDataByIds(Convert.toStrArray(ids));
+        return baseMapper.deleteBatchIds(Arrays.asList(Convert.toIntArray(ids)));
     }
 
     /**
@@ -94,11 +96,11 @@ public class CustomerFloorDataServiceImpl extends ServiceImpl<CustomerFloorDataM
     @Override
     public int deleteCustomerFloorDataById(Long id)
     {
-        return customerFloorDataMapper.deleteCustomerFloorDataById(id);
+        return baseMapper.deleteById(id);
     }
 
     @Override
     public int deleteByCustomerId(Long customerId) {
-        return customerFloorDataMapper.deleteByCustomerId(customerId);
+        return baseMapper.deleteByCustomerId(customerId);
     }
 }

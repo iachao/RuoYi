@@ -1,7 +1,6 @@
 package com.ruoyi.stock.domain;
 
 import com.baomidou.mybatisplus.annotation.TableLogic;
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 import lombok.AllArgsConstructor;
@@ -21,7 +20,6 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-@TableName(value = "stock_floor")
 public class StockFloor extends BaseEntity
 {
     private static final long serialVersionUID = 1L;

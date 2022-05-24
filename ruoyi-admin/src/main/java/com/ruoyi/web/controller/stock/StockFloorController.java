@@ -1,8 +1,10 @@
 package com.ruoyi.web.controller.stock;
 
-import java.util.List;
-import java.util.Locale;
-
+import com.ruoyi.common.annotation.Log;
+import com.ruoyi.common.core.controller.BaseController;
+import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.core.page.TableDataInfo;
+import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.stock.domain.StockFloor;
 import com.ruoyi.stock.service.IStockFloorService;
@@ -11,16 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import com.ruoyi.common.annotation.Log;
-import com.ruoyi.common.enums.BusinessType;
-import com.ruoyi.common.core.controller.BaseController;
-import com.ruoyi.common.core.domain.AjaxResult;
-import com.ruoyi.common.core.page.TableDataInfo;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Locale;
 
 /**
  * 地板库存Controller
@@ -122,8 +118,7 @@ public class StockFloorController extends BaseController
     @ResponseBody
     public AjaxResult editSave(StockFloor stockFloor)
     {
-        stockFloor.setFloorNumber(stockFloor.getFloorNumber().toUpperCase(Locale.ROOT));
-        stockFloor.setUpdateBy(getLoginName());
+        stockFloor.setFloorNumber(stockFloor.getFloorNumber().toUpperCase());
         return toAjax(stockFloorService.updateStockFloor(stockFloor));
     }
 

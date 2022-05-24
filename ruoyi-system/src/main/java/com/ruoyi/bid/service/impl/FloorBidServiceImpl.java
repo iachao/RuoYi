@@ -1,14 +1,16 @@
 package com.ruoyi.bid.service.impl;
 
-import java.util.List;
-import com.ruoyi.common.utils.DateUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import com.ruoyi.bid.mapper.FloorBidMapper;
-import com.ruoyi.bid.domain.FloorBid;
-import com.ruoyi.bid.service.IFloorBidService;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ruoyi.bid.domain.FloorBid;
+import com.ruoyi.bid.mapper.FloorBidMapper;
+import com.ruoyi.bid.service.IFloorBidService;
 import com.ruoyi.common.core.text.Convert;
+import com.ruoyi.common.utils.DateUtils;
+import org.springframework.stereotype.Service;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * 地板报价Service业务层处理
@@ -19,9 +21,6 @@ import com.ruoyi.common.core.text.Convert;
 @Service
 public class FloorBidServiceImpl extends ServiceImpl<FloorBidMapper,FloorBid> implements IFloorBidService
 {
-    @Autowired
-    private FloorBidMapper floorBidMapper;
-
     /**
      * 查询地板报价
      * 
@@ -31,7 +30,7 @@ public class FloorBidServiceImpl extends ServiceImpl<FloorBidMapper,FloorBid> im
     @Override
     public FloorBid selectFloorBidById(Long id)
     {
-        return floorBidMapper.selectFloorBidById(id);
+        return baseMapper.selectById(id);
     }
 
     /**
@@ -43,7 +42,10 @@ public class FloorBidServiceImpl extends ServiceImpl<FloorBidMapper,FloorBid> im
     @Override
     public List<FloorBid> selectFloorBidList(FloorBid floorBid)
     {
-        return floorBidMapper.selectFloorBidList(floorBid);
+        QueryWrapper<FloorBid> queryWrapper = new QueryWrapper<>();
+        queryWrapper.orderByDesc("id");
+        queryWrapper.setEntity(floorBid);
+        return baseMapper.selectList(queryWrapper);
     }
 
     /**
@@ -56,7 +58,7 @@ public class FloorBidServiceImpl extends ServiceImpl<FloorBidMapper,FloorBid> im
     public int insertFloorBid(FloorBid floorBid)
     {
         floorBid.setCreateTime(DateUtils.getNowDate());
-        return floorBidMapper.insertFloorBid(floorBid);
+        return baseMapper.insert(floorBid);
     }
 
     /**
@@ -69,7 +71,7 @@ public class FloorBidServiceImpl extends ServiceImpl<FloorBidMapper,FloorBid> im
     public int updateFloorBid(FloorBid floorBid)
     {
         floorBid.setUpdateTime(DateUtils.getNowDate());
-        return floorBidMapper.updateFloorBid(floorBid);
+        return baseMapper.updateById(floorBid);
     }
 
     /**
@@ -81,7 +83,7 @@ public class FloorBidServiceImpl extends ServiceImpl<FloorBidMapper,FloorBid> im
     @Override
     public int deleteFloorBidByIds(String ids)
     {
-        return floorBidMapper.deleteFloorBidByIds(Convert.toStrArray(ids));
+        return baseMapper.deleteBatchIds(Arrays.asList(Convert.toIntArray(ids)));
     }
 
     /**
@@ -93,11 +95,11 @@ public class FloorBidServiceImpl extends ServiceImpl<FloorBidMapper,FloorBid> im
     @Override
     public int deleteFloorBidById(Long id)
     {
-        return floorBidMapper.deleteFloorBidById(id);
+        return baseMapper.deleteById(id);
     }
 
     @Override
     public List<FloorBid> selectStaffFloorBidList(FloorBid floorBid) {
-        return floorBidMapper.selectStaffFloorBidList(floorBid);
+        return baseMapper.selectStaffFloorBidList(floorBid);
     }
 }

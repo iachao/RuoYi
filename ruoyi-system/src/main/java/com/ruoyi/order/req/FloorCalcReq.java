@@ -1,11 +1,15 @@
 package com.ruoyi.order.req;
 
 import com.ruoyi.order.model.FloorCalcParam;
-import lombok.Data;
+import lombok.*;
 
 import java.util.List;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class FloorCalcReq {
 
     private Long customerId;

@@ -1,9 +1,8 @@
 package com.ruoyi.order.domain;
 
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
-import lombok.Data;
+import lombok.*;
 
 import java.math.BigDecimal;
 
@@ -13,8 +12,11 @@ import java.math.BigDecimal;
  * @author Chaos
  * @date 2022-03-08
  */
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Data
-@TableName(value = "customer_floor_data")
+@EqualsAndHashCode(callSuper = false)
 public class CustomerFloorData extends BaseEntity
 {
     /** 主键 */

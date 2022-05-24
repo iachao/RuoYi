@@ -1,16 +1,13 @@
 package com.ruoyi.bid.domain;
 
-import java.math.BigDecimal;
-import com.baomidou.mybatisplus.annotation.TableId;
-import lombok.Data;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
+import com.ruoyi.common.core.domain.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
-import com.ruoyi.common.core.domain.BaseEntity;
+
+import java.math.BigDecimal;
 
 /**
  * 地板报价对象 floor_bid

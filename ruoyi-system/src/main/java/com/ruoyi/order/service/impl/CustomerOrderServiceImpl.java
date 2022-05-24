@@ -1,16 +1,15 @@
 package com.ruoyi.order.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.order.domain.CustomerOrder;
 import com.ruoyi.order.mapper.CustomerOrderMapper;
 import com.ruoyi.order.service.ICustomerOrderService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -22,8 +21,6 @@ import java.util.List;
 @Service
 public class CustomerOrderServiceImpl extends ServiceImpl<CustomerOrderMapper, CustomerOrder> implements ICustomerOrderService
 {
-    @Autowired
-    private CustomerOrderMapper customerOrderMapper;
 
     /**
      * 查询客户
@@ -34,7 +31,7 @@ public class CustomerOrderServiceImpl extends ServiceImpl<CustomerOrderMapper, C
     @Override
     public CustomerOrder selectCustomerOrderById(Long id)
     {
-        return customerOrderMapper.selectCustomerOrderById(id);
+        return baseMapper.selectById(id);
     }
 
     /**
@@ -46,7 +43,10 @@ public class CustomerOrderServiceImpl extends ServiceImpl<CustomerOrderMapper, C
     @Override
     public List<CustomerOrder> selectCustomerOrderList(CustomerOrder customerOrder)
     {
-        return customerOrderMapper.selectCustomerOrderList(customerOrder);
+        QueryWrapper<CustomerOrder> queryWrapper = new QueryWrapper<>();
+        queryWrapper.orderByDesc("id");
+        queryWrapper.setEntity(customerOrder);
+        return baseMapper.selectList(queryWrapper);
     }
 
     /**
@@ -59,7 +59,7 @@ public class CustomerOrderServiceImpl extends ServiceImpl<CustomerOrderMapper, C
     public int insertCustomerOrder(CustomerOrder customerOrder)
     {
         customerOrder.setCreateTime(DateUtils.getNowDate());
-        return customerOrderMapper.insertCustomerOrder(customerOrder);
+        return baseMapper.insert(customerOrder);
     }
 
     /**
@@ -72,7 +72,7 @@ public class CustomerOrderServiceImpl extends ServiceImpl<CustomerOrderMapper, C
     public int updateCustomerOrder(CustomerOrder customerOrder)
     {
         customerOrder.setUpdateTime(DateUtils.getNowDate());
-        return customerOrderMapper.updateCustomerOrder(customerOrder);
+        return baseMapper.updateById(customerOrder);
     }
 
     /**
@@ -84,7 +84,7 @@ public class CustomerOrderServiceImpl extends ServiceImpl<CustomerOrderMapper, C
     @Override
     public int deleteCustomerOrderByIds(String ids)
     {
-        return customerOrderMapper.deleteCustomerOrderByIds(Convert.toStrArray(ids));
+        return baseMapper.deleteBatchIds(Arrays.asList(Convert.toIntArray(ids)));
     }
 
     /**
@@ -96,12 +96,12 @@ public class CustomerOrderServiceImpl extends ServiceImpl<CustomerOrderMapper, C
     @Override
     public int deleteCustomerOrderById(Long id)
     {
-        return customerOrderMapper.deleteCustomerOrderById(id);
+        return baseMapper.deleteById(id);
     }
 
     @Override
     public List<CustomerOrder> selectByInfo(String keyword) {
-        List<CustomerOrder> list = customerOrderMapper.selectByInfo(keyword);
+        List<CustomerOrder> list = baseMapper.selectByInfo(keyword);
         return list;
     }
 }

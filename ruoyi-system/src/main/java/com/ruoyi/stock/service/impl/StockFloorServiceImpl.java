@@ -1,18 +1,19 @@
 package com.ruoyi.stock.service.impl;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.List;
-
-import com.ruoyi.common.utils.DateUtils;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.purchase.domain.PurchaseFloorOrder;
 import com.ruoyi.stock.domain.StockFloor;
 import com.ruoyi.stock.mapper.StockFloorMapper;
 import com.ruoyi.stock.service.IStockFloorService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.ruoyi.common.core.text.Convert;
-import org.springframework.util.NumberUtils;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * 地板库存Service业务层处理
@@ -21,10 +22,8 @@ import org.springframework.util.NumberUtils;
  * @date 2021-12-18
  */
 @Service
-public class StockFloorServiceImpl implements IStockFloorService
+public class StockFloorServiceImpl extends ServiceImpl<StockFloorMapper,StockFloor> implements IStockFloorService
 {
-    @Autowired
-    private StockFloorMapper stockFloorMapper;
 
     /**
      * 查询地板库存
@@ -35,7 +34,7 @@ public class StockFloorServiceImpl implements IStockFloorService
     @Override
     public StockFloor selectStockFloorById(Long id)
     {
-        return stockFloorMapper.selectStockFloorById(id);
+        return baseMapper.selectById(id);
     }
 
     /**
@@ -47,7 +46,10 @@ public class StockFloorServiceImpl implements IStockFloorService
     @Override
     public List<StockFloor> selectStockFloorList(StockFloor stockFloor)
     {
-        return stockFloorMapper.selectStockFloorList(stockFloor);
+        QueryWrapper<StockFloor> queryWrapper = new QueryWrapper<>();
+        queryWrapper.orderByDesc("id");
+        queryWrapper.setEntity(stockFloor);
+        return baseMapper.selectList(queryWrapper);
     }
 
     /**
@@ -59,9 +61,8 @@ public class StockFloorServiceImpl implements IStockFloorService
     @Override
     public int insertStockFloor(StockFloor stockFloor)
     {
-        stockFloor.setCreateTime(DateUtils.getNowDate());
         stockFloor.setFloorArea(this.getStockArea(stockFloor.getFloorSpec(),stockFloor.getStockCount()));
-        return stockFloorMapper.insertStockFloor(stockFloor);
+        return baseMapper.insert(stockFloor);
     }
 
     /**
@@ -73,9 +74,8 @@ public class StockFloorServiceImpl implements IStockFloorService
     @Override
     public int updateStockFloor(StockFloor stockFloor)
     {
-        stockFloor.setUpdateTime(DateUtils.getNowDate());
         stockFloor.setFloorArea(this.getStockArea(stockFloor.getFloorSpec(),stockFloor.getStockCount()));
-        return stockFloorMapper.updateStockFloor(stockFloor);
+        return baseMapper.updateById(stockFloor);
     }
 
     /**
@@ -87,7 +87,7 @@ public class StockFloorServiceImpl implements IStockFloorService
     @Override
     public int deleteStockFloorByIds(String ids)
     {
-        return stockFloorMapper.deleteStockFloorByIds(Convert.toStrArray(ids));
+        return baseMapper.deleteBatchIds(Arrays.asList(Convert.toStrArray(ids)));
     }
 
     /**
@@ -99,7 +99,7 @@ public class StockFloorServiceImpl implements IStockFloorService
     @Override
     public int deleteStockFloorById(Long id)
     {
-        return stockFloorMapper.deleteStockFloorById(id);
+        return baseMapper.deleteById(id);
     }
 
     /**

@@ -1,14 +1,16 @@
 package com.ruoyi.purchase.service.impl;
 
-import java.util.List;
-import com.ruoyi.common.utils.DateUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import com.ruoyi.purchase.mapper.PurchaseFloorOrderMapper;
-import com.ruoyi.purchase.domain.PurchaseFloorOrder;
-import com.ruoyi.purchase.service.IPurchaseFloorOrderService;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ruoyi.common.core.text.Convert;
+import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.purchase.domain.PurchaseFloorOrder;
+import com.ruoyi.purchase.mapper.PurchaseFloorOrderMapper;
+import com.ruoyi.purchase.service.IPurchaseFloorOrderService;
+import org.springframework.stereotype.Service;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * 采购木地板Service业务层处理
@@ -19,8 +21,6 @@ import com.ruoyi.common.core.text.Convert;
 @Service
 public class PurchaseFloorOrderServiceImpl extends ServiceImpl<PurchaseFloorOrderMapper,PurchaseFloorOrder> implements IPurchaseFloorOrderService
 {
-    @Autowired
-    private PurchaseFloorOrderMapper purchaseFloorOrderMapper;
 
     /**
      * 查询采购木地板
@@ -31,7 +31,7 @@ public class PurchaseFloorOrderServiceImpl extends ServiceImpl<PurchaseFloorOrde
     @Override
     public PurchaseFloorOrder selectPurchaseFloorOrderById(Long id)
     {
-        return purchaseFloorOrderMapper.selectPurchaseFloorOrderById(id);
+        return baseMapper.selectById(id);
     }
 
     /**
@@ -43,7 +43,10 @@ public class PurchaseFloorOrderServiceImpl extends ServiceImpl<PurchaseFloorOrde
     @Override
     public List<PurchaseFloorOrder> selectPurchaseFloorOrderList(PurchaseFloorOrder purchaseFloorOrder)
     {
-        return purchaseFloorOrderMapper.selectPurchaseFloorOrderList(purchaseFloorOrder);
+        QueryWrapper<PurchaseFloorOrder> queryWrapper = new QueryWrapper<>();
+        queryWrapper.orderByDesc("id");
+        queryWrapper.setEntity(purchaseFloorOrder);
+        return baseMapper.selectList(queryWrapper);
     }
 
     /**
@@ -56,7 +59,7 @@ public class PurchaseFloorOrderServiceImpl extends ServiceImpl<PurchaseFloorOrde
     public int insertPurchaseFloorOrder(PurchaseFloorOrder purchaseFloorOrder)
     {
         purchaseFloorOrder.setCreateTime(DateUtils.getNowDate());
-        return purchaseFloorOrderMapper.insertPurchaseFloorOrder(purchaseFloorOrder);
+        return baseMapper.insert(purchaseFloorOrder);
     }
 
     /**
@@ -69,7 +72,7 @@ public class PurchaseFloorOrderServiceImpl extends ServiceImpl<PurchaseFloorOrde
     public int updatePurchaseFloorOrder(PurchaseFloorOrder purchaseFloorOrder)
     {
         purchaseFloorOrder.setUpdateTime(DateUtils.getNowDate());
-        return purchaseFloorOrderMapper.updatePurchaseFloorOrder(purchaseFloorOrder);
+        return baseMapper.updateById(purchaseFloorOrder);
     }
 
     /**
@@ -81,7 +84,7 @@ public class PurchaseFloorOrderServiceImpl extends ServiceImpl<PurchaseFloorOrde
     @Override
     public int deletePurchaseFloorOrderByIds(String ids)
     {
-        return purchaseFloorOrderMapper.deletePurchaseFloorOrderByIds(Convert.toStrArray(ids));
+        return baseMapper.deleteBatchIds(Arrays.asList(Convert.toIntArray(ids)));
     }
 
     /**
@@ -93,6 +96,6 @@ public class PurchaseFloorOrderServiceImpl extends ServiceImpl<PurchaseFloorOrde
     @Override
     public int deletePurchaseFloorOrderById(Long id)
     {
-        return purchaseFloorOrderMapper.deletePurchaseFloorOrderById(id);
+        return baseMapper.deleteById(id);
     }
 }
