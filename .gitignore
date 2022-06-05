@@ -45,3 +45,5 @@ nbdist/
 !*/build/*.html
 !*/build/*.xml
 /ruoyi-admin/src/main/resources/application-pro.yml
+/ruoyi-admin/src/main/resources/static/js/pdfjs/web/bj/
+/ruoyi-admin/src/main/resources/static/js/pdfjs/web/bj
