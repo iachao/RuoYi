@@ -64,4 +64,15 @@ public class SunnyWellBidController extends BaseController
         return prefix + "/newWoodDoor";
     }
 
+    /**
+     * 标准门型
+     * @return
+     */
+    @RequiresPermissions("bid:sunnyWellBid:standardWoodDoor")
+    @GetMapping("/standardWoodDoor")
+    public String standardWoodDoor()
+    {
+        return prefix + "/standardWoodDoor";
+    }
+
 }
