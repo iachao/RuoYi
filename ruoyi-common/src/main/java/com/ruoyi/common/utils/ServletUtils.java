@@ -1,14 +1,17 @@
 package com.ruoyi.common.utils;
 
-import com.ruoyi.common.core.text.Convert;
-import org.springframework.web.context.request.RequestAttributes;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+import com.ruoyi.common.constant.Constants;
+import com.ruoyi.common.core.text.Convert;
 
 /**
  * 客户端工具类
@@ -173,5 +176,41 @@ public class ServletUtils
             }
         }
         return flag;
+    }
+
+    /**
+     * 内容编码
+     * 
+     * @param str 内容
+     * @return 编码后的内容
+     */
+    public static String urlEncode(String str)
+    {
+        try
+        {
+            return URLEncoder.encode(str, Constants.UTF8);
+        }
+        catch (UnsupportedEncodingException e)
+        {
+            return StringUtils.EMPTY;
+        }
+    }
+
+    /**
+     * 内容解码
+     * 
+     * @param str 内容
+     * @return 解码后的内容
+     */
+    public static String urlDecode(String str)
+    {
+        try
+        {
+            return URLDecoder.decode(str, Constants.UTF8);
+        }
+        catch (UnsupportedEncodingException e)
+        {
+            return StringUtils.EMPTY;
+        }
     }
 }

@@ -300,6 +300,9 @@ var table = {
                 var tableParams = $("#" + currentId).bootstrapTable('getOptions');
                 var pageSize = $.common.isNotEmpty(tableParams.pageSize) ? tableParams.pageSize: table.options.pageSize;
                 var pageNumber = $.common.isNotEmpty(tableParams.pageNumber) ? tableParams.pageNumber: table.options.pageNumber;
+                if (table.options.sidePagination == 'client') {
+                    return index + 1;
+                }
                 return pageSize * (pageNumber - 1) + index + 1;
             },
             // 列超出指定长度浮动提示 target（copy单击复制文本 open弹窗打开文本）
@@ -913,6 +916,9 @@ var table = {
                     yes: callback,
                     cancel: function(index) {
                         return true;
+                    },
+                    success: function () {
+                        $(':focus').blur();
                     }
                 });
             },
@@ -959,6 +965,9 @@ var table = {
                     yes: options.yes,
                     cancel: function () {
                         return true;
+                    },
+                    success: function () {
+                        $(':focus').blur();
                     }
                 }, btnCallback));
                 if ($.common.isNotEmpty(options.full) && options.full === true) {
@@ -1002,6 +1011,9 @@ var table = {
                     },
                     cancel: function(index) {
                         return true;
+                    },
+                    success: function () {
+                        $(':focus').blur();
                     }
                 });
                 top.layer.full(index);
