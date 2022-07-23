@@ -135,28 +135,47 @@
                 {
                     field: 'price',
                     title: '价格',
-                    visible: false
+                    visible: false,
+                    formatter: function(value, row, index) {
+                        return value.toFixed(2);
+                    }
                 },
                 {
                     field: 'visiblePrice',
                     title: '采购价',
-                    visible: false
+                    visible: false,
+                    formatter: function(value, row, index) {
+                        return value.toFixed(2);
+                    }
                 },
                 {
                     field: 'marketPrice',
-                    title: '市场价'
+                    title: '市场价',
+                    formatter: function(value, row, index) {
+                        return value.toFixed(2);
+                    }
+
                 },
                 {
                     field: 'tradePrice',
-                    title: '建议成交价'
+                    title: '建议成交价',
+                    formatter: function(value, row, index) {
+                        return value.toFixed(2);
+                    }
                 },
                 {
                     field: 'directPrice',
-                    title: '直供价(分销商)'
+                    title: '直供价(分销商)',
+                    formatter: function(value, row, index) {
+                        return value.toFixed(2);
+                    }
                 },
                 {
                     field: 'cooperatePrice',
-                    title: '合作价'
+                    title: '合作价',
+                    formatter: function(value, row, index) {
+                        return value.toFixed(2);
+                    }
                 },
                 {
                     field: 'technology',

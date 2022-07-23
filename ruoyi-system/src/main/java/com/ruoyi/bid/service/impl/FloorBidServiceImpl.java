@@ -102,4 +102,14 @@ public class FloorBidServiceImpl extends ServiceImpl<FloorBidMapper,FloorBid> im
     public List<FloorBid> selectStaffFloorBidList(FloorBid floorBid) {
         return baseMapper.selectStaffFloorBidList(floorBid);
     }
+
+    @Override
+    public List<FloorBid> cooperationFloorBidList(FloorBid floorBid) {
+        return baseMapper.cooperationFloorBidList(floorBid);
+    }
+
+    @Override
+    public List<FloorBid> directFloorBidList(FloorBid floorBid) {
+        return baseMapper.directFloorBidList(floorBid);
+    }
 }

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:include="include :: header('店内地板报价列表')" />
+    <th:block th:include="include :: header('经销商地板报价列表')" />
 </head>
 <body class="gray-bg">
      <div class="container-div">
@@ -66,12 +66,12 @@
         var floorTypeDatas = [[${@dict.getType('floor_type')}]];
         var floorSpecDatas = [[${@dict.getType('floor_spec')}]];
         var buckleTypeDatas = [[${@dict.getType('floor_buckle_type')}]];
-        var prefix = ctx + "bid/staffFloorBid";
+        var prefix = ctx + "bid/directFloorBid";
 
         $(function() {
             var options = {
-                url: prefix + "/staffFloorBidList",
-                modalName: "店内地板报价",
+                url: prefix + "/directFloorBidList",
+                modalName: "经销商地板报价",
                 columns: [{
                     checkbox: true
                 },
@@ -112,15 +112,8 @@
                     visible: false
                 },
                 {
-                    field: 'marketPrice',
-                    title: '市场价',
-                    formatter: function(value, row, index) {
-                        return value.toFixed(2);
-                    }
-                },
-                {
-                    field: 'tradePrice',
-                    title: '建议成交价',
+                    field: 'directPrice',
+                    title: '经销商价',
                     formatter: function(value, row, index) {
                         return value.toFixed(2);
                     }

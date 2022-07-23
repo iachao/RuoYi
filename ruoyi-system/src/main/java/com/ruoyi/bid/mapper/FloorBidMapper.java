@@ -14,4 +14,8 @@ import java.util.List;
 public interface FloorBidMapper extends BaseMapper<FloorBid>
 {
     List<FloorBid> selectStaffFloorBidList(FloorBid floorBid);
+
+    List<FloorBid> cooperationFloorBidList(FloorBid floorBid);
+
+    List<FloorBid> directFloorBidList(FloorBid floorBid);
 }

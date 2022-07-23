@@ -67,4 +67,8 @@ public interface IFloorBidService extends IService<FloorBid>
      * @return
      */
     List<FloorBid> selectStaffFloorBidList(FloorBid floorBid);
+
+    List<FloorBid> cooperationFloorBidList(FloorBid floorBid);
+
+    List<FloorBid> directFloorBidList(FloorBid floorBid);
 }

@@ -26,4 +26,49 @@
             <if test="buckleType != null "> and buckle_type = #{buckleType}</if>
         </where>
     </select>
+    <select id="cooperationFloorBidList" resultType="com.ruoyi.bid.domain.FloorBid">
+        select id, supply_id, floor_type, wood_type, floor_number,
+        floor_spec, floor_rank,
+        market_price,
+        cooperate_price,
+        technology, buckle_type, create_by, create_time, update_by, update_time, remark from floor_bid
+        <where>
+        <if test="supplyId != null "> and supply_id = #{supplyId}</if>
+        <if test="floorType != null "> and floor_type = #{floorType}</if>
+        <if test="woodType != null  and woodType != ''"> and wood_type = #{woodType}</if>
+        <if test="floorNumber != null  and floorNumber != ''"> and floor_number = #{floorNumber}</if>
+        <if test="floorSpec != null  and floorSpec != ''"> and floor_spec = #{floorSpec}</if>
+        <if test="floorRank != null  and floorRank != ''"> and floor_rank = #{floorRank}</if>
+        <if test="price != null "> and price = #{price}</if>
+        <if test="visiblePrice != null "> and visible_price = #{visiblePrice}</if>
+        <if test="marketPrice != null "> and market_price = #{marketPrice}</if>
+        <if test="tradePrice != null "> and trade_price = #{tradePrice}</if>
+        <if test="directPrice != null "> and direct_price = #{directPrice}</if>
+        <if test="cooperatePrice != null "> and cooperate_price = #{cooperatePrice}</if>
+        <if test="technology != null  and technology != ''"> and technology = #{technology}</if>
+        <if test="buckleType != null "> and buckle_type = #{buckleType}</if>
+        </where>
+    </select>
+    <select id="directFloorBidList" resultType="com.ruoyi.bid.domain.FloorBid">
+        select id, supply_id, floor_type, wood_type, floor_number,
+        floor_spec, floor_rank,
+        direct_price,
+        technology, buckle_type, create_by, create_time, update_by, update_time, remark from floor_bid
+        <where>
+            <if test="supplyId != null "> and supply_id = #{supplyId}</if>
+            <if test="floorType != null "> and floor_type = #{floorType}</if>
+            <if test="woodType != null  and woodType != ''"> and wood_type = #{woodType}</if>
+            <if test="floorNumber != null  and floorNumber != ''"> and floor_number = #{floorNumber}</if>
+            <if test="floorSpec != null  and floorSpec != ''"> and floor_spec = #{floorSpec}</if>
+            <if test="floorRank != null  and floorRank != ''"> and floor_rank = #{floorRank}</if>
+            <if test="price != null "> and price = #{price}</if>
+            <if test="visiblePrice != null "> and visible_price = #{visiblePrice}</if>
+            <if test="marketPrice != null "> and market_price = #{marketPrice}</if>
+            <if test="tradePrice != null "> and trade_price = #{tradePrice}</if>
+            <if test="directPrice != null "> and direct_price = #{directPrice}</if>
+            <if test="cooperatePrice != null "> and cooperate_price = #{cooperatePrice}</if>
+            <if test="technology != null  and technology != ''"> and technology = #{technology}</if>
+            <if test="buckleType != null "> and buckle_type = #{buckleType}</if>
+        </where>
+    </select>
 </mapper>
