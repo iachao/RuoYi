@@ -1,5 +1,11 @@
 package com.ruoyi.system.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+import org.apache.commons.lang3.ArrayUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import com.ruoyi.common.annotation.DataScope;
 import com.ruoyi.common.constant.UserConstants;
 import com.ruoyi.common.core.domain.Ztree;
@@ -13,14 +19,6 @@ import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.spring.SpringUtils;
 import com.ruoyi.system.mapper.SysDeptMapper;
 import com.ruoyi.system.service.ISysDeptService;
-import org.apache.commons.lang3.ArrayUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 /**
  * 部门管理 服务实现
@@ -72,18 +70,12 @@ public class SysDeptServiceImpl implements ISysDeptService
     public List<Ztree> selectDeptTreeExcludeChild(SysDept dept)
     {
         Long excludeId = dept.getExcludeId();
-        List<SysDept> deptList = deptMapper.selectDeptList(dept);
-        Iterator<SysDept> it = deptList.iterator();
-        while (it.hasNext())
+        List<SysDept> depts = deptMapper.selectDeptList(dept);
+        if (excludeId.intValue() > 0)
         {
-            SysDept d = it.next();
-            if (d.getDeptId().intValue() == excludeId
-                    || ArrayUtils.contains(StringUtils.split(d.getAncestors(), ","), excludeId + ""))
-            {
-                it.remove();
-            }
+            depts.removeIf(d -> d.getDeptId().intValue() == excludeId || ArrayUtils.contains(StringUtils.split(d.getAncestors(), ","), excludeId + ""));
         }
-        List<Ztree> ztrees = initZtree(deptList);
+        List<Ztree> ztrees = initZtree(depts);
         return ztrees;
     }
 
@@ -98,7 +90,7 @@ public class SysDeptServiceImpl implements ISysDeptService
     {
         Long roleId = role.getRoleId();
         List<Ztree> ztrees = new ArrayList<Ztree>();
-        List<SysDept> deptList = selectDeptList(new SysDept());
+        List<SysDept> deptList = SpringUtils.getAopProxy(this).selectDeptList(new SysDept());
         if (StringUtils.isNotNull(roleId))
         {
             List<String> roleDeptList = deptMapper.selectRoleDeptTree(roleId);

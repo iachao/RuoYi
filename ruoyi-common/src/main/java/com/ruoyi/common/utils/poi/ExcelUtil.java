@@ -1,5 +1,73 @@
 package com.ruoyi.common.utils.poi;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
+import javax.servlet.http.HttpServletResponse;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.RegExUtils;
+import org.apache.commons.lang3.reflect.FieldUtils;
+import org.apache.poi.hssf.usermodel.HSSFClientAnchor;
+import org.apache.poi.hssf.usermodel.HSSFPicture;
+import org.apache.poi.hssf.usermodel.HSSFPictureData;
+import org.apache.poi.hssf.usermodel.HSSFShape;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ooxml.POIXMLDocumentPart;
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.ClientAnchor;
+import org.apache.poi.ss.usermodel.DataValidation;
+import org.apache.poi.ss.usermodel.DataValidationConstraint;
+import org.apache.poi.ss.usermodel.DataValidationHelper;
+import org.apache.poi.ss.usermodel.DateUtil;
+import org.apache.poi.ss.usermodel.Drawing;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.PictureData;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.ss.util.CellRangeAddressList;
+import org.apache.poi.util.IOUtils;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFClientAnchor;
+import org.apache.poi.xssf.usermodel.XSSFDataValidation;
+import org.apache.poi.xssf.usermodel.XSSFDrawing;
+import org.apache.poi.xssf.usermodel.XSSFPicture;
+import org.apache.poi.xssf.usermodel.XSSFShape;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.openxmlformats.schemas.drawingml.x2006.spreadsheetDrawing.CTMarker;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.annotation.Excel.ColumnType;
 import com.ruoyi.common.annotation.Excel.Type;
@@ -15,29 +83,6 @@ import com.ruoyi.common.utils.file.FileTypeUtils;
 import com.ruoyi.common.utils.file.FileUtils;
 import com.ruoyi.common.utils.file.ImageUtils;
 import com.ruoyi.common.utils.reflect.ReflectUtils;
-import org.apache.commons.lang3.RegExUtils;
-import org.apache.poi.hssf.usermodel.*;
-import org.apache.poi.ooxml.POIXMLDocumentPart;
-import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.ss.util.CellRangeAddress;
-import org.apache.poi.ss.util.CellRangeAddressList;
-import org.apache.poi.util.IOUtils;
-import org.apache.poi.xssf.streaming.SXSSFWorkbook;
-import org.apache.poi.xssf.usermodel.*;
-import org.openxmlformats.schemas.drawingml.x2006.spreadsheetDrawing.CTMarker;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.servlet.http.HttpServletResponse;
-import java.io.*;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Excel相关处理
@@ -108,9 +153,29 @@ public class ExcelUtil<T>
     private short maxHeight;
 
     /**
+     * 合并后最后行数
+     */
+    private int subMergedLastRowNum = 0;
+
+    /**
+     * 合并后开始行数
+     */
+    private int subMergedFirstRowNum = 1;
+
+    /**
+     * 对象的子列表方法
+     */
+    private Method subMethod;
+
+    /**
+     * 对象的子列表属性
+     */
+    private List<Field> subFields;
+
+    /**
      * 统计列表
      */
-    private final Map<Integer, Double> statistics = new HashMap<Integer, Double>();
+    private Map<Integer, Double> statistics = new HashMap<Integer, Double>();
 
     /**
      * 数字格式
@@ -122,9 +187,25 @@ public class ExcelUtil<T>
      */
     public Class<T> clazz;
 
+    /**
+     * 需要排除列属性
+     */
+    public String[] excludeFields;
+
     public ExcelUtil(Class<T> clazz)
     {
         this.clazz = clazz;
+    }
+
+    /**
+     * 隐藏Excel中列属性
+     *
+     * @param fields 列属性名 示例[单个"name"/多个"id","name"]
+     * @throws Exception
+     */
+    public void hideColumn(String... fields)
+    {
+        this.excludeFields = fields;
     }
 
     public void init(List<T> list, String sheetName, String title, Type type)
@@ -140,6 +221,7 @@ public class ExcelUtil<T>
         createExcelField();
         createWorkbook();
         createTitle();
+        createSubHead();
     }
 
     /**
@@ -149,13 +231,48 @@ public class ExcelUtil<T>
     {
         if (StringUtils.isNotEmpty(title))
         {
+            subMergedFirstRowNum++;
+            subMergedLastRowNum++;
+            int titleLastCol = this.fields.size() - 1;
+            if (isSubList())
+            {
+                titleLastCol = titleLastCol + subFields.size() - 1;
+            }
             Row titleRow = sheet.createRow(rownum == 0 ? rownum++ : 0);
             titleRow.setHeightInPoints(30);
             Cell titleCell = titleRow.createCell(0);
             titleCell.setCellStyle(styles.get("title"));
             titleCell.setCellValue(title);
-            sheet.addMergedRegion(new CellRangeAddress(titleRow.getRowNum(), titleRow.getRowNum(), titleRow.getRowNum(),
-                    this.fields.size() - 1));
+            sheet.addMergedRegion(new CellRangeAddress(titleRow.getRowNum(), titleRow.getRowNum(), titleRow.getRowNum(), titleLastCol));
+        }
+    }
+
+    /**
+     * 创建对象的子列表名称
+     */
+    public void createSubHead()
+    {
+        if (isSubList())
+        {
+            subMergedFirstRowNum++;
+            subMergedLastRowNum++;
+            Row subRow = sheet.createRow(rownum);
+            int excelNum = 0;
+            for (Object[] objects : fields)
+            {
+                Excel attr = (Excel) objects[1];
+                Cell headCell1 = subRow.createCell(excelNum);
+                headCell1.setCellValue(attr.name());
+                headCell1.setCellStyle(styles.get(StringUtils.format("header_{}_{}", attr.headerColor(), attr.headerBackgroundColor())));
+                excelNum++;
+            }
+            int headFirstRow = excelNum - 1;
+            int headLastRow = headFirstRow + subFields.size() - 1;
+            if (headLastRow > headFirstRow)
+            {
+                sheet.addMergedRegion(new CellRangeAddress(rownum, rownum, headFirstRow, headLastRow));
+            }
+            rownum++;
         }
     }
 
@@ -535,8 +652,20 @@ public class ExcelUtil<T>
             // 写入各个字段的列头名称
             for (Object[] os : fields)
             {
+                Field field = (Field) os[0];
                 Excel excel = (Excel) os[1];
-                this.createCell(excel, row, column++);
+                if (Collection.class.isAssignableFrom(field.getType()))
+                {
+                    for (Field subField : subFields)
+                    {
+                        Excel subExcel = subField.getAnnotation(Excel.class);
+                        this.createHeadCell(subExcel, row, column++);
+                    }
+                }
+                else
+                {
+                    this.createHeadCell(excel, row, column++);
+                }
             }
             if (Type.EXPORT.equals(type))
             {
@@ -552,21 +681,60 @@ public class ExcelUtil<T>
      * @param index 序号
      * @param row 单元格行
      */
+    @SuppressWarnings("unchecked")
     public void fillExcelData(int index, Row row)
     {
         int startNo = index * sheetSize;
         int endNo = Math.min(startNo + sheetSize, list.size());
+        int rowNo = (1 + rownum) - startNo;
         for (int i = startNo; i < endNo; i++)
         {
-            row = sheet.createRow(i + 1 + rownum - startNo);
+            rowNo = i > 1 ? rowNo + 1 : rowNo + i;
+            row = sheet.createRow(rowNo);
             // 得到导出对象.
-            T vo = list.get(i);
+            T vo = (T) list.get(i);
+            Collection<?> subList = null;
+            if (isSubListValue(vo))
+            {
+                subList = getListCellValue(vo);
+                subMergedLastRowNum = subMergedLastRowNum + subList.size();
+            }
+
             int column = 0;
             for (Object[] os : fields)
             {
                 Field field = (Field) os[0];
                 Excel excel = (Excel) os[1];
-                this.addCell(excel, row, vo, field, column++);
+                if (Collection.class.isAssignableFrom(field.getType()) && StringUtils.isNotNull(subList))
+                {
+                    boolean subFirst = false;
+                    for (Object obj : subList)
+                    {
+                        if (subFirst)
+                        {
+                            rowNo++;
+                            row = sheet.createRow(rowNo);
+                        }
+                        List<Field> subFields = FieldUtils.getFieldsListWithAnnotation(obj.getClass(), Excel.class);
+                        int subIndex = 0;
+                        for (Field subField : subFields)
+                        {
+                            if (subField.isAnnotationPresent(Excel.class))
+                            {
+                                subField.setAccessible(true);
+                                Excel attr = subField.getAnnotation(Excel.class);
+                                this.addCell(attr, row, (T) obj, subField, column + subIndex);
+                            }
+                            subIndex++;
+                        }
+                        subFirst = true;
+                    }
+                    this.subMergedFirstRowNum = this.subMergedFirstRowNum + subList.size();
+                }
+                else
+                {
+                    this.addCell(excel, row, vo, field, column++);
+                }
             }
         }
     }
@@ -701,7 +869,7 @@ public class ExcelUtil<T>
     /**
      * 创建单元格
      */
-    public Cell createCell(Excel attr, Row row, int column)
+    public Cell createHeadCell(Excel attr, Row row, int column)
     {
         // 创建列
         Cell cell = row.createCell(column);
@@ -709,6 +877,15 @@ public class ExcelUtil<T>
         cell.setCellValue(attr.name());
         setDataValidation(attr, row, column);
         cell.setCellStyle(styles.get(StringUtils.format("header_{}_{}", attr.headerColor(), attr.headerBackgroundColor())));
+        if (isSubList())
+        {
+            // 填充默认样式，防止合并单元格样式失效
+            sheet.setDefaultColumnStyle(column, styles.get(StringUtils.format("data_{}_{}_{}", attr.align(), attr.color(), attr.backgroundColor())));
+            if (attr.needMerge())
+            {
+                sheet.addMergedRegion(new CellRangeAddress(rownum - 1, rownum, column, column));
+            }
+        }
         return cell;
     }
 
@@ -816,6 +993,11 @@ public class ExcelUtil<T>
             {
                 // 创建cell
                 cell = row.createCell(column);
+                if (isSubListValue(vo) && getListCellValue(vo).size() > 1 && attr.needMerge())
+                {
+                    CellRangeAddress cellAddress = new CellRangeAddress(subMergedFirstRowNum, subMergedLastRowNum, column, column);
+                    sheet.addMergedRegion(cellAddress);
+                }
                 cell.setCellStyle(styles.get(StringUtils.format("data_{}_{}_{}", attr.align(), attr.color(), attr.backgroundColor())));
 
                 // 用于读取对象中的属性
@@ -838,7 +1020,7 @@ public class ExcelUtil<T>
                 }
                 else if (value instanceof BigDecimal && -1 != attr.scale())
                 {
-                    cell.setCellValue((((BigDecimal) value).setScale(attr.scale(), attr.roundingMode())).toString());
+                    cell.setCellValue((((BigDecimal) value).setScale(attr.scale(), attr.roundingMode())).doubleValue());
                 }
                 else if (!attr.handler().equals(ExcelHandlerAdapter.class))
                 {
@@ -1008,7 +1190,7 @@ public class ExcelUtil<T>
         try
         {
             Object instance = excel.handler().newInstance();
-            Method formatMethod = excel.handler().getMethod("format", Object.class, String[].class);
+            Method formatMethod = excel.handler().getMethod("format", new Class[] { Object.class, String[].class });
             value = formatMethod.invoke(instance, value, excel.args());
         }
         catch (Exception e)
@@ -1069,7 +1251,7 @@ public class ExcelUtil<T>
      */
     public String encodingFilename(String filename)
     {
-        filename = UUID.randomUUID() + "_" + filename + ".xlsx";
+        filename = UUID.randomUUID().toString() + "_" + filename + ".xlsx";
         return filename;
     }
 
@@ -1161,28 +1343,38 @@ public class ExcelUtil<T>
         tempFields.addAll(Arrays.asList(clazz.getDeclaredFields()));
         for (Field field : tempFields)
         {
-            // 单注解
-            if (field.isAnnotationPresent(Excel.class))
+            if (!ArrayUtils.contains(this.excludeFields, field.getName()))
             {
-                Excel attr = field.getAnnotation(Excel.class);
-                if (attr != null && (attr.type() == Type.ALL || attr.type() == type))
+                // 单注解
+                if (field.isAnnotationPresent(Excel.class))
                 {
-                    field.setAccessible(true);
-                    fields.add(new Object[] { field, attr });
-                }
-            }
-
-            // 多注解
-            if (field.isAnnotationPresent(Excels.class))
-            {
-                Excels attrs = field.getAnnotation(Excels.class);
-                Excel[] excels = attrs.value();
-                for (Excel attr : excels)
-                {
+                    Excel attr = field.getAnnotation(Excel.class);
                     if (attr != null && (attr.type() == Type.ALL || attr.type() == type))
                     {
                         field.setAccessible(true);
                         fields.add(new Object[] { field, attr });
+                    }
+                    if (Collection.class.isAssignableFrom(field.getType()))
+                    {
+                        subMethod = getSubMethod(field.getName(), clazz);
+                        ParameterizedType pt = (ParameterizedType) field.getGenericType();
+                        Class<?> subClass = (Class<?>) pt.getActualTypeArguments()[0];
+                        this.subFields = FieldUtils.getFieldsListWithAnnotation(subClass, Excel.class);
+                    }
+                }
+
+                // 多注解
+                if (field.isAnnotationPresent(Excels.class))
+                {
+                    Excels attrs = field.getAnnotation(Excels.class);
+                    Excel[] excels = attrs.value();
+                    for (Excel attr : excels)
+                    {
+                        if (attr != null && (attr.type() == Type.ALL || attr.type() == type))
+                        {
+                            field.setAccessible(true);
+                            fields.add(new Object[] { field, attr });
+                        }
                     }
                 }
             }
@@ -1336,7 +1528,7 @@ public class ExcelUtil<T>
                     HSSFPicture pic = (HSSFPicture) shape;
                     int pictureIndex = pic.getPictureIndex() - 1;
                     HSSFPictureData picData = pictures.get(pictureIndex);
-                    String picIndex = anchor.getRow1() + "_" + String.valueOf(anchor.getCol1());
+                    String picIndex = String.valueOf(anchor.getRow1()) + "_" + String.valueOf(anchor.getCol1());
                     sheetIndexPicMap.put(picIndex, picData);
                 }
             }
@@ -1411,5 +1603,62 @@ public class ExcelUtil<T>
             str = val.toString();
         }
         return str;
+    }
+
+    /**
+     * 是否有对象的子列表
+     */
+    public boolean isSubList()
+    {
+        return StringUtils.isNotNull(subFields) && subFields.size() > 0;
+    }
+
+    /**
+     * 是否有对象的子列表，集合不为空
+     */
+    public boolean isSubListValue(T vo)
+    {
+        return StringUtils.isNotNull(subFields) && subFields.size() > 0 && StringUtils.isNotNull(getListCellValue(vo)) && getListCellValue(vo).size() > 0;
+    }
+
+    /**
+     * 获取集合的值
+     */
+    public Collection<?> getListCellValue(Object obj)
+    {
+        Object value;
+        try
+        {
+            value = subMethod.invoke(obj, new Object[] {});
+        }
+        catch (Exception e)
+        {
+            return new ArrayList<Object>();
+        }
+        return (Collection<?>) value;
+    }
+
+    /**
+     * 获取对象的子列表方法
+     * 
+     * @param name 名称
+     * @param pojoClass 类对象
+     * @return 子列表方法
+     */
+    public Method getSubMethod(String name, Class<?> pojoClass)
+    {
+        StringBuffer getMethodName = new StringBuffer("get");
+        getMethodName.append(name.substring(0, 1).toUpperCase());
+        getMethodName.append(name.substring(1));
+        Method method = null;
+        try
+        {
+            method = pojoClass.getMethod(getMethodName.toString(), new Class[] {});
+        }
+        catch (Exception e)
+        {
+            log.error("获取对象异常{}", e.getMessage());
+        }
+        return method;
     }
 }
