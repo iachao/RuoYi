@@ -1,5 +1,7 @@
 package com.ruoyi.bid.domain;
 
+import com.baomidou.mybatisplus.annotation.SqlCondition;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 import lombok.AllArgsConstructor;
@@ -36,9 +38,11 @@ public class FloorBid extends BaseEntity
     private String woodType;
     /** 型号/编号/系列 */
     @Excel(name = "型号/编号/系列")
+    @TableField(condition = SqlCondition.LIKE)
     private String floorNumber;
     /** 地板规格;1220*168*12*10P */
     @Excel(name = "地板规格;1220*168*12*10P")
+    @TableField(condition = SqlCondition.LIKE)
     private String floorSpec;
     /** 等级 */
     @Excel(name = "等级")

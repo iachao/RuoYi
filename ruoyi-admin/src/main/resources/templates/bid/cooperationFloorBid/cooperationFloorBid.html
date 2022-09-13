@@ -33,14 +33,6 @@
                                 <input type="text" name="floorSpec" placeholder="例如：1221*168*12*10P"/>
                             </li>
                             <li>
-                                <label>等级：</label>
-                                <input type="text" name="floorRank"/>
-                            </li>
-                            <li>
-                                <label>工艺：</label>
-                                <input type="text" name="technology"/>
-                            </li>
-                            <li>
                                 <label>扣型：</label>
                                 <select name="buckleType" th:with="type=${@dict.getType('floor_buckle_type')}">
                                     <option value="">所有</option>
@@ -110,13 +102,6 @@
                     field: 'floorRank',
                     title: '等级',
                     visible: false
-                },
-                {
-                    field: 'marketPrice',
-                    title: '市场价',
-                    formatter: function(value, row, index) {
-                        return value.toFixed(2);
-                    }
                 },
                 {
                     field: 'cooperatePrice',
