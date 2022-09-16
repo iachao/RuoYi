@@ -75,4 +75,59 @@ public class SunnyWellBidController extends BaseController
         return prefix + "/standardWoodDoor";
     }
 
+    /**
+     * 大柱
+     * @return
+     */
+    @RequiresPermissions("bid:sunnyWellBid:bigPillar")
+    @GetMapping("/bigPillar")
+    public String bigPillar()
+    {
+        return prefix + "/bigPillar";
+    }
+
+    /**
+     * 小柱
+     * @return
+     */
+    @RequiresPermissions("bid:sunnyWellBid:smallPillar")
+    @GetMapping("/smallPillar")
+    public String smallPillar()
+    {
+        return prefix + "/smallPillar";
+    }
+
+    /**
+     * 踏步扶手
+     * @return
+     */
+    @RequiresPermissions("bid:sunnyWellBid:armrest")
+    @GetMapping("/armrest")
+    public String armrest()
+    {
+        return prefix + "/armrest";
+    }
+
+    /**
+     * 栅格
+     * @return
+     */
+    @RequiresPermissions("bid:sunnyWellBid:shanGe")
+    @GetMapping("/shanGe")
+    public String shanGe()
+    {
+        return prefix + "/shanGe";
+    }
+
+    /**
+     * 家居
+     * @return
+     */
+    @RequiresPermissions("bid:sunnyWellBid:household")
+    @GetMapping("/household")
+    public String household()
+    {
+        return prefix + "/household";
+    }
+
 }
