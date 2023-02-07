@@ -3,9 +3,9 @@ ruoyi:
     # 名称
     name: XiHu
     # 版本
-    version: 4.7.3
+    version: 4.7.6
     # 版权年份
-    copyrightYear: 2022
+    copyrightYear: 2023
     # 实例演示开关
     demoEnabled: true
     # 文件路径 示例（ Windows配置D:/ruoyi/uploadPath，Linux配置 /home/ruoyi/uploadPath）
@@ -32,9 +32,9 @@ spring:
             slave:
                 # 从数据源开关/默认关闭
                 enabled: false
-                url: 
-                username: 
-                password: 
+                url:
+                username:
+                password:
             # 初始连接数
             initialSize: 5
             # 最小连接池数量
@@ -54,7 +54,7 @@ spring:
             testWhileIdle: true
             testOnBorrow: false
             testOnReturn: false
-            webStatFilter: 
+            webStatFilter:
                 enabled: true
             statViewServlet:
                 enabled: true
