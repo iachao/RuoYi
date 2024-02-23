@@ -1,7 +1,6 @@
 package com.ruoyi.web.controller.system;
 
 import com.ruoyi.common.annotation.Log;
-import com.ruoyi.common.constant.UserConstants;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
@@ -81,7 +80,7 @@ public class SysConfigController extends BaseController
     @ResponseBody
     public AjaxResult addSave(@Validated SysConfig config)
     {
-        if (UserConstants.CONFIG_KEY_NOT_UNIQUE.equals(configService.checkConfigKeyUnique(config)))
+        if (!configService.checkConfigKeyUnique(config))
         {
             return error("新增参数'" + config.getConfigName() + "'失败，参数键名已存在");
         }
@@ -109,7 +108,7 @@ public class SysConfigController extends BaseController
     @ResponseBody
     public AjaxResult editSave(@Validated SysConfig config)
     {
-        if (UserConstants.CONFIG_KEY_NOT_UNIQUE.equals(configService.checkConfigKeyUnique(config)))
+        if (!configService.checkConfigKeyUnique(config))
         {
             return error("修改参数'" + config.getConfigName() + "'失败，参数键名已存在");
         }
@@ -148,7 +147,7 @@ public class SysConfigController extends BaseController
      */
     @PostMapping("/checkConfigKeyUnique")
     @ResponseBody
-    public String checkConfigKeyUnique(SysConfig config)
+    public boolean checkConfigKeyUnique(SysConfig config)
     {
         return configService.checkConfigKeyUnique(config);
     }

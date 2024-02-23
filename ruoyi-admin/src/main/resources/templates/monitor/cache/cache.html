@@ -11,7 +11,7 @@
                 <div class="col-sm-4">
                     <div class="ibox float-e-margins">
                         <div class="ibox-title">
-                            <h5>缓存列表</h5>
+                            <h5><i class="fa fa-bars"></i> 缓存列表</h5>
                             <div class="ibox-tools">
                                 <a href="javascript:getCacheNames()"><i class="fa fa-refresh"></i></a>
                             </div>
@@ -29,7 +29,7 @@
                                     <tr th:fragment="fragment-cache-names" th:each="cacheName, stat : ${cacheNames}">
                                         <td>[[${stat.index + 1}]]</td>
                                         <td style="word-wrap:break-word;word-break:break-all;" th:onclick="getCacheKeys([[${cacheName}]])">[[${cacheName}]]</td>
-                                        <td style="width: 50px"><a href="#" th:onclick="clearCacheName([[${cacheName}]])" title="清空"><i class="fa fa-trash-o text-danger"></i></a></td>
+                                        <td style="width: 50px"><a href="javascript:;" th:onclick="clearCacheName([[${cacheName}]])" title="清空"><i class="fa fa-trash-o text-danger"></i></a></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -39,7 +39,7 @@
                 <div class="col-sm-4">
                     <div class="ibox float-e-margins">
                         <div class="ibox-title">
-                            <h5>键名列表</h5>
+                            <h5><i class="fa fa-key"></i> 键名列表</h5>
                             <div class="ibox-tools">
                                 <a href="javascript:getCacheKeys('', true)"><i class="fa fa-refresh"></i></a>
                             </div>
@@ -57,7 +57,7 @@
                                     <tr th:fragment="fragment-cache-kyes" th:each="cacheKey, stat : ${cacheKeys}">
                                         <td>[[${stat.index + 1}]]</td>
                                         <td style="word-wrap:break-word;word-break:break-all;" th:onclick="getCacheValue([[${cacheName}]], [[${cacheKey}]])">[[${cacheKey}]]</td>
-                                        <td style="width: 50px"><a href="#" th:onclick="clearCacheKey([[${cacheName}]], [[${cacheKey}]])" title="清空"><i class="fa fa-trash-o text-danger"></i></a></td>
+                                        <td style="width: 50px"><a href="javascript:;" th:onclick="clearCacheKey([[${cacheName}]], [[${cacheKey}]])" title="清空"><i class="fa fa-trash-o text-danger"></i></a></td>
                                     </tr>
                                 </tbody>
                                 </div>
@@ -68,7 +68,7 @@
                 <div class="col-sm-4">
                     <div class="ibox float-e-margins">
                         <div class="ibox-title">
-                            <h5>缓存内容</h5>
+                            <h5><i class="fa fa-file-text"></i> 缓存内容</h5>
                             <div class="ibox-tools">
                                 <a href="javascript:clearAll()"><i class="fa fa-refresh"></i> 清理全部</a>
                             </div>

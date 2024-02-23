@@ -41,6 +41,7 @@ var table = {
                     method: 'post',
                     height: undefined,
                     sidePagination: "server",
+                    undefinedText: '-',
                     sortName: undefined,
                     sortOrder: "asc",
                     pagination: true,
@@ -87,6 +88,7 @@ var table = {
                     cache: false,                                       // 是否使用缓存
                     height: options.height,                             // 表格的高度
                     striped: options.striped,                           // 是否显示行间隔色
+                    undefinedText: options.undefinedText,               // 数据值为空时显示的内容
                     sortable: true,                                     // 是否启用排序
                     sortStable: true,                                   // 设置为 true 将获得稳定的排序
                     sortName: options.sortName,                         // 排序列名称
@@ -539,7 +541,8 @@ var table = {
                 $.each(datas, function(index, dict) {
                     if (dict.dictValue == ('' + value)) {
                         var listClass = $.common.equals("default", dict.listClass) || $.common.isEmpty(dict.listClass) ? "" : "badge badge-" + dict.listClass;
-                        actions.push($.common.sprintf("<span class='%s'>%s</span>", listClass, dict.dictLabel));
+                        var cssClass = $.common.isNotEmpty(dict.cssClass) ? dict.cssClass : listClass;
+                        actions.push($.common.sprintf("<span class='%s'>%s</span>", cssClass, dict.dictLabel));
                         return false;
                     }
                 });
@@ -727,9 +730,7 @@ var table = {
                 var tableId = $.common.isEmpty(tableId) ? table.options.id : tableId;
                 if (table.options.type == table_type.bootstrapTable) {
                     var params = $("#" + tableId).bootstrapTable('getOptions');
-                    if ($.common.isNotEmpty(pageNumber)) {
-                        params.pageNumber = pageNumber;
-                    }
+                    params.pageNumber = 1;
                     if ($.common.isNotEmpty(pageSize)) {
                         params.pageSize = pageSize;
                     }
@@ -737,14 +738,7 @@ var table = {
                 } else if (table.options.type == table_type.bootstrapTreeTable) {
                     $("#" + tableId).bootstrapTreeTable('refresh', table.options.ajaxParams);
                 }
-                if ($.common.isNotEmpty(startLayDate) && $.common.isNotEmpty(endLayDate)) {
-                    endLayDate.config.min.year = '';
-                    endLayDate.config.min.month = '';
-                    endLayDate.config.min.date = '';
-                    startLayDate.config.max.year = '2099';
-                    startLayDate.config.max.month = '12';
-                    startLayDate.config.max.date = '31';
-                 }
+                resetDate();
             },
             // 获取选中复选框项
             selectCheckeds: function(name) {
@@ -1034,12 +1028,12 @@ var table = {
             },
             // 禁用按钮
             disable: function() {
-                var doc = window.top == window.parent ? window.document : window.parent.document;
+                var doc = window.top == window.parent ? top.window.document : window.parent.document;
                 $("a[class*=layui-layer-btn]", doc).addClass("layer-disabled");
             },
             // 启用按钮
             enable: function() {
-                var doc = window.top == window.parent ? window.document : window.parent.document;
+                var doc = window.top == window.parent ? top.window.document : window.parent.document;
                 $("a[class*=layui-layer-btn]", doc).removeClass("layer-disabled");
             },
             // 打开遮罩层
@@ -1380,13 +1374,6 @@ var table = {
         },
         // 校验封装处理
         validate: {
-            // 判断返回标识是否唯一 false 为存在 true 为不存在
-            unique: function (value) {
-                if (value == "0") {
-                    return true;
-                }
-                return false;
-            },
             // 表单验证
             form: function (formId) {
                 var currentId = $.common.isEmpty(formId) ? $('form').attr('id') : formId;

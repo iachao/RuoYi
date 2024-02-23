@@ -217,6 +217,8 @@
             if (!data || data.length <= 0) {
                 var _empty = '<tr><td colspan="' + options.columns.length + '"><div style="display: block;text-align: center;">没有找到匹配的记录</div></td></tr>'
                 $tbody.html(_empty);
+                options.pageNumber = 1;
+                initPagination(0, 0);
                 return;
             }
             // 缓存并格式化数据
@@ -271,6 +273,9 @@
             var pageTo = options.pageNumber * options.pageSize;
             if (pageTo > target.totalRows) {
                 pageTo = target.totalRows;
+            }
+            if (pageFrom > pageTo) {
+                pageFrom = pageTo;
             }
             html.push('<div class="pull-left pagination-detail">');
             html.push('<span class="pagination-info">' + formatShowingRows(pageFrom, pageTo, target.totalRows) + '</span>');
@@ -730,7 +735,7 @@
                                     $.ajax({
                                         type: options.type,
                                         url: options.dataUrl,
-                                        data: $.extend(parms, options.ajaxParams),
+                                        data: parms,
                                         dataType: "json",
                                         success: function(data, textStatus, jqXHR) {
                                             $("#" + row_id + "_load").remove();
@@ -766,6 +771,7 @@
         }
         // 添加数据刷新表格
         target.appendData = function(data) {
+            data.reverse()
             // 下边的操作主要是为了查询时让一些没有根节点的节点显示
             $.each(data, function(i, item) {
                 if (options.pagination) {

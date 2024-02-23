@@ -1,10 +1,9 @@
 package com.ruoyi.system.service;
 
-import com.ruoyi.common.core.domain.entity.SysRole;
-import com.ruoyi.system.domain.SysUserRole;
-
 import java.util.List;
 import java.util.Set;
+import com.ruoyi.common.core.domain.entity.SysRole;
+import com.ruoyi.system.domain.SysUserRole;
 
 /**
  * 角色业务层
@@ -19,7 +18,7 @@ public interface ISysRoleService
      * @param role 角色信息
      * @return 角色数据集合信息
      */
-    List<SysRole> selectRoleList(SysRole role);
+    public List<SysRole> selectRoleList(SysRole role);
 
     /**
      * 根据用户ID查询角色列表
@@ -27,7 +26,7 @@ public interface ISysRoleService
      * @param userId 用户ID
      * @return 权限列表
      */
-    Set<String> selectRoleKeys(Long userId);
+    public Set<String> selectRoleKeys(Long userId);
 
     /**
      * 根据用户ID查询角色权限
@@ -35,14 +34,14 @@ public interface ISysRoleService
      * @param userId 用户ID
      * @return 角色列表
      */
-    List<SysRole> selectRolesByUserId(Long userId);
+    public List<SysRole> selectRolesByUserId(Long userId);
 
     /**
      * 查询所有角色
      * 
      * @return 角色列表
      */
-    List<SysRole> selectRoleAll();
+    public List<SysRole> selectRoleAll();
 
     /**
      * 通过角色ID查询角色
@@ -50,7 +49,7 @@ public interface ISysRoleService
      * @param roleId 角色ID
      * @return 角色对象信息
      */
-    SysRole selectRoleById(Long roleId);
+    public SysRole selectRoleById(Long roleId);
 
     /**
      * 通过角色ID删除角色
@@ -58,7 +57,7 @@ public interface ISysRoleService
      * @param roleId 角色ID
      * @return 结果
      */
-    boolean deleteRoleById(Long roleId);
+    public boolean deleteRoleById(Long roleId);
 
     /**
      * 批量删除角色用户信息
@@ -67,7 +66,7 @@ public interface ISysRoleService
      * @return 结果
      * @throws Exception 异常
      */
-    int deleteRoleByIds(String ids);
+    public int deleteRoleByIds(String ids);
 
     /**
      * 新增保存角色信息
@@ -75,7 +74,7 @@ public interface ISysRoleService
      * @param role 角色信息
      * @return 结果
      */
-    int insertRole(SysRole role);
+    public int insertRole(SysRole role);
 
     /**
      * 修改保存角色信息
@@ -83,7 +82,7 @@ public interface ISysRoleService
      * @param role 角色信息
      * @return 结果
      */
-    int updateRole(SysRole role);
+    public int updateRole(SysRole role);
 
     /**
      * 修改数据权限信息
@@ -91,7 +90,7 @@ public interface ISysRoleService
      * @param role 角色信息
      * @return 结果
      */
-    int authDataScope(SysRole role);
+    public int authDataScope(SysRole role);
 
     /**
      * 校验角色名称是否唯一
@@ -99,7 +98,7 @@ public interface ISysRoleService
      * @param role 角色信息
      * @return 结果
      */
-    String checkRoleNameUnique(SysRole role);
+    public boolean checkRoleNameUnique(SysRole role);
 
     /**
      * 校验角色权限是否唯一
@@ -107,21 +106,21 @@ public interface ISysRoleService
      * @param role 角色信息
      * @return 结果
      */
-    String checkRoleKeyUnique(SysRole role);
+    public boolean checkRoleKeyUnique(SysRole role);
 
     /**
      * 校验角色是否允许操作
      * 
      * @param role 角色信息
      */
-    void checkRoleAllowed(SysRole role);
+    public void checkRoleAllowed(SysRole role);
 
     /**
      * 校验角色是否有数据权限
      * 
      * @param roleId 角色id
      */
-    void checkRoleDataScope(Long roleId);
+    public void checkRoleDataScope(Long roleId);
 
     /**
      * 通过角色ID查询角色使用数量
@@ -129,7 +128,7 @@ public interface ISysRoleService
      * @param roleId 角色ID
      * @return 结果
      */
-    int countUserRoleByRoleId(Long roleId);
+    public int countUserRoleByRoleId(Long roleId);
 
     /**
      * 角色状态修改
@@ -137,7 +136,7 @@ public interface ISysRoleService
      * @param role 角色信息
      * @return 结果
      */
-    int changeStatus(SysRole role);
+    public int changeStatus(SysRole role);
 
     /**
      * 取消授权用户角色
@@ -145,7 +144,7 @@ public interface ISysRoleService
      * @param userRole 用户和角色关联信息
      * @return 结果
      */
-    int deleteAuthUser(SysUserRole userRole);
+    public int deleteAuthUser(SysUserRole userRole);
 
     /**
      * 批量取消授权用户角色
@@ -154,7 +153,7 @@ public interface ISysRoleService
      * @param userIds 需要删除的用户数据ID
      * @return 结果
      */
-    int deleteAuthUsers(Long roleId, String userIds);
+    public int deleteAuthUsers(Long roleId, String userIds);
 
     /**
      * 批量选择授权用户角色
@@ -163,5 +162,5 @@ public interface ISysRoleService
      * @param userIds 需要删除的用户数据ID
      * @return 结果
      */
-    int insertAuthUsers(Long roleId, String userIds);
+    public int insertAuthUsers(Long roleId, String userIds);
 }

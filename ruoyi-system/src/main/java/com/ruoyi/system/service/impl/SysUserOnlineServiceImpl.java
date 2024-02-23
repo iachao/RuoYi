@@ -1,20 +1,20 @@
 package com.ruoyi.system.service.impl;
 
+import java.io.Serializable;
+import java.util.Date;
+import java.util.Deque;
+import java.util.List;
+import com.ruoyi.common.utils.spring.SpringUtils;
+import org.apache.shiro.cache.Cache;
+import org.apache.shiro.cache.ehcache.EhCacheManager;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import com.ruoyi.common.constant.ShiroConstants;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.system.domain.SysUserOnline;
 import com.ruoyi.system.mapper.SysUserOnlineMapper;
 import com.ruoyi.system.service.ISysUserOnlineService;
-import org.apache.shiro.cache.Cache;
-import org.apache.shiro.cache.ehcache.EhCacheManager;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.io.Serializable;
-import java.util.Date;
-import java.util.Deque;
-import java.util.List;
 
 /**
  * 在线用户 服务层处理
@@ -26,9 +26,6 @@ public class SysUserOnlineServiceImpl implements ISysUserOnlineService
 {
     @Autowired
     private SysUserOnlineMapper userOnlineDao;
-    
-    @Autowired
-    private EhCacheManager ehCacheManager;
 
     /**
      * 通过会话序号查询信息
@@ -119,6 +116,7 @@ public class SysUserOnlineServiceImpl implements ISysUserOnlineService
     @Override
     public void removeUserCache(String loginName, String sessionId)
     {
+        EhCacheManager ehCacheManager = SpringUtils.getBean(EhCacheManager.class);
         Cache<String, Deque<Serializable>> cache = ehCacheManager.getCache(ShiroConstants.SYS_USERCACHE);
         Deque<Serializable> deque = cache.get(loginName);
         if (StringUtils.isEmpty(deque) || deque.size() == 0)
