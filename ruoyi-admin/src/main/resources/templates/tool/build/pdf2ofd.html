@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('pdf2ofd')" />
+    <th:block th:include="include :: bootstrap-fileinput-css" />
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form class="form-horizontal m" id="uploadForm">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            <input id="fileInput" name="file" type="file" accept="application/pdf">
+                        </li>
+                        <li>
+                            <button type="submit" class="btn btn-primary">获取转换后的ofd文件</button>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer" />
+<th:block th:include="include :: bootstrap-fileinput-js" />
+<script th:inline="javascript">
+    $(function() {
+        $("#uploadForm").on("submit", function (event) {
+            event.preventDefault();
+            var formData = new FormData();
+            var fileInput = document.getElementById('fileInput');
+            formData.append('file', fileInput.files[0]);
+            fetch(ctx + 'tool/pdf2ofd/convert', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response =>
+                    response.blob()
+                )
+                .then(blob => {
+                    var url = window.URL.createObjectURL(blob);
+                    var a = document.createElement('a');
+                    var fileName = fileInput.files[0].name;
+                    var filePrefix = fileName.substring(0, fileName.lastIndexOf('.'));
+                    a.style.display = 'none';
+                    a.href = url;
+                    a.download = filePrefix + '.ofd';
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                })
+                .catch(error => console.error('Error:', error));
+        });
+
+        $("#fileInput").fileinput({
+            dropZoneEnabled: false,
+            showUpload: false,
+            showRemove: false,
+            maxFileCount: 1,
+            autoReplace: true,
+            allowedFileExtensions: ['pdf']
+        });
+    });
+</script>
+</body>
+</html>
