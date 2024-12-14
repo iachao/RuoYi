@@ -10,6 +10,7 @@ import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.ShiroUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
@@ -126,6 +127,8 @@ public class SysUserController extends BaseController
     @ResponseBody
     public AjaxResult addSave(@Validated SysUser user)
     {
+        deptService.checkDeptDataScope(user.getDeptId());
+        roleService.checkRoleDataScope(user.getRoleIds());
         if (!userService.checkLoginNameUnique(user))
         {
             return error("新增用户'" + user.getLoginName() + "'失败，登录账号已存在");
@@ -140,6 +143,7 @@ public class SysUserController extends BaseController
         }
         user.setSalt(ShiroUtils.randomSalt());
         user.setPassword(passwordService.encryptPassword(user.getLoginName(), user.getPassword(), user.getSalt()));
+        user.setPwdUpdateDate(DateUtils.getNowDate());
         user.setCreateBy(getLoginName());
         return toAjax(userService.insertUser(user));
     }
@@ -160,6 +164,20 @@ public class SysUserController extends BaseController
     }
 
     /**
+     * 查询用户详细
+     */
+    @RequiresPermissions("system:user:list")
+    @GetMapping("/view/{userId}")
+    public String view(@PathVariable("userId") Long userId, ModelMap mmap)
+    {
+        userService.checkUserDataScope(userId);
+        mmap.put("user", userService.selectUserById(userId));
+        mmap.put("roleGroup", userService.selectUserRoleGroup(userId));
+        mmap.put("postGroup", userService.selectUserPostGroup(userId));
+        return prefix + "/view";
+    }
+
+    /**
      * 修改保存用户
      */
     @RequiresPermissions("system:user:edit")
@@ -170,6 +188,8 @@ public class SysUserController extends BaseController
     {
         userService.checkUserAllowed(user);
         userService.checkUserDataScope(user.getUserId());
+        deptService.checkDeptDataScope(user.getDeptId());
+        roleService.checkRoleDataScope(user.getRoleIds());
         if (!userService.checkLoginNameUnique(user))
         {
             return error("修改用户'" + user.getLoginName() + "'失败，登录账号已存在");
@@ -240,6 +260,7 @@ public class SysUserController extends BaseController
     public AjaxResult insertAuthRole(Long userId, Long[] roleIds)
     {
         userService.checkUserDataScope(userId);
+        roleService.checkRoleDataScope(roleIds);
         userService.insertUserAuth(userId, roleIds);
         AuthorizationUtils.clearAllCachedAuthorizationInfo();
         return success();

@@ -158,13 +158,16 @@ public class SysLoginService
     public void setRolePermission(SysUser user)
     {
         List<SysRole> roles = user.getRoles();
-        if (!roles.isEmpty() && roles.size() > 1)
+        if (!roles.isEmpty())
         {
-            // 多角色设置permissions属性，以便数据权限匹配权限
+            // 设置permissions属性，以便数据权限匹配权限
             for (SysRole role : roles)
             {
-                Set<String> rolePerms = menuService.selectPermsByRoleId(role.getRoleId());
-                role.setPermissions(rolePerms);
+                if (StringUtils.equals(role.getStatus(), UserConstants.ROLE_NORMAL))
+                {
+                    Set<String> rolePerms = menuService.selectPermsByRoleId(role.getRoleId());
+                    role.setPermissions(rolePerms);
+                }
             }
         }
     }

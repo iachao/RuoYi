@@ -1,11 +1,11 @@
 package com.ruoyi.framework.web.service;
 
-import com.ruoyi.common.constant.Constants;
-import com.ruoyi.common.utils.CacheUtils;
+import java.util.Set;
+import java.util.TreeSet;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.stereotype.Service;
-
-import java.util.Set;
+import com.ruoyi.common.constant.Constants;
+import com.ruoyi.common.utils.CacheUtils;
 
 /**
  * 缓存操作处理
@@ -34,7 +34,7 @@ public class CacheService
      */
     public Set<String> getCacheKeys(String cacheName)
     {
-        return CacheUtils.getCache(cacheName).keys();
+        return new TreeSet<>(CacheUtils.getCache(cacheName).keys());
     }
 
     /**

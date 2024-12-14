@@ -131,6 +131,9 @@
                     $th = $('<th style="width:36px"></th>');
                 } else {
                     $th = $('<th style="' + ((column.width) ? ('width:' + column.width + ((column.widthUnit) ? column.widthUnit : 'px')) : '') + '" class="' + column.field + '_cls"></th>');
+                    if (column.align) {
+                        $th.css("text-align", column.align);
+                    }
                 }
                 if((!target.isFixWidth)&& column.width){
                     target.isFixWidth = column.width.indexOf("px")>-1?true:false;
@@ -686,6 +689,7 @@
                 if (_isExpanded || _isCollapsed) {
                     var tr = $(this).parent().parent();
                     var row_id = tr.attr("id");
+                    var row_pid = tr.attr("pid");
                     var _id = tr.attr("data-id");
                     var _ls = target.find("tbody").find("tr[id^='" + row_id + "_']");
                     if (!options.pagination) {
@@ -714,18 +718,36 @@
                         var _ls = target.find("tbody").find("tr[id^='" + row_id + "_']");
                         if (_ls && _ls.length > 0) {
                             if (_isExpanded) {
-                                $.each(_ls, function(index, item) {
-                                    $(item).css("display", "none");
-                                });
+                                if (row_pid == "row_root") {
+                                    $('table tr[id^="' + row_id + '_"]').css("display", "none");
+                                    $('table tr[id^="' + row_id + '_"]').each(function(i,n) {
+                                        var _isExpanded = $(n).find(".treetable-expander").hasClass(options.expanderExpandedClass);
+                                        if (_isExpanded) {
+                                            $(n).find(".treetable-expander").trigger("click");
+                                        }
+                                    })
+                                } else {
+                                    $.each(_ls, function(index, item) {
+                                        $(item).css("display", "none");
+                                        var _isExpanded = $(item).find(".treetable-expander").hasClass(options.expanderExpandedClass);
+                                        if (_isExpanded) {
+                                            $(item).find(".treetable-expander").trigger("click");
+                                        }
+                                     });
+                            	}
                             } else {
-                                $.each(_ls, function(index, item) {
-                                    var _icon = $(item).eq(options.expandColumn).find(".treetable-expander");
-                                    if (_icon && _icon.hasClass(options.expanderExpandedClass)) {
-                                        $(item).css("display", "table");
-                                    } else {
-                                        $(item).css("display", "table");
-                                    }
-                                });
+                                if (row_pid == "row_root") {
+                                    $('table tr[pid="' + row_id + '"]').css("display", "table");
+                                } else {
+	                                $.each(_ls, function(index, item) {
+	                                    var _p_icon = $("#" + $(item).attr("pid")).children().eq(options.expandColumn).find(".treetable-expander");
+                                        var _isExpanded = _p_icon.hasClass(options.expanderExpandedClass);
+                                        var _isCollapsed = _p_icon.hasClass(options.expanderCollapsedClass);
+	                                    if (row_id == $(item).attr("pid")) {
+		                                    $(item).css("display", "table");
+	                                    }
+	                                });
+                                }
                             }
                         } else {
                             if (options.pagination) {
